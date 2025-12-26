@@ -1,26 +1,31 @@
 import React from 'react'
-import { BrowserRouter,Routes,Route } from 'react-router-dom'
+import { Routes,Route } from 'react-router-dom'
 import Home from './Home/Index'
 import Dashboard from './Dashboard/Index'
 import Chat from './Chat/Index'
 import Auth from './Auth/Index'
 import Navbar from '../components/Navbar'
+import Login from './Login'
+import { ScrollToTop } from '../components/common/ScrollToTop'
+import AppLayout from '../layout/AppLayout'
 // import Admin from './Admin/Index.jsx'
 // import ProtectedRoutes from '../ProtectedRoutes/ProtectedRoutes.jsx'
 
  function Index() {
   return (
     <>
-    <BrowserRouter>
+    <ScrollToTop />
     <Routes>
-      <Route path="/" element={<Navbar />} />
+    <Route element={<AppLayout />}>
+      <Route path="/" element={<>Dasboard</>} />
+    </Route>
+      <Route path="/login" element={<Login />} />
       {/* <Route path="/dashboard/*" element={<Dashboard />} />
       <Route path="/chat/*" element={<Chat />} />
       <Route path="/auth/*" element={<Auth />} /> */}
 
       {/* <Route path="/admin/*" element={<ProtectedRoutes><Admin /></ProtectedRoutes>} /> */}
-    </Routes>   
-    </BrowserRouter>
+    </Routes>  
 
     </>
   )

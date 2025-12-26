@@ -8,7 +8,7 @@ const ProfessionalNavbar = () => {
 
   // Navigation items data
   const navItems = [
-    {
+    {    
       id: 2,
       label: 'Projects',
       icon: <span>📁</span>,
@@ -94,7 +94,7 @@ const ProfessionalNavbar = () => {
               <div className="w-10 h-10 bg-gradi bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">T</span>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className=" ">
                 Taskio
               </span>
             </div>
