@@ -5,7 +5,8 @@ import Dashboard from './Dashboard/Index'
 import Chat from './Chat/Index'
 import Auth from './Auth/Index'
 import Navbar from '../components/Navbar'
-import Login from './Login'
+import Login from '../components/Auth/Login'
+import Signup from '../components/Auth/Signup'
 import { ScrollToTop } from '../components/common/ScrollToTop'
 import AppLayout from '../layout/AppLayout'
 // import Admin from './Admin/Index.jsx'
@@ -20,6 +21,7 @@ import AppLayout from '../layout/AppLayout'
       <Route path="/" element={<>Dasboard</>} />
     </Route>
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       {/* <Route path="/dashboard/*" element={<Dashboard />} />
       <Route path="/chat/*" element={<Chat />} />
       <Route path="/auth/*" element={<Auth />} /> */}

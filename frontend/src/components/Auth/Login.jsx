@@ -9,12 +9,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../components/ui/form";
+} from "../../components/ui/form";
 
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 
-import { loginSchema } from "../lib/schema";
+import { loginSchema } from "../../lib/schema";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
@@ -69,7 +69,10 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
+                <div className="flex justify-between">
                 <FormLabel>Password</FormLabel>
+                <Link to='/forgot-password' className='text-blue-700 hover:text-blue-900 cursor-pointer border-blue-900'>Forgot password</Link>
+                </div>
                 <FormControl>
                   <Input
                     type="password"
