@@ -1,22 +1,55 @@
 // models/User.js
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken'
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['manager', 'developer'], default: 'developer' },
-  specialization: { type: String },
-  tokens: [String],
-  managerId: {
-  type: String
-}
-},{timestamps:true});
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: { 
+      type: String,
+       required: true,
+        unique: true,
+        trim : true,
+        lowercase : true
+      },
+    password: { 
+      type: String,
+       required: true,
+       select : false
+       },
+       profilePicture : {
+        type : String
+       },
+       isEmailVerified : {
+        type : Boolean,
+        default : false
+       },
+       lastLogin : {
+        type : Date
+       },
+       is2FAEnabled : {
+        type : Boolean,
+        default : false
+       },
+       twoFAOtp : {
+        type : String,
+        select : false
+       },
+       twoFAOtpExpires : {
+        type : Date,
+        select : false
+       }
+  },
+  { timestamps: true }
+);
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
@@ -26,7 +59,6 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-
 // Token generation method
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
@@ -34,7 +66,7 @@ userSchema.methods.generateAuthToken = async function () {
   const token = jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: '1d' }
+    { expiresIn: "1d" }
   );
 
   // Save token to tokens array
@@ -44,7 +76,5 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-
-
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
