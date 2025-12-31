@@ -25,7 +25,7 @@ app.use(express.json())
 
 // manager routes 
 import route from './routes/index.js'
-app.use("/api/v1" , route)
+app.use("/api/v1" , route);
 
 // error middleware
 app.use((err,req,res,next) => {
