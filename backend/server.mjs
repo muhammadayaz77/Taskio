@@ -21,6 +21,7 @@
   app.use(cookieParser())
 
   app.use(express.json())
+  
 
 
   // manager routes 

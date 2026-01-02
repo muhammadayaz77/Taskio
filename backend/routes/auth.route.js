@@ -9,10 +9,10 @@ router.post("/login",
     body : loginSchema
   })
   ,login)
-router.post("/register"
-  // validateRequest({
-  //   body : registerSchema
-  // })
+router.post("/register",
+  validateRequest({
+    body : registerSchema
+  })
   ,register)
 
 export default router

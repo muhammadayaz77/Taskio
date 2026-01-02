@@ -26,15 +26,22 @@ export const register = async (req, res) => {
     }
 
     // const managerId = req.user._id;
-    const user = {
+    let savedUser = await User.create({
       name : fullName,
       email,
       password
+    });  
+    const user = {
+      name : savedUser.name,
+      email : savedUser.email,
     }
-    let savedUser = await User.create(user);
-    res.status(201).json({ message: 'Team created successfully',savedUser});
+    res.status(201).json({ message: 'Team created successfully',user});
   } catch (err) {
-    res.status(500).json({ message: 'Internal Server error', error : err.message });
+    res.status(500).json({ 
+      message: 'Internal Server error',
+      error : errors.message
+    
+    });
   }
 };
 
