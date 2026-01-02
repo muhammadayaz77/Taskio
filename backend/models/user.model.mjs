@@ -48,33 +48,33 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) return next();
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
+// userSchema.methods.matchPassword = async function (enteredPassword) {
+//   return await bcrypt.compare(enteredPassword, this.password);
+// };
 
-// Token generation method
-userSchema.methods.generateAuthToken = async function () {
-  const user = this;
+// // Token generation method
+// userSchema.methods.generateAuthToken = async function () {
+//   const user = this;
 
-  const token = jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+//   const token = jwt.sign(
+//     { id: user._id, role: user.role },
+//     process.env.JWT_SECRET,
+//     { expiresIn: "1d" }
+//   );
 
-  // Save token to tokens array
-  user.tokens.push(token);
-  await user.save();
+//   // Save token to tokens array
+//   user.tokens.push(token);
+//   await user.save();
 
-  return token;
-};
+//   return token;
+// };
 
 const User = mongoose.model("User", userSchema);
 export default User;
