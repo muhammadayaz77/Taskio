@@ -14,7 +14,7 @@ export const login = async (req, res) => {
 };
 export const register = async (req, res) => {
   try {
-    const { name,email,password } = req.body;
+    const { fullName,email,password } = req.body;
     let existUser = await User.findOne({email});
     console.log("User")
     // console.log(existUser);
@@ -24,16 +24,15 @@ export const register = async (req, res) => {
         success : false
       })
     }
-    let salt = bcrypt.genSalt(10);
-    let hashedPassword = bcrypt.hast(password,salt)
 
     // const managerId = req.user._id;
     const user = {
-      fullName,
+      name : fullName,
       email,
-      password: hashedPassword
+      password
     }
-    res.status(201).json({ message: 'Team created successfully',user});
+    let savedUser = await User.create(user);
+    res.status(201).json({ message: 'Team created successfully',savedUser});
   } catch (err) {
     res.status(500).json({ message: 'Internal Server error', error : err.message });
   }
