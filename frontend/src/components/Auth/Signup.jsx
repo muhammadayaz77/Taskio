@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import useRegister from '../../hooks/auth/useRegister'
 import {
   Form,
   FormControl,
@@ -17,6 +17,8 @@ import { signupSchema } from "../../lib/schema";
 import { Link } from "react-router-dom";
 
 const SignupForm = () => {
+  const { mutate, isLoading } = useRegister();
+
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -28,8 +30,12 @@ const SignupForm = () => {
   });
 
   const onSubmit = (data) => {
-    console.log("Signup Data:", data);
-    // API call here
+    console.log("Signup Data:", data.name);
+    e.preventDefault();
+    mutate({
+      email: e.target.email.value,
+      password: e.target.password.value,
+    });
   };
 
   return (
