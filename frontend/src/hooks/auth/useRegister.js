@@ -1,8 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import {registerApi}  from "../../api/auth/auth.api";
+import { postData } from "../../api/axios";
 const useRegister = () => {
   return useMutation({
-    mutationFn: registerApi,
+    mutationFn: (data) => postData('/auth/register',data),
+    onSuccess : (data) => {
+      console.log("data : ",data)
+    },
+    onError : (err) => {
+      console.log('error : ',err)
+    }
   });
 };
 
