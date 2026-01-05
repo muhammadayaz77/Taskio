@@ -10,6 +10,7 @@ router.post("/login",
     body : loginSchema
   })
   ,login)
+  
 router.post("/register",
   validateSchema(registerSchema)
   ,register)

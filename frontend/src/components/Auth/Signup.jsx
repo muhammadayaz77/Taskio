@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useRegister from '../../hooks/auth/useRegister'
 import {
   Form,
   FormControl,
@@ -15,6 +14,7 @@ import { Button } from "../../components/ui/button";
 
 import { signupSchema } from "../../lib/schema";
 import { Link } from "react-router-dom";
+import useRegister from "../../hooks/auth/useRegister";
 
 const SignupForm = () => {
   const { mutate, isLoading } = useRegister();
@@ -30,12 +30,8 @@ const SignupForm = () => {
   });
 
   const onSubmit = (data) => {
-    console.log("Signup Data:", data.name);
-    e.preventDefault();
-    mutate({
-      email: e.target.email.value,
-      password: e.target.password.value,
-    });
+    console.log("Signup Data:", data);
+    mutate(data);
   };
 
   return (
