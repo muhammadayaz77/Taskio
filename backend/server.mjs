@@ -21,12 +21,7 @@
   app.use(cookieParser())
 
   app.use(express.json())
-  
-  app.get("/ayaz",(req,res) => {
-    res.json({
-      message : "Hurrayyyyy"
-    })
-  })
+
 
 
   // manager routes 

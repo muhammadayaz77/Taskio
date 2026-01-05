@@ -2,6 +2,7 @@
 import { z } from "zod";
 
 const noEmojiRegex = /^[^\p{Extended_Pictographic}]*$/u;
+const fullNameRegex = /^[A-Za-z]+( [A-Za-z]+)?$/;
 const noSpaceRegex = /^\S*$/;
 
 export const loginSchema = z.object({
@@ -20,11 +21,13 @@ export const loginSchema = z.object({
 export const registerSchema = z
   .object({
     fullName: z
-      .string()
-      .min(3, "Full name must be at least 3 characters")
-      .regex(noEmojiRegex, "Emojis are not allowed in full name")
-      .regex(noSpaceRegex, "Spaces are not allowed in full name"),
-
+          .string()
+          .min(3, "Full name must be at least 3 characters")
+          .regex(noEmojiRegex, "Emojis are not allowed in full name")
+          .regex(
+            fullNameRegex,
+            "Full name can contain letters and only one space (e.g. Muhammad Ayaz)"
+          ),
     email: z
       .string()
       .email("Invalid email address")
