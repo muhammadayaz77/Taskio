@@ -31,7 +31,12 @@ const SignupForm = () => {
 
   const onSubmit = (data) => {
     console.log("Signup Data:", data);
-    mutate(data);
+    mutate({
+      fullName: data.fullName,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    });
   };
 
   return (

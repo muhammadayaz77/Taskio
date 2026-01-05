@@ -1,7 +1,23 @@
-import api from "../axios";
+// import api from "../axios";
+import axios from "axios";
 
-/* POST – Register */
-export const registerApi = async (data) => {
-  const res = await api.post("/auth/register", data);
-  return res.data;
+export const registerApi = async (payload) => {
+  try {
+    
+    console.log("auth.api data : ",payload.fullName)
+    const response = await axios.post(
+      "http://localhost:3000/api/v1/auth/register",
+      payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  
+  console.log('res : ',response.data)
+  return response.data;
+} catch (error) {
+  console.log(error)
+}
 };
