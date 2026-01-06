@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import useRegister from "../../hooks/auth/useRegister";
 
 const SignupForm = () => {
-  const { mutate, isLoading } = useRegister();
+  const { mutate, isPending } = useRegister();
 
   const form = useForm({
     resolver: zodResolver(signupSchema),
@@ -131,8 +131,8 @@ const SignupForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Sign Up
+          <Button type="submit" className="w-full" disabled={isPending}  >
+            {isPending ? 'Loading...' : 'Sign Up'}
           </Button>
         </form>
 
