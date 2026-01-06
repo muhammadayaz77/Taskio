@@ -1,7 +1,8 @@
-a1import User from '../models/user.model.mjs'
+import User from '../models/user.model.mjs'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import Verification from '../models/verification.model.mjs';
+import {sendEmail} from '../libs/send-email.js'
 // creating a team 
 export const login = async (req, res) => {
   try {
@@ -50,15 +51,23 @@ export const register = async (req, res) => {
     })
 
     // send email
-      const verificationLink = `${process.env.FRONTEND_URL}/verify-email/token=${verificationToken}`
-      
-      const emailBody = `<p>Click <a href="${verificationLink}>here</a> to verify your email"</p>`
-
+      const verificationLink = `${process.env.FRONTEND_URL}/verify-email/token=${verificationToken}`; 
+      const emailBody = `<p>Click <a href="${verificationLink}>here</a> to verify your email"</p>`;
       const emailSubject = "Verify your email"
 
-      
+      const isEmailSent = await sendEmail(email,emailSubject,emailBody)
 
-    res.status(201).json({ message: 'Account created successfully',user});
+      if(!isEmailSent){
+        return res.status(500).json({
+          message : 'Failed to send verification email',
+          success : false
+        })
+      }
+      else{
+
+      }
+
+    res.status(201).json({ message: 'Verification email sent to your email. Please check and verify your account.',user});
   } catch (err) {
     res.status(500).json({ 
       message: 'Internal Server error',
