@@ -1,6 +1,7 @@
-import User from '../models/user.model.mjs'
+a1import User from '../models/user.model.mjs'
 import bcrypt from 'bcryptjs';
-
+import jwt from 'jsonwebtoken'
+import Verification from '../models/verification.model.mjs';
 // creating a team 
 export const login = async (req, res) => {
   try {
@@ -26,16 +27,38 @@ export const register = async (req, res) => {
     }
 
     // const managerId = req.user._id;
-    let savedUser = await User.create({
+    let newUser = await User.create({
       name : fullName,
       email,
       password
     });  
     const user = {
-      name : savedUser.name,
-      email : savedUser.email,
+      name : newUser.name,
+      email : newUser.email,
     }
-    res.status(201).json({ message: 'Team created successfully',user});
+
+    const verificationToken = jwt.sign(
+      {userId:newUser._id,property : 'email-verification'},
+      process.env.JWT_SECRET,
+      {expiresIn : '1h'}
+    )
+
+    await Verification.create({
+      userId : newUser._id,
+      token : verificationToken,
+      expiresAt : new Date(Date.now() + 1 * 60 * 60 * 1000)
+    })
+
+    // send email
+      const verificationLink = `${process.env.FRONTEND_URL}/verify-email/token=${verificationToken}`
+      
+      const emailBody = `<p>Click <a href="${verificationLink}>here</a> to verify your email"</p>`
+
+      const emailSubject = "Verify your email"
+
+      
+
+    res.status(201).json({ message: 'Account created successfully',user});
   } catch (err) {
     res.status(500).json({ 
       message: 'Internal Server error',
