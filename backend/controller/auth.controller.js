@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import Verification from '../models/verification.model.mjs';
 import {sendEmail} from '../libs/send-email.js'
+import aj from '../libs/arcjet.js';
 // creating a team 
 export const login = async (req, res) => {
   try {
@@ -16,7 +17,42 @@ export const login = async (req, res) => {
 };
 export const register = async (req, res) => {
   try {
-    const { fullName,email,password,confirmPassword } = req.body;
+    const { fullName,email,password } = req.body;
+
+    const decision = await aj.protect(req, { email }); // Deduct 5 tokens from the bucket
+    console.log("Arcjet decision", decision);
+  
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Invalid Email address" }));
+      } else if (decision.reason.isBot()) {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "No bots allowed" }));
+      } else {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Forbidden" }));
+      }
+    } else if (decision.ip.isHosting()) {
+      // Requests from hosting IPs are likely from bots, so they can usually be
+      // blocked. However, consider your use case - if this is an API endpoint
+      // then hosting IPs might be legitimate.
+      // https://docs.arcjet.com/blueprints/vpn-proxy-detection
+      res.writeHead(403, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Forbidden" }));
+    } else if (decision.results.some(isSpoofedBot)) {
+      // Paid Arcjet accounts include additional verification checks using IP data.
+      // Verification isn't always possible, so we recommend checking the decision
+      // separately.
+      // https://docs.arcjet.com/bot-protection/reference#bot-verification
+      res.writeHead(403, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Forbidden" }));
+    } else {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "Hello World" }));
+    }
+
+
     let existUser = await User.findOne({email});
     console.log("User")
     // console.log(existUser);
@@ -52,22 +88,18 @@ export const register = async (req, res) => {
 
     // send email
       const verificationLink = `${process.env.FRONTEND_URL}/verify-email/token=${verificationToken}`; 
-      const emailBody = `<p>Click <a href="${verificationLink}>here</a> to verify your email"</p>`;
+      const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email</p>`;
       const emailSubject = "Verify your email"
 
       const isEmailSent = await sendEmail(email,emailSubject,emailBody)
-
+      console.log("isemail sent : ",isEmailSent)
       if(!isEmailSent){
         return res.status(500).json({
           message : 'Failed to send verification email',
           success : false
         })
       }
-      else{
-
-      }
-
-    res.status(201).json({ message: 'Verification email sent to your email. Please check and verify your account.',user});
+    return res.status(201).json({ message: 'Verification email sent to your email. Please check and verify your account.',user});
   } catch (err) {
     res.status(500).json({ 
       message: 'Internal Server error',

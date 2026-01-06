@@ -9,7 +9,7 @@ const fromEmail = process.env.FROM_EMAIL;
 export const sendEmail = async (to,subject,html) => {
   const msg = {
     to,
-    from : `Taskio ${fromEmail}`,
+    from : fromEmail,
     subject,
     html
   }
