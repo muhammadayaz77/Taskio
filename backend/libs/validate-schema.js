@@ -47,4 +47,7 @@ export const registerSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
-  
+
+  export const verfiyEmailSchema = z.object({
+    token : z.string().min(1,"Token is required")
+  })
