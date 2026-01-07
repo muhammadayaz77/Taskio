@@ -4,6 +4,7 @@ import Login from '../components/Auth/Login'
 import Signup from '../components/Auth/Signup'
 import { ScrollToTop } from '../components/common/ScrollToTop'
 import AppLayout from '../layout/AppLayout'
+import VerifyEmail from '../components/Auth/VerifyEmail'
 // import Admin from './Admin/Index.jsx'
 // import ProtectedRoutes from '../ProtectedRoutes/ProtectedRoutes.jsx'
 
@@ -17,6 +18,7 @@ import AppLayout from '../layout/AppLayout'
     </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/verify-email/:token" element={<VerifyEmail />} />
       {/* <Route path="/dashboard/*" element={<Dashboard />} />
       <Route path="/chat/*" element={<Chat />} />
       <Route path="/auth/*" element={<Auth />} /> */}
