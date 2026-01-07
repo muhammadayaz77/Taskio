@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle, XCircle } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import useVerifyEmail from "../../hooks/auth/useVerifyEmail";
 
 function VerifyEmail() {
   const { token } = useParams();
   const [isSuccess, setIsSuccess] = useState(false); // true/false after verification
-  const [isVerifying, setIsVerifying] = useState(true); // true while verifying
-
+  const {mutate,isPending:isVerifying} = useVerifyEmail();  
   useEffect(() => {
     console.log("token:", token);
 
-    // Simulate verification delay (e.g., API call)
-    const timer = setTimeout(() => {
       if (!token) {
-        setIsSuccess(true);
-      } else {
         setIsSuccess(false);
+      } else {
+        mutate({
+          token
+        },{
+          onSuccess : () => {
+            setIsSuccess(true)
+          }
+        },
+        {
+          onError : (err) => {
+            setIsSuccess(false)
+          }
+        }
+      )
       }
-      setIsVerifying(false);
-    }, 1500); // 1.5 seconds delay
 
-    return () => clearTimeout(timer);
   }, [token]);
 
   return (
