@@ -1,5 +1,4 @@
-import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/node";
-import { isSpoofedBot } from "@arcjet/inspect";
+import arcjet, { shield, detectBot, tokenBucket, validateEmail } from "@arcjet/node";
 import express from "express";
 
 const app = express();
@@ -23,6 +22,11 @@ const aj = arcjet({
         //"CATEGORY:MONITOR", // Uptime monitoring services
         //"CATEGORY:PREVIEW", // Link previews e.g. Slack, Discord
       ],
+    }),
+    validateEmail({
+      mode: "LIVE", // will block requests. Use "DRY_RUN" to log only
+      // block disposable, invalid, and email addresses with no MX records
+      deny: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
     }),
     // Create a token bucket rate limit. Other algorithms are supported.
     tokenBucket({
