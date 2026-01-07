@@ -28,7 +28,6 @@ const SignupForm = () => {
       confirmPassword: "",
     },
   });
-
   const onSubmit = (data) => {
     console.log("Signup Data:", data);
     mutate({
@@ -36,8 +35,13 @@ const SignupForm = () => {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
-    });
-  };
+    },
+    {
+      onSuccess: () => {
+         form.reset()// runs first
+      }
+  });
+}
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 border rounded-xl 

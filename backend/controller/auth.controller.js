@@ -73,7 +73,10 @@ export const register = async (req, res) => {
           success : false
         })
       }
-    return res.status(201).json({ message: 'Verification email sent to your email. Please check and verify your account.',user});
+    return res.status(201).json({ 
+      message: 'Verification email sent to your email. Please check and verify your account.',
+      success : false
+    });
   } catch (err) {
     res.status(500).json({ 
       message: 'Internal Server error',
