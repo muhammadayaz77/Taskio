@@ -51,7 +51,7 @@ export const register = async (req, res) => {
     })
 
     // send email
-      const verificationLink = `${process.env.FRONTEND_URL}/verify-email/token=${verificationToken}`; 
+      const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`; 
       const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email</p>`;
       const emailSubject = "Verify your email"
 
@@ -150,6 +150,8 @@ export const login = async (req, res) => {
 export const verifyEmail = async (req, res) => {
         try {
           const { token } = req.body;
+
+          console.log("token : ",token)
 
           let payload = jwt.verify(token,process.env.JWT_SECRET);
           let {userId,purpose} = payload;

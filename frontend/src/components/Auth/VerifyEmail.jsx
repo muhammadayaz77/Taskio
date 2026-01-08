@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle, XCircle } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
 import useVerifyEmail from "../../hooks/auth/useVerifyEmail";
 
 function VerifyEmail() {
-  const { token } = useParams();
+  const {token} = useParams();
   const [isSuccess, setIsSuccess] = useState(false); // true/false after verification
   const {mutate,isPending:isVerifying} = useVerifyEmail();  
   useEffect(() => {
