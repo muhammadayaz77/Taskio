@@ -5,14 +5,11 @@ import useVerifyEmail from "../../hooks/auth/useVerifyEmail";
 
 function VerifyEmail() {
   const {token} = useParams();
-  const [isSuccess, setIsSuccess] = useState(false); // true/false after verification
-  const {mutate,isPending:isVerifying} = useVerifyEmail();  
+  const [isSuccess, setIsSuccess] = useState(false); // true/false after verificationverification
+  const {mutate,isPending} = useVerifyEmail();  
   useEffect(() => {
     console.log("token:", token);
-
-      if (!token) {
-        setIsSuccess(false);
-      } else {
+    console.log("pending:", isPending);
         mutate({
           token
         },{
@@ -26,14 +23,13 @@ function VerifyEmail() {
           }
         }
       )
-      }
 
   }, [token]);
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 px-4">
       <div className="bg-white shadow-md rounded-xl p-8 max-w-md w-full text-center">
-        {isVerifying ? (
+        {isPending ? (
           // Loader while verifying
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
