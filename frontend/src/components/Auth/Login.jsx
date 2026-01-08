@@ -31,11 +31,7 @@ const LoginForm = () => {
   const onSubmit = (data) => {
     console.log("Login Data:", data);
     // API call here
-    mutate(data,{
-      onSuccess : () => {
-        
-      },
-    })
+    mutate(data)
   };
 
   return (

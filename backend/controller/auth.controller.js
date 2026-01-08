@@ -91,14 +91,14 @@ export const login = async (req, res) => {
         const existingVerification = await Verification.findOne({
           userId : user._id
         })
-        if(existingVerification && existingVerification.expiresAt > new Date().now){
+        if(existingVerification && existingVerification.expiresAt > new Date.now()){
           return res.status(400).json({
             message : 'Email not verified.Please check your email for the verification link.  ',
             success : false
           })
         }
         else {
-          await Verification.findByIdAndDelete(existingVerification._id)
+          await Verification.deleteMany({userId:user._id})
           const verificationToken = jwt.sign({
             userId : user._id,purpose : 'email-verification'
           },
@@ -110,7 +110,7 @@ export const login = async (req, res) => {
         await Verification.create({
           userId : user._id,
           token : verificationToken,
-          expiresAt : new Date(Date.now() * 1 * 60 * 60 * 1000)
+          expiresAt : new Date(Date.now() + 1 * 60 * 60 * 1000)
         })
         const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`; 
         const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email</p>`;
@@ -164,9 +164,10 @@ export const login = async (req, res) => {
 
       
   } catch (err) {
+    console.log("Error : ",err)
     res.status(500).json({ 
       message: 'Internal Server error',
-      error : errors.message
+      error : err.message
     
     });
   }
