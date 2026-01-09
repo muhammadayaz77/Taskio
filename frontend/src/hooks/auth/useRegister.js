@@ -8,7 +8,7 @@ const useRegister = () => {
     onSuccess : (data) => {
       window.toastify(data.message,'success');
       console.log("data : ",data);
-      navigate("/login");
+      navigate("/sign-in");
       
     },
     onError : (err) => {

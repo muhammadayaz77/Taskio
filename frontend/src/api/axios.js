@@ -21,7 +21,7 @@ api.interceptors.request.use((response) => response ,(error) => {
   const token = getToken();
 
   if (error.response && error.response.status === 401) {
-    window.dispatchEvent(new Event('force-logou'))
+    window.dispatchEvent(new Event('force-logout'))
   }
 
   return Promise.reject(error);

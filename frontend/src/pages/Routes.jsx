@@ -16,8 +16,8 @@ import VerifyEmail from '../components/Auth/VerifyEmail'
     <Route element={<AppLayout />}>
       <Route path="/" element={<>Dasboard</>} />
     </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/sign-in" element={<Login />} />
+      <Route path="/sign-up" element={<Signup />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
       {/* <Route path="/dashboard/*" element={<Dashboard />} />
       <Route path="/chat/*" element={<Chat />} />

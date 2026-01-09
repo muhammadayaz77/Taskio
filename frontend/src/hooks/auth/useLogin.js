@@ -1,18 +1,31 @@
 import { useMutation } from "@tanstack/react-query";
-import { setToken } from "../../utils/tokenStorage";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../../store/auth/authSlice.js";
 import { postData } from "../../api/axios";
 
 export const useLogin = () => {
+  const dispatch = useDispatch();
+
   return useMutation({
-    mutationFn: (data) => postData('/auth/login',data),
+    mutationFn: (data) => postData("/auth/login", data),
     onSuccess: (data) => {
-      console.log('login',data)
-      window.toastify(data?.message || "Your are logged in",'success')
-      setToken(data.token);
+      dispatch(
+        loginSuccess({
+          user: data.user,
+          token: data.token,
+        })
+      );
+
+      window.toastify(
+        data?.message || "You are logged in",
+        "success"
+      );
     },
-    onError : (err) => {
-      console.log("Error : ",err)
-      window.toastify(err?.response?.data?.message,'error')
-    }
+    onError: (err) => {
+      window.toastify(
+        err?.response?.data?.message || "Login failed",
+        "error"
+      );
+    },
   });
 };
