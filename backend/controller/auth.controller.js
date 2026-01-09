@@ -20,7 +20,7 @@ export const register = async (req, res) => {
     let existUser = await User.findOne({email});
     console.log("User")
     // console.log(existUser);
-    if(existUser){
+    if(existUser && existUser.isEmailVerified){
       return res.status(400).json({
         message : "Email address already in use",
         success : false
@@ -70,7 +70,7 @@ export const register = async (req, res) => {
   } catch (err) {
     res.status(500).json({ 
       message: 'Internal Server error',
-      error : errors.message
+      error : err.message
     
     });
   }
@@ -110,7 +110,7 @@ export const login = async (req, res) => {
         await Verification.create({
           userId : user._id,
           token : verificationToken,
-          expiresAt : new Date(Date.now() + 1 * 60 * 60 * 1000)
+          expiresAt : new Date(  + 1 * 60 * 60 * 1000)
         })
         const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`; 
         const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email</p>`;
@@ -182,6 +182,8 @@ export const verifyEmail = async (req, res) => {
           let payload = jwt.verify(token,process.env.JWT_SECRET);
           let {userId,purpose} = payload;
 
+
+          console.log("purpose :",purpose)
           if(purpose !== 'email-verification'){
           return res.status(401).json({ message: 'Unauthorized' });
           }
@@ -189,6 +191,7 @@ export const verifyEmail = async (req, res) => {
             userId,
             token
           })
+          console.log("Verification : ",verification);
           if(!verification){
           return res.status(401).json({ message: 'Unauthorized' });
 
