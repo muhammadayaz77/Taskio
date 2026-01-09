@@ -91,7 +91,7 @@ export const login = async (req, res) => {
         const existingVerification = await Verification.findOne({
           userId : user._id
         })
-        if(existingVerification && existingVerification.expiresAt > new Date.now()){
+        if(existingVerification && existingVerification.expiresAt > Date.now()){
           return res.status(400).json({
             message : 'Email not verified.Please check your email for the verification link.  ',
             success : false
