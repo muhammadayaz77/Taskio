@@ -191,7 +191,7 @@ export const verifyEmail = async (req, res) => {
             userId,
             token
           })
-          console.log("Verification : ",verification);
+          console.log("Verification : ",payload);
           if(!verification){
           return res.status(401).json({ message: 'Unauthorized' });
 

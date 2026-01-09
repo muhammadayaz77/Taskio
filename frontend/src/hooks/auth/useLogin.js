@@ -9,6 +9,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: (data) => postData("/auth/login", data),
     onSuccess: (data) => {
+      console.log('data : ',data)
       dispatch(
         loginSuccess({
           user: data.user,
