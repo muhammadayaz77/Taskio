@@ -14,7 +14,10 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const isPublicRoute = publicRoutes.includes(pathname);
+  const isPublicRoute =
+  publicRoutes.includes(pathname) ||
+  pathname.startsWith("/verify-email/");
+
 
   useEffect(() => {
     const checkAuth = async () => {

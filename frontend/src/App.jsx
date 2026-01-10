@@ -15,7 +15,7 @@ const App = () => {
     return <>Loading...</>
   }
   if(isAuthenticated){
-    return <Navigate to='/dashbard' />
+    // return <Navigate to='/dashbard' />
   }
   
   return (

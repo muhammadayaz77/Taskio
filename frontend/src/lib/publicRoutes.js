@@ -4,5 +4,5 @@ export const publicRoutes = [
   '/sign-in',
   '/reset-password',
   '/forgot-password',
-  '/verify-email',
+  '/verify-email/:token',
 ]

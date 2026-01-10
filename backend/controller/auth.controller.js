@@ -13,8 +13,12 @@ export const register = async (req, res) => {
     console.log("Arcjet decision", decision);
     
     if (decision.isDenied()) {
-      res.writeHead(403, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "Invalid Email address" }));
+      if (decision.isDenied()) {
+        return res.status(403).json({
+          message: "Invalid Email address",
+          success: false
+        });
+      }      
     }
 
     let existUser = await User.findOne({email});
@@ -49,7 +53,7 @@ export const register = async (req, res) => {
       const emailSubject = "Verify your email"
     const isEmailSent = await sendEmail(email,emailSubject,emailBody)
     console.log("isemail sent : ",isEmailSent);
-    
+
     if(!isEmailSent){
       return res.status(500).json({
         message : 'Failed to send verification email',
