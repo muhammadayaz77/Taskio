@@ -24,15 +24,15 @@ import AuthProvider from '../providers/AuthProviders'
       <Route path="/sign-in" element={<Login />} />
       <Route path="/sign-up" element={<Signup />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
-    <Route element={<ProtectedRoute />}>
+    {/* <Route element={<ProtectedRoute />}> */}
 
-    <Route path="/dashboard" element={<>Dashboard</>} />
+    <Route path="/dashboard" element={<ProtectedRoute><>Dasboard</></ProtectedRoute>} />
       {/* <Route path="/dashboard/*" element={<Dashboard />} />
       <Route path="/chat/*" element={<Chat />} />
       <Route path="/auth/*" element={<Auth />} /> */}
 
       {/* <Route path="/admin/*" element={<ProtectedRoutes><Admin /></ProtectedRoutes>} /> */}
-      </Route>
+      {/* </Route> */}
     </Routes>  
       </AuthProvider> 
 
