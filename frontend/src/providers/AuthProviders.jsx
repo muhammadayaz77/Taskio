@@ -45,9 +45,10 @@ const AuthProvider = ({ children }) => {
     };
 
     checkAuth();
-  }, [dispatch, navigate, isPublicRoute]);
+  }, []);
 
   useEffect(() => {
+    console.log('calls : handles logout')
     const handleLogout = () => {
       dispatch(logout());
       navigate("/sign-in");
@@ -56,7 +57,7 @@ const AuthProvider = ({ children }) => {
     window.addEventListener("force-logout", handleLogout);
     return () =>
       window.removeEventListener("force-logout", handleLogout);
-  }, [dispatch, navigate]);
+  }, []);
 
   return children;
 };

@@ -18,8 +18,6 @@ api.interceptors.request.use((config) => {
 
   
 api.interceptors.request.use((response) => response ,(error) => {
-  const token = getToken();
-
   if (error.response && error.response.status === 401) {
     window.dispatchEvent(new Event('force-logout'))
   }

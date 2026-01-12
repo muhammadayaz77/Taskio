@@ -5,8 +5,8 @@ import Signup from '../components/Auth/Signup'
 import { ScrollToTop } from '../components/common/ScrollToTop'
 import AppLayout from '../layout/AppLayout'
 import VerifyEmail from '../components/Auth/VerifyEmail'
-import ProtectedRoute from '../ProtectedRoutes/ProtectedRoutes'
 import AuthProvider from '../providers/AuthProviders'
+import Dashboard from './Dashboard'
 // import Admin from './Admin/Index.jsx'
 // import ProtectedRoutes from '../ProtectedRoutes/ProtectedRoutes.jsx'
 
@@ -25,11 +25,11 @@ import AuthProvider from '../providers/AuthProviders'
       <Route path="/sign-up" element={<Signup />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
       <Route path="/ayaz" element={<>Ayaz</>} />
-    {/* <Route element={<ProtectedRoute />}> */}
 
-    <Route element={<ProtectedRoute />}>
-  <Route path="/dashboard" element={<>Dashboard</>} />
-</Route>
+      <Route path="/dashboard" element={<Dashboard />} />
+    {/* <Route element={<ProtectedRoute />}> */}
+    {/* <Route element={<ProtectedRoute />}> */}
+{/* </Route> */}
 
       {/* <Route path="/dashboard/*" element={<Dashboard />} />
       <Route path="/chat/*" element={<Chat />} />
