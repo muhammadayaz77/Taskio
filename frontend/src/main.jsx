@@ -10,7 +10,7 @@ import App from "./App.jsx";
 import AuthProvider from "./providers/AuthProviders.jsx";
 import { store } from "../store/index.js"; // 👈 redux store
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

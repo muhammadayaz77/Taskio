@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import queryClient from '../../src/main.jsx'
 
 const initialState = {
   user: null,
@@ -24,6 +25,7 @@ const authSlice = createSlice({
 
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      queryClient.clear()
     },
 
     restoreAuth: (state, action) => {
