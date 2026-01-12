@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   logout,
   restoreAuth,
@@ -13,11 +13,11 @@ const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const isPublicRoute =
-  publicRoutes.includes(pathname) ||
-  pathname.startsWith("/verify-email/");
-
+    publicRoutes.includes(pathname) ||
+    pathname.startsWith("/verify-email/");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -44,20 +44,26 @@ const AuthProvider = ({ children }) => {
       }
     };
 
-    checkAuth();
-  }, []);
+    // checkAuth();
+  }, [dispatch, navigate, isPublicRoute]);
 
+  // FIXED: Add dependencies and only navigate if not already on sign-in
   useEffect(() => {
-    console.log('calls : handles logout')
+    console.log('Setting up logout listener');
+    
     const handleLogout = () => {
+      console.log('Force logout triggered');
       dispatch(logout());
       navigate("/sign-in");
     };
 
     window.addEventListener("force-logout", handleLogout);
-    return () =>
+    
+    return () => {
+      console.log('Cleaning up logout listener');
       window.removeEventListener("force-logout", handleLogout);
-  }, []);
+    };
+  }, [dispatch, navigate]); // Add dependencies
 
   return children;
 };

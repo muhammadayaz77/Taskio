@@ -5,9 +5,12 @@ import { logout } from '../../store/auth/authSlice'
 
 function Dashboard() {
   const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout())
+  }
   return (
     <div>
-      <Button onclick={dispatch(logout())}>Logout</Button>
+      <Button onClick={handleLogout}>Logout</Button>
     </div>
   )
 }
