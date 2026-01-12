@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import queryClient from '../../src/main.jsx'
+import {queryClient} from '../../src/main.jsx'
 
 const initialState = {
   user: null,
