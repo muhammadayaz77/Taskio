@@ -92,7 +92,7 @@ const LoginForm = () => {
             Login
           </Button>
         </form>
-          <p className="text-gray-500 text-sm text-center mt-6">Don't have an account? <Link to='/sign-up' className="text-blue-700 hover:text-blue-900 hover:border-b-1 border-blue-900">Signup</Link></p>
+          <p className="text-gray-500 text-sm text-center mt-6">Don't have an account? <Link to='/sign-up' className="text-blue-700 hover:text-blue-900 border-blue-900">Signup</Link></p>
       </Form>
     </div>
   );
