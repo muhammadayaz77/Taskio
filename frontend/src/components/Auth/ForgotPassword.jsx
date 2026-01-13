@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import { forgotPasswordSchema } from "../../lib/schema";
+import { ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
+import { emailSchema } from "../../lib/schema";
 
 import {
   Form,
@@ -15,11 +15,15 @@ import {
 
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
+import { useState } from "react";
+import { useForgotPassword } from "../../hooks/auth/useForgotPassword";
 // Simple schema for email
 
 const ForgotPassword = () => {
+  const [isSuccess,setIsSuccess] = useState(false);
+    const {mutate,isPending} = useForgotPassword()
   const form = useForm({
-    resolver: zodResolver(forgotPasswordSchema),
+    resolver: zodResolver(emailSchema),
     defaultValues: {
       email: "",
     },
@@ -27,6 +31,11 @@ const ForgotPassword = () => {
 
   const onSubmit = (data) => {
     console.log("Forgot Password Email:", data.email);
+    mutate(data,{
+      onSuccess : () => {
+        setIsSuccess(true)
+      }
+    })
     // API call here
   };
 
@@ -49,6 +58,16 @@ const ForgotPassword = () => {
         Back to Login
       </Link>
 
+      {
+        isSuccess ? <div className="flex flex-col items-center">
+        <CheckCircle className="w-10 h-10 text-green-500 "/>
+        <h2 className="text-2xl font-semibold ">Password reset email sent</h2>
+      <p className=" mb-6 text-gray-600">
+        Enter your email and we’ll send you a reset link
+      </p>
+        </div>
+        :
+        <>
       {/* Heading */}
       <h2 className="text-2xl font-semibold text-center">Forgot Password?</h2>
       <p className="text-center mb-6 text-gray-600 text-sm">
@@ -63,7 +82,7 @@ const ForgotPassword = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email Address</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -77,8 +96,13 @@ const ForgotPassword = () => {
           />
 
           {/* Button */}
-          <Button type="submit" className="w-full">
-            Send Reset Link
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {
+              isPending ? 
+              <Loader2 className="w-4 h-4 animate-spin" />
+              :
+              'Reset Password'
+            }
           </Button>
         </form>
 
@@ -90,6 +114,8 @@ const ForgotPassword = () => {
           </Link>
         </p>
       </Form>
+        </>
+      }
     </div>
   );
 };

@@ -17,7 +17,7 @@ export const loginSchema = z.object({
     .regex(noSpaceRegex, "Spaces are not allowed in password")
     .regex(noEmojiRegex, "Emojis are not allowed in password"),
 });
-export const forgotPasswordSchema = z.object({
+export const emailSchema = z.object({
   email: z
     .string()
     .email("Invalid email address")
@@ -56,3 +56,25 @@ export const signupSchema = z
     path: ["confirmPassword"],
   });
   
+  export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .regex(noSpaceRegex, "Spaces are not allowed in password")
+      .regex(noEmojiRegex, "Emojis are not allowed in password"),
+
+    confirmPassword: z
+      .string()
+      .min(6, "Confirm password is required")
+      .regex(noSpaceRegex, "Spaces are not allowed in password")
+      .regex(noEmojiRegex, "Emojis are not allowed in password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+  export const verfiyEmailSchema = z.object({
+    token : z.string().min(1,"Token is required")
+  })

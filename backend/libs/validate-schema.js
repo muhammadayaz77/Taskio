@@ -57,11 +57,6 @@ export const registerSchema = z
   });
 export const resetPasswordSchema = z
   .object({
-    email: z
-      .string()
-      .email("Invalid email address")
-      .regex(noEmojiRegex, "Emojis are not allowed in email"),
-
     newPassword: z
       .string()
       .min(6, "Password must be at least 6 characters")
@@ -72,8 +67,7 @@ export const resetPasswordSchema = z
       .string()
       .min(6, "Confirm password is required")
       .regex(noSpaceRegex, "Spaces are not allowed in password")
-      .regex(noEmojiRegex, "Emojis are not allowed in password")
-      ,
+      .regex(noEmojiRegex, "Emojis are not allowed in password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
