@@ -254,14 +254,13 @@ export const resetPasswordRequest  = async (req, res) => {
 
 export const verifyResetPassword = async (req, res) => {
   try {
-    const { email,password } = req.body;
-
-    console.log("token : ", token);
+    const { token,newPassword,confirmPassword } = req.body;
 
     let payload = jwt.verify(token, process.env.JWT_SECRET);
+    if (!payload) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     let { userId, purpose } = payload;
-
-    console.log("purpose :", purpose);
     if (purpose !== "email-verification") {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -281,14 +280,18 @@ export const verifyResetPassword = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    if (user.isEmailVerified) {
-      return res.status(400).json({ message: "Email already verified" });
-    }
-    user.isEmailVerified = true;
-    await user.save();
 
-    await Verification.findByIdAndDelete(verification._id);
-    res.status(201).json({ message: "Email Verified Successfully" });
+    if(newPassword !== confirmPassword){
+        return res.status(401).json({ message: "Password do not match" });
+    }
+   const salt = await bcrypt.genSalt(10);
+   const hashedPassword = await bcrypt.hash(newPassword,salt);
+
+   user.password = hashedPassword;
+   await user.save()
+
+   await Verification.findByIdAndDelete(verification._id);
+    res.status(200).json({ message: "Password reset Successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
