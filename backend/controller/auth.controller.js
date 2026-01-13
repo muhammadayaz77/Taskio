@@ -226,7 +226,7 @@ export const resetPasswordRequest  = async (req, res) => {
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
 
-    const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${resetPasswordToken}`;
+    const verificationLink = `${process.env.FRONTEND_URL}/reset-password/${resetPasswordToken}`;
     const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email</p>`;
     const emailSubject = "Reset your password";
     const isEmailSent = await sendEmail(email, emailSubject, emailBody);
