@@ -255,6 +255,7 @@ export const resetPasswordRequest  = async (req, res) => {
 export const verifyResetPassword = async (req, res) => {
   try {
     const { token,newPassword,confirmPassword } = req.body;
+    console.log("token : ",token)
 
     let payload = jwt.verify(token, process.env.JWT_SECRET);
     if (!payload) {
@@ -293,6 +294,7 @@ export const verifyResetPassword = async (req, res) => {
    await Verification.findByIdAndDelete(verification._id);
     res.status(200).json({ message: "Password reset Successfully" });
   } catch (error) {
+    console.log("error : ",error)
     res.status(500).json({ message: "Internal server error", error });
   }
 };

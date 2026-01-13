@@ -9,15 +9,9 @@ export const useResetPassword = () => {
   const navigate = useNavigate( )
 
   return useMutation({
-    mutationFn: (data) => postData("/auth/reset-password-request", data),
+    mutationFn: (data) => postData("/auth/reset-password", data),
     onSuccess: (data) => {
       console.log('data : ',data)
-      dispatch(
-        loginSuccess({
-          user: data.user,
-          token: data.token,
-        })
-      );
 
       window.toastify(
         data?.message || "Reset pasword email sent",
@@ -27,7 +21,7 @@ export const useResetPassword = () => {
     onError: (err) => {
       console.log("Error : ",err)
       window.toastify(
-        err?.response?.data?.message || "Login failed",
+        err?.response?.data?.message || "Reset password failed",
         "error"
       );
     },
