@@ -8,6 +8,7 @@ import VerifyEmail from '../components/Auth/VerifyEmail'
 import AuthProvider from '../providers/AuthProviders'
 import Dashboard from './Dashboard'
 import ForgotPassword from '../components/Auth/ForgotPassword'
+import ResetPassword from '../components/Auth/ResetPassword'
 // import Admin from './Admin/Index.jsx'
 // import ProtectedRoutes from '../ProtectedRoutes/ProtectedRoutes.jsx'
 
@@ -26,7 +27,7 @@ import ForgotPassword from '../components/Auth/ForgotPassword'
       <Route path="/sign-up" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
-      <Route path="/ayaz" element={<>Ayaz</>} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
 
       <Route path="/dashboard" element={<Dashboard />} />
     {/* <Route element={<ProtectedRoute />}> */}

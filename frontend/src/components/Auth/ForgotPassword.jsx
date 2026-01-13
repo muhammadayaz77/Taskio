@@ -23,7 +23,7 @@ const ForgotPassword = () => {
   const [isSuccess,setIsSuccess] = useState(false);
     const {mutate,isPending} = useForgotPassword()
   const form = useForm({
-    resolver: zodResolver(emailSchema),
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
     },
