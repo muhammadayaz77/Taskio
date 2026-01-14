@@ -32,12 +32,17 @@ export const register = async (req, res) => {
       });
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password,salt);
+ 
+
     // const managerId = req.user._id;
     let newUser = await User.create({
       name: fullName,
       email,
-      password,
+      password : hashedPassword,
     });
+
     const user = {
       name: newUser.name,
       email: newUser.email,
@@ -124,7 +129,6 @@ export const login = async (req, res) => {
         const emailSubject = "Verify your email";
 
         const isEmailSent = await sendEmail(email, emailSubject, emailBody);
-        console.log("isemail sent : ", isEmailSent);
         if (!isEmailSent) {
           return res.status(500).json({
             message: "Failed to send verification email",
@@ -140,6 +144,7 @@ export const login = async (req, res) => {
     }
 
     let isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("is password : ",user.password) 
     if (!isPasswordValid) {
       return res.status(400).json({
         message: "Invalid email or password",
@@ -289,7 +294,6 @@ export const verifyResetPassword = async (req, res) => {
    const hashedPassword = await bcrypt.hash(newPassword,salt);
 
    user.password = hashedPassword;
-
    await user.save();
 
    await Verification.findByIdAndDelete(verification._id);
@@ -314,10 +318,11 @@ export const verifyEmail = async (req, res) => {
     }
     const verification = await Verification.findOne({
       userId,
-      token,
     });
-    console.log("Verification : ", payload);
-    console.log("Verification : ", payload);
+    console.log("Payload : ", payload);
+    console.log("Verification : ", verification);
+    const user = await User.findById(userId);
+    console.log('user : ',user)
     if (!verification) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -325,7 +330,6 @@ export const verifyEmail = async (req, res) => {
     if (isTokenExpired) {
       return res.status(401).json({ message: "Token expired" });
     }
-    const user = await User.findById(userId);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
