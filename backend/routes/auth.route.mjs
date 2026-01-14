@@ -21,7 +21,7 @@ router.post("/reset-password-request",
   validateSchema(emailSchema)
   ,resetPasswordRequest) 
 router.post("/reset-password",
-  validateSchema(resetPasswordSchema    )
+  validateSchema(resetPasswordSchema)
   ,verifyResetPassword) 
 
 export default router

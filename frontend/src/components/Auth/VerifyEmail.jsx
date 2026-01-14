@@ -61,14 +61,14 @@ function VerifyEmail() {
             {/* Back Button */}
             {isSuccess ? (
               <Link
-                to="/login"
+                to="/sign-in"
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition"
               >
                 <ArrowLeft size={16} /> Back to Login
               </Link>
             ) : (
               <Link
-                to="/signup"
+                to="/sign-up"
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition"
               >
                 <ArrowLeft size={16} /> Back to Signup

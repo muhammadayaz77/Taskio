@@ -255,14 +255,14 @@ export const resetPasswordRequest  = async (req, res) => {
 export const verifyResetPassword = async (req, res) => {
   try {
     const { token,newPassword,confirmPassword } = req.body;
-    console.log("token : ",token)
-
+    
     let payload = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("payload : ",payload)
     if (!payload) {
       return res.status(401).json({ message: "Unauthorized" });
     }
     let { userId, purpose } = payload;
-    if (purpose !== "email-verification") {
+    if (purpose !== "reset-password") {
       return res.status(401).json({ message: "Unauthorized" });
     }
     const verification = await Verification.findOne({
@@ -289,7 +289,8 @@ export const verifyResetPassword = async (req, res) => {
    const hashedPassword = await bcrypt.hash(newPassword,salt);
 
    user.password = hashedPassword;
-   await user.save()
+
+   await user.save();
 
    await Verification.findByIdAndDelete(verification._id);
     res.status(200).json({ message: "Password reset Successfully" });
@@ -315,6 +316,7 @@ export const verifyEmail = async (req, res) => {
       userId,
       token,
     });
+    console.log("Verification : ", payload);
     console.log("Verification : ", payload);
     if (!verification) {
       return res.status(401).json({ message: "Unauthorized" });
