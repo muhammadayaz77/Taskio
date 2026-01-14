@@ -17,13 +17,14 @@ export const loginSchema = z.object({
     .regex(noSpaceRegex, "Spaces are not allowed in password")
     .regex(noEmojiRegex, "Emojis are not allowed in password"),
 });
+
 export const emailSchema = z.object({
   email: z
     .string()
-    .email("Invalid email address")
-    .regex(noEmojiRegex, "Emojis are not allowed in email"),
-
+    .regex(noEmojiRegex, "Emojis are not allowed in email")
+    .email("Invalid email address"),
 });
+
 
 export const signupSchema = z
   .object({
