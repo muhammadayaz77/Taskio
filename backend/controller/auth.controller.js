@@ -307,7 +307,6 @@ export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.body;
 
-    console.log("token : ", token);
 
     let payload = jwt.verify(token, process.env.JWT_SECRET);
     let { userId, purpose } = payload;
