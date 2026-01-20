@@ -22,6 +22,7 @@ import ResetPassword from '../components/Auth/ResetPassword'
 
     <Route element={<AppLayout />}>
       <Route path="/" element={<>Dasboard</>} />
+      <Route path="/dashboard" element={<Dashboard />} />
     </Route>
       <Route path="/sign-in" element={<Login />} />
       <Route path="/sign-up" element={<Signup />} />
@@ -29,7 +30,6 @@ import ResetPassword from '../components/Auth/ResetPassword'
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-      <Route path="/dashboard" element={<Dashboard />} />
     {/* <Route element={<ProtectedRoute />}> */}
     {/* <Route element={<ProtectedRoute />}> */}
 {/* </Route> */}

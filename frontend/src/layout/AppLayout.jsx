@@ -1,11 +1,24 @@
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
+import { useSelector } from "react-redux";
+import Loader from "../components/common/Loader";
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+
+  let {isAuthenticated,isLoading} = useSelector(store => store.auth)
+
+  
+  if(isLoading){
+    return <Loader />
+  }
+  if(!isAuthenticated){
+    return <Navigate to='sign-in' ></Navigate>
+  }
+  console.log('is : ',isAuthenticated,isLoading)
 
   return (
     <div className="min-h-screen xl:flex">
