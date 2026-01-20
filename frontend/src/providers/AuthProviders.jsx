@@ -1,69 +1,65 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  logout,
-  restoreAuth,
-  setIsLoading,
-  setIsAuthenticated,
-} from "../../store/auth/authSlice.js";
-import { useLocation, useNavigate } from "react-router-dom";
+import { restoreAuth, setIsLoading, setIsAuthenticated, logout } from "../../store/auth/authSlice.js";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { publicRoutes } from "../lib/publicRoutes.js";
+import Loader from "../components/common/Loader.jsx";
 
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, isLoading } = useSelector(state => state.auth);
+
+  
+  // List of routes that should only be accessible to public users
+  const authPages = ["/sign-in", "/sign-up", "/forgot-password"];
+
 
   const isPublicRoute =
-    publicRoutes.includes(pathname) ||
-    pathname.startsWith("/verify-email/");
+    publicRoutes.includes(pathname) || pathname.startsWith("/verify-email/");
 
+  // ✅ Restore auth from localStorage on mount
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuth = () => {
       dispatch(setIsLoading(true));
+      const user = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-      try {
-        const user = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
-        
-        if (user && token) {
-          dispatch(
-            restoreAuth({
-              user: JSON.parse(user),
-            })
-          );
-        } else {
-          dispatch(setIsAuthenticated(false));
-          if (!isPublicRoute) {
-            navigate("/sign-in");
-          }
-        }
-      } finally {
-        dispatch(setIsLoading(false));
+      if (user && token) {
+        dispatch(restoreAuth({ user: JSON.parse(user) }));
+      } else {
+        dispatch(setIsAuthenticated(false));
       }
+
+      dispatch(setIsLoading(false));
     };
 
-    // checkAuth();
-  }, [dispatch, navigate, isPublicRoute]);
+    checkAuth();
+  }, [dispatch]);
 
-  // FIXED: Add dependencies and only navigate if not already on sign-in
+  // ✅ Listen for force logout events
   useEffect(() => {
-    console.log('Setting up logout listener');
-    
     const handleLogout = () => {
-      console.log('Force logout triggered');
       dispatch(logout());
-      navigate("/sign-in");
+      navigate("/sign-in", { replace: true });
     };
-
     window.addEventListener("force-logout", handleLogout);
-    
-    return () => {
-      console.log('Cleaning up logout listener');
-      window.removeEventListener("force-logout", handleLogout);
-    };
-  }, [dispatch, navigate]); // Add dependencies
+    return () => window.removeEventListener("force-logout", handleLogout);
+  }, [dispatch, navigate]);
+
+  // ✅ Show loader while checking auth
+  if (isLoading) return <Loader />;
+
+  // ✅ Navigate only if not authenticated & not on public route
+  if (!isAuthenticated && !isPublicRoute) {
+    return <Navigate to="/sign-in" replace />;
+  }
+
+   // ✅ Redirect authenticated users away from auth pages
+   if (isAuthenticated && authPages.includes(pathname)) {
+    return <Navigate to="/dashboard" replace />; // or any dashboard/home route
+  }
 
   return children;
 };

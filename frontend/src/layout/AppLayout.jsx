@@ -8,17 +8,11 @@ import Loader from "../components/common/Loader";
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const { isAuthenticated, isLoading } = useSelector(store => store.auth);
 
-  let {isAuthenticated,isLoading} = useSelector(store => store.auth)
+  if (isLoading) return <Loader />;
 
-  
-  if(isLoading){
-    return <Loader />
-  }
-  if(!isAuthenticated){
-    return <Navigate to='sign-in' ></Navigate>
-  }
-  console.log('is : ',isAuthenticated,isLoading)
+  if (!isAuthenticated) return <Navigate to="/sign-in" replace />;
 
   return (
     <div className="min-h-screen xl:flex">
@@ -40,12 +34,10 @@ const LayoutContent = () => {
   );
 };
 
-const AppLayout = () => {
-  return (
-    <SidebarProvider>
-      <LayoutContent />
-    </SidebarProvider>
-  );
-};
+const AppLayout = () => (
+  <SidebarProvider>
+    <LayoutContent />
+  </SidebarProvider>
+);
 
 export default AppLayout;
