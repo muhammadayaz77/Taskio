@@ -9,8 +9,6 @@ import AuthProvider from '../providers/AuthProviders'
 import Dashboard from './Dashboard'
 import ForgotPassword from '../components/Auth/ForgotPassword'
 import ResetPassword from '../components/Auth/ResetPassword'
-// import Admin from './Admin/Index.jsx'
-// import ProtectedRoutes from '../ProtectedRoutes/ProtectedRoutes.jsx'
 
  function Index() {
   return (
