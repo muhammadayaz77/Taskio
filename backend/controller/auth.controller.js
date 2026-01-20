@@ -262,7 +262,6 @@ export const verifyResetPassword = async (req, res) => {
     const { token,newPassword,confirmPassword } = req.body;
     
     let payload = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("payload : ",payload)
     if (!payload) {
       return res.status(401).json({ message: "Unauthorized" });
     }
