@@ -1,19 +1,42 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useSidebar } from "../context/SidebarContext";
-import { useSelector } from "react-redux";
-// import NotificationDropdown from "../components/header/NotificationDropdown";
-// import UserDropdown from "../components/header/UserDropdown";
+import { useDispatch, useSelector } from "react-redux";
+// import { logout } from "@/store/auth/authSlice";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "../components/ui/dropdown-menu";
+
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
+
+import {
+  Bell,
+  ChevronDown,
+  Layers,
+  Plus,
+  User,
+  Settings,
+  LogOut,
+} from "lucide-react";
 
 const AppHeader = ({
   onWorkspaceSelected,
   selectedWorkspace,
-  onCreateWorkspace
+  onCreateWorkspace,
 }) => {
-  const {user} = useSelector(store => store.auth);
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.auth);
+
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
+
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  console.log("user : ",user)
+
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
       toggleSidebar();
@@ -26,7 +49,7 @@ const AppHeader = ({
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -35,26 +58,22 @@ const AppHeader = ({
         inputRef.current?.focus();
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
-    <header className="sticky top-0 flex w-full bg-white border-b border-gray-200
-     z-90">
-      <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
-        {/* Left Section */}
-        <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
-          {/* Sidebar Toggle Button */}
-          <div className="flex gap-2">
-            
-          <button
-            className="flex items-center justify-center w-10 h-10 text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-100 lg:h-11 lg:w-11 transition"
-            onClick={handleToggle}
-            aria-label="Toggle Sidebar"
-          >
-            {isMobileOpen ? (
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+      <div className="flex flex-col lg:flex-row lg:px-6">
+        {/* LEFT */}
+        <div className="flex items-center justify-between w-full px-3 py-3 border-b lg:border-b-0 lg:py-4 lg:px-0">
+          <div className="flex items-center gap-2">
+            {/* Sidebar Toggle */}
+            <button
+              className="flex items-center justify-center w-10 h-10 border rounded-lg hover:bg-gray-100"
+              onClick={handleToggle}
+            >
+               {isMobileOpen ? (
               /* Close Icon */
               <svg
                 width="24"
@@ -86,61 +105,115 @@ const AppHeader = ({
                   fill="currentColor"
                 />
               </svg>
-            )}
-          </button>
-          <button
-            className="flex items-center justify-center p-3 h-10 text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-100 lg:h-11 transition"
-            // onClick={()}
-            aria-label="Toggle Sidebar"
-          >
-           Workspace
-          </button>
+            )}  
+            </button>
+
+            {/* WORKSPACE DROPDOWN */}
+            <DropdownMenu open={workspaceOpen} onOpenChange={setWorkspaceOpen}>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition">
+                  <Layers size={16} />
+                  <span className="text-sm font-medium">Workspace</span>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${
+                      workspaceOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem>Workspace 1</DropdownMenuItem>
+                <DropdownMenuItem>Workspace 2</DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem onClick={onCreateWorkspace}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Workspace
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          {/* Logo for Mobile */}
+
+          {/* Logo Mobile */}
           <Link to="/" className="lg:hidden">
-            <img
-              width={30}
-              height={30}
-              src="/Logo.png"
-              alt="Logo"
-              className="object-contain"
-            />
+            <img src="/Logo.png" width={30} height={30} alt="Logo" />
           </Link>
 
-          {/* App Menu Button (mobile only) */}
+          {/* Mobile Menu */}
           <button
             onClick={toggleApplicationMenu}
-            className="flex items-center justify-center w-10 h-10 text-gray-100 rounded-lg hover:bg-gray-100 lg:hidden transition" 
+            className="lg:hidden w-10 h-10 rounded-lg hover:bg-gray-100"
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M6 10.5c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5S4.5 12.828 4.5 12s.672-1.5 1.5-1.5Zm12 0c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5S16.5 12.828 16.5 12s.672-1.5 1.5-1.5ZM12 10.5c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5S10.5 12.828 10.5 12s.672-1.5 1.5-1.5Z"
-                fill="currentColor"
-              />
-            </svg>
+            ⋮
           </button>
         </div>
-        {/* Right Section */}
+
+        {/* RIGHT */}
         <div
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
-          } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-sm lg:justify-end lg:px-0 lg:shadow-none`}
+          } lg:flex items-center justify-end gap-3 px-5 py-4 lg:px-0`}
         >
-          <div className="flex items-center gap-2 2xsm:gap-3">
-            {/* <NotificationDropdown /> */}
-            notification dropdown
-          </div>
+          {/* NOTIFICATION DROPDOWN */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative px-3 h-10 border rounded-lg hover:bg-gray-100">
+                <Bell size={18} />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64">
+              <DropdownMenuItem>No new notifications</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          {/* <UserDropdown /> */}
-          User dropdown
+          {/* USER DROPDOWN */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 px-2 h-10 border rounded-lg hover:bg-gray-100">
+                <Avatar className="h-7 w-7">
+                  <AvatarFallback>
+                    {user?.name?.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="hidden sm:block text-sm font-medium">
+                  {user?.name}
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-56">
+              <div className="px-3 py-2 text-sm">
+                <p className="font-medium">{user?.name}</p>
+                <p className="text-xs text-gray-500">{user?.email}</p>
+              </div>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                // onClick={() => dispatch(logout())}
+                className="text-red-600"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
