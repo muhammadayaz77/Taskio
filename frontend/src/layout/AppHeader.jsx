@@ -24,6 +24,12 @@ import {
   LogOut,
 } from "lucide-react";
 
+const workspaces =[
+  {_id:'1',name:"Ayaz"},
+  {_id:'2',name:"Ayaz"},
+  {_id:'3',name:"Ayaz"},
+];
+
 const AppHeader = ({
   onWorkspaceSelected,
   selectedWorkspace,
@@ -124,8 +130,21 @@ const AppHeader = ({
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className="w-56">
-                <DropdownMenuItem>Workspace 1</DropdownMenuItem>
-                <DropdownMenuItem>Workspace 2</DropdownMenuItem>
+                {
+                  workspaces.map(ws => <>
+                  
+                    <DropdownMenuItem
+                    key={ws._id}
+                     onClick={() => onWorkspaceSelected(ws)}
+                     >
+                      {ws?.color && (
+                        <WorkspaceAvatar color={ws.color} name={ws.name} />
+                    )}
+                    <span>{ws?.name}</span>
+                      </DropdownMenuItem>
+                      </>
+                  )
+                }
 
                 <DropdownMenuSeparator />
 
