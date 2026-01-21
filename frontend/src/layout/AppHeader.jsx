@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useSidebar } from "../context/SidebarContext";
+import { useSelector } from "react-redux";
 // import NotificationDropdown from "../components/header/NotificationDropdown";
 // import UserDropdown from "../components/header/UserDropdown";
 
-const AppHeader = () => {
+const AppHeader = ({
+  onWorkspaceSelected,
+  selectedWorkspace,
+  onCreateWorkspace
+}) => {
+  const {user} = useSelector(store => store.auth);
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-
+  console.log("user : ",user)
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
       toggleSidebar();
@@ -35,11 +41,14 @@ const AppHeader = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 flex w-full bg-white border-b border-gray-200 z-[99]">
+    <header className="sticky top-0 flex w-full bg-white border-b border-gray-200
+     z-90">
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
         {/* Left Section */}
         <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
           {/* Sidebar Toggle Button */}
+          <div className="flex gap-2">
+            
           <button
             className="flex items-center justify-center w-10 h-10 text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-100 lg:h-11 lg:w-11 transition"
             onClick={handleToggle}
@@ -79,7 +88,14 @@ const AppHeader = () => {
               </svg>
             )}
           </button>
-
+          <button
+            className="flex items-center justify-center p-3 h-10 text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-100 lg:h-11 transition"
+            // onClick={()}
+            aria-label="Toggle Sidebar"
+          >
+           Workspace
+          </button>
+          </div>
           {/* Logo for Mobile */}
           <Link to="/" className="lg:hidden">
             <img

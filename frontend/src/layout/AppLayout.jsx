@@ -5,14 +5,21 @@ import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
 import { useSelector } from "react-redux";
 import Loader from "../components/common/Loader";
+import { useState } from "react";
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   const { isAuthenticated, isLoading } = useSelector(store => store.auth);
+  const [isCreatingWorkspace,setIsCreatingWorkspace] = useState(false);
+  const [currentWorkspace,setCurrentWorkspace] = useState({});
 
   if (isLoading) return <Loader />;
 
   if (!isAuthenticated) return <Navigate to="/sign-in" replace />;
+
+  const handleWorkspaceSelected = (workspace) => {
+    setCurrentWorkspace(workspace);
+  }
 
   return (
     <div className="min-h-screen xl:flex">
@@ -25,7 +32,11 @@ const LayoutContent = () => {
           isExpanded || isHovered ? "lg:ml-[290px]" : "lg:ml-[90px]"
         } ${isMobileOpen ? "ml-0" : ""}`}
       >
-        <AppHeader />
+        <AppHeader
+        onWorkspaceSelected={handleWorkspaceSelected}
+        selectedWorkspace={currentWorkspace}
+        onCreateWorkspace={() => setIsCreatingWorkspace(true)}
+        />
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
           <Outlet />
         </div>
