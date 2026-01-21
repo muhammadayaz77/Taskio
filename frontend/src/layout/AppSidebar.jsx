@@ -4,7 +4,36 @@ import { Link, useLocation } from "react-router";
 
 import { Grid as GridIcon, ChevronDown as ChevronDownIcon, MoreHorizontal as HorizontaLDots } from "lucide-react";
 import {  UserCog as User } from "lucide-react";
-import { Store } from "lucide-react";
+
+import { Store, CheckSquare, Users, Settings, Archive, Folder, Clipboard } from "lucide-react";
+
+const navItems = [
+  {
+    icon: <Folder />,
+    name: "Workspaces",
+    path: "/workspaces",
+  },
+  {
+    icon: <Clipboard />,
+    name: "My Tasks",
+    path: "/my-tasks",
+  },
+  {
+    icon: <Users />,
+    name: "Members",
+    path: "/members",
+  },
+  {
+    icon: <CheckSquare />,
+    name: "Achieved",
+    path: "/achieved",
+  },
+  {
+    icon: <Settings />,
+    name: "Settings",
+    path: "/settings",
+  },
+];
 
 import { useSidebar } from "../context/SidebarContext";
 
@@ -22,18 +51,7 @@ const adminNavItems = [
   },
 ];
 
-const sellerNavItems = [
-  {
-    icon: <User />,
-    name: "Seller Information",
-    path: "/seller/add",
-  },
-  {
-    icon: <Store />,
-    name: "Store Details",
-    path: "/seller/store/detail",
-  },
-];
+
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -43,9 +61,9 @@ const AppSidebar = () => {
   const subMenuRefs = useRef({});
 
   // 👇 You can change this dynamically later (e.g., from localStorage)
-  const [role] = useState("seller");
+  // const [role] = useState("seller");
 
-  const navItems = role === "admin" ? adminNavItems : role === 'seller' ? sellerNavItems : [];
+  // const navItems = role === "admin" ? adminNavItems : role === 'seller' ? navItems : [];
 
   const isActive = useCallback(
     (path) => location.pathname === path,
@@ -109,7 +127,7 @@ const AppSidebar = () => {
             <div className="flex items-center gap-2">
               <img src="/Logo.png" alt="Logo" width={50} height={40} />
               <span className="text-gray-900 text-2xl font-semibold">
-                GemStone
+                Taskio
               </span>
             </div>
           ) : (
@@ -144,7 +162,7 @@ const AppSidebar = () => {
                     {nav.subItems ? (
                       <button
                         onClick={() => handleSubmenuToggle(index)}
-                        className={`flex items-center w-full gap-3 px-3 py-2 rounded-lg transition-colors duration-200
+                        className={`flex items-center justify-center w-full gap-3 px-3 py-2 rounded-lg transition-colors duration-200
                           ${
                             openSubmenu === index
                               ? "bg-gray-100 text-black"
@@ -156,7 +174,7 @@ const AppSidebar = () => {
                               : "lg:justify-start"
                           }`}
                       >
-                        <span className="w-5 h-5">{nav.icon}</span>
+                        <span className="w-4 h-4">{nav.icon}</span>
                         {(isExpanded || isHovered || isMobileOpen) && (
                           <span className="text-sm font-medium whitespace-nowrap">
                             {nav.name}
@@ -183,7 +201,7 @@ const AppSidebar = () => {
                                 : "text-gray-700 hover:bg-gray-50"
                             }`}
                         >
-                          <span className="w-5 h-5">{nav.icon}</span>
+                          <span className="w-4 h-4">{nav.icon}</span>
                           {(isExpanded || isHovered || isMobileOpen) && (
                             <span className="text-sm font-medium whitespace-nowrap">
                               {nav.name}
