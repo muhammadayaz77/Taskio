@@ -19,7 +19,6 @@ const LayoutContent = () => {
 
   const handleWorkspaceSelected = (workspace) => {
     setCurrentWorkspace(workspace);
-    console.log('workspace : ',workspace);
   }
 
   return (
