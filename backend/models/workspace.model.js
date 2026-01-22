@@ -6,7 +6,9 @@ const workspaceSchema = new mongoose.Schema({
     type: String, trim: true
   },
   color: {
-    type: String, trim: true
+    type: String, 
+    trim: true,
+    default : "#3B82F6"
 },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
