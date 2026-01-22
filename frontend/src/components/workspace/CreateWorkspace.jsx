@@ -92,7 +92,7 @@ function CreateWorkspace({ isCreatingWorkspace, setIsCreatingWorkspace }) {
                         type="button"
                         key={color}
                         onClick={() => form.setValue("color", color)}
-                        className={`h-7 w-7 rounded-full border-2 transition ${
+                        className={`h-7 w-7 rounded-full border-2 transition cursor-pointer ${
                           selectedColor === color
                             ? "border-black scale-110"
                             : "border-transparent"
@@ -130,10 +130,13 @@ function CreateWorkspace({ isCreatingWorkspace, setIsCreatingWorkspace }) {
                 type="button"
                 variant="outline"
                 onClick={() => setIsCreatingWorkspace(false)}
+                className='cursor-pointer'
               >
                 Cancel
               </Button>
-              <Button type="submit">Create</Button>
+              <Button type="submit"
+              className='cursor-pointer'
+              >Create</Button>
             </DialogFooter>
           </form>
         </Form>
