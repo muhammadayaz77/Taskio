@@ -6,6 +6,7 @@ import AppSidebar from "./AppSidebar";
 import { useSelector } from "react-redux";
 import Loader from "../components/common/Loader";
 import { useState } from "react";
+import CreateWorkspace from "../components/workspace/CreateWorkspace";
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -41,6 +42,10 @@ const LayoutContent = () => {
           <Outlet />
         </div>
       </div>
+      <CreateWorkspace
+      isCreatingWorkspace={isCreatingWorkspace}
+      setIsCreatingWorkspace={setIsCreatingWorkspace}
+      />
     </div>
   );
 };

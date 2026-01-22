@@ -23,6 +23,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { logout } from "../../store/auth/authSlice";
 
 const workspaces =[
   {_id:'1',name:"Ayaz"},
@@ -37,12 +38,15 @@ const AppHeader = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-
+  
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
-
+  
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-
+  
+  const handleLogout = () => {
+    dispatch(logout())
+  }
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
       toggleSidebar();
@@ -212,12 +216,12 @@ const AppHeader = ({
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem>
+              <DropdownMenuItem className='cursor-pointer'>
                 <User className="mr-2 h-4 w-4" />
                 Profile
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
+              <DropdownMenuItem className='cursor-pointer'>
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
@@ -225,8 +229,8 @@ const AppHeader = ({
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
-                // onClick={() => dispatch(logout())}
-                className="text-red-600"
+                onClick={handleLogout}
+                className="text-red-600 cursor-pointer"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
