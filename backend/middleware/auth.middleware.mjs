@@ -6,6 +6,7 @@ const authMiddleware = async (req, res, next) => {
     //  Get Authorization header
     const authHeader = req.headers.authorization;
 
+    console.log("auth header : ",authHeader);
     // Format: "Bearer TOKEN"
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
@@ -20,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
     //  Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.userId);
     if (!user) {
       return res.status(401).json({
         success: false,

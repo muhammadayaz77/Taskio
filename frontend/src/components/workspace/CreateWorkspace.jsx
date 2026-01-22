@@ -60,7 +60,7 @@ function CreateWorkspace({ isCreatingWorkspace, setIsCreatingWorkspace }) {
           setIsCreatingWorkspace(false)
         },
         onError : (err) => {
-          console.log('Error : ',err)
+          console.log('Error : ',err);
         }
       }
     )
@@ -147,7 +147,9 @@ function CreateWorkspace({ isCreatingWorkspace, setIsCreatingWorkspace }) {
               </Button>
               <Button type="submit"
               className='cursor-pointer'
-              >Create</Button>
+              >
+                {isPending ? 'Creating...' : 'Create'}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

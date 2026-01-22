@@ -1,8 +1,8 @@
 import express from 'express'
-import {login, register, resetPasswordRequest, verifyEmail, verifyResetPassword} from '../controller/auth.controller.js'
+import {login, register, resetPasswordRequest, verifyEmail, verifyResetPassword} from '../controller/auth.controller.mjs'
 import {validateRequest} from 'zod-express-middleware'
-import { emailSchema, loginSchema, registerSchema, resetPasswordSchema, verfiyEmailSchema } from '../libs/validate-schema.js'
-import { validateSchema } from '../libs/validateSchema.js'
+import { emailSchema, loginSchema, registerSchema, resetPasswordSchema, verfiyEmailSchema } from '../libs/validate-schema.mjs'
+import { validateSchema } from '../libs/validateSchema.mjs'
 let router = express.Router()
 
 router.post("/login",

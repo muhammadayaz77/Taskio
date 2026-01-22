@@ -12,12 +12,11 @@ export const useCreateWorkspace = () => {
     onSuccess: (data) => {
       console.log('data : ',data)
       
-
       window.toastify(
         data?.message || "Workspace created successfully",
         "success"
       );
-      navigate(`/workspaces/${data.}`)
+      navigate(`/workspaces/${data._id}`)
     },
     onError: (err) => {
       window.toastify(

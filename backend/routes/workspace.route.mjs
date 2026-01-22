@@ -1,8 +1,8 @@
 import express from 'express';
-import { validateSchema } from '../libs/validateSchema';
-import { workspaceSchema } from '../libs/validate-schema';
+import { validateSchema } from '../libs/validateSchema.mjs';
+import { workspaceSchema } from '../libs/validate-schema.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
-import { createWorkspace } from '../controller/workspace.controller';
+import { createWorkspace } from '../controller/workspace.controller.mjs';
 
 
 const router = express.Router();
