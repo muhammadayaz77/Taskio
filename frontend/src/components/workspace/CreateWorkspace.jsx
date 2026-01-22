@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import {useCreateWorkspace} from '../../hooks/workspace/useCreateWorkspace'
 
 import {
   Dialog,
@@ -38,6 +38,8 @@ const colorOptions = [
 
 
 function CreateWorkspace({ isCreatingWorkspace, setIsCreatingWorkspace }) {
+
+  const {mutate,isPending} = useCreateWorkspace()
   const form = useForm({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
@@ -51,8 +53,17 @@ function CreateWorkspace({ isCreatingWorkspace, setIsCreatingWorkspace }) {
 
   const onSubmit = (data) => {
     console.log("Workspace Data:", data);
-    setIsCreatingWorkspace(false);
-    form.reset();
+    mutate(
+      data,{
+        onSuccess :() => {
+          form.reset();
+          setIsCreatingWorkspace(false)
+        },
+        onError : (err) => {
+          console.log('Error : ',err)
+        }
+      }
+    )
   };
 
   return (

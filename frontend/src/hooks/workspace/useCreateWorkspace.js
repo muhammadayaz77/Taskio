@@ -14,14 +14,14 @@ export const useCreateWorkspace = () => {
       
 
       window.toastify(
-        data?.message || "You are logged in",
+        data?.message || "Workspace created successfully",
         "success"
       );
-      navigate("/dashboard")
+      navigate(`/workspaces/${data.}`)
     },
     onError: (err) => {
       window.toastify(
-        err?.response?.data?.message || "Login failed",
+        err?.response?.data?.message || "Workspace create failed",
         "error"
       );
     },
