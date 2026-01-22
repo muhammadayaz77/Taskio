@@ -77,3 +77,23 @@ export const resetPasswordSchema = z
   export const verfiyEmailSchema = z.object({
     token : z.string().min(1,"Token is required")
   })
+
+  
+  export const workspaceSchema = z.object({
+    
+    name: z
+      .string()
+      .min(3, "Name must be at least 3 characters")
+      .regex(noEmojiRegex, "Emojis are not allowed in name")
+     ,
+    color: z
+      .string()
+      .min(3, "Color must be at least 3 characters")
+      .regex(noEmojiRegex, "Emojis are not allowed in color"),
+    
+      description: z
+      .string()
+      .optional()
+
+  })
+  

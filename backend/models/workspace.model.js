@@ -35,5 +35,5 @@ const workspaceSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-const Team = mongoose.model('Team', teamSchema);
-export default Team;
+const Workspace = mongoose.model('Workspace', workspaceSchema);
+export default Workspace;
