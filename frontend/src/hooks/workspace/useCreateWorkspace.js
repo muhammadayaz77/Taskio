@@ -10,7 +10,6 @@ export const useCreateWorkspace = () => {
   return useMutation({
     mutationFn: (data) => postData("/workspaces", data),
     onSuccess: (data) => {
-      console.log('data : ',data)
       
       window.toastify(
         data?.message || "Workspace created successfully",
