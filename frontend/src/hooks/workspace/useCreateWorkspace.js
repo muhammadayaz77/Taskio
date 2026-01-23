@@ -16,7 +16,7 @@ export const useCreateWorkspace = () => {
         data?.message || "Workspace created successfully",
         "success"
       );
-      navigate(`/workspaces/${data._id}`)
+      navigate(`/workspaces/${data.workspace._id}`)
     },
     onError: (err) => {
       window.toastify(
