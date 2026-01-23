@@ -4,7 +4,6 @@ import { postData } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 export const useCreateWorkspace = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate()
 
   return useMutation({
