@@ -120,32 +120,46 @@ const AppHeader = ({
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition">
                   <Layers size={16} />
-                  <span className="text-sm font-medium">Workspace</span>
-                  <ChevronDown
-                    size={16}
-                    className={`transition-transform duration-200 ${
-                      workspaceOpen ? "rotate-180" : ""
-                    }`}
-                  />
+                  <DropdownMenuTrigger asChild>
+  <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition">
+    <Layers size={16} />
+    <span className="text-sm font-medium">
+      {selectedWorkspace?.name || "Workspace"}
+    </span>
+    <ChevronDown
+      size={16}
+      className={`transition-transform duration-200 ${
+        workspaceOpen ? "rotate-180" : ""
+      }`}
+    />
+  </button>
+</DropdownMenuTrigger>
+
                 </button>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className="w-56">
-                {
-                  workspaces.map(ws => <>
-                  
-                    <DropdownMenuItem
-                    key={ws._id}
-                     onClick={() => onWorkspaceSelected(ws)}
-                     >
-                      {ws?.color && (
-                        <Avatar color={ws.color} name={ws.name} />
-                    )}
-                    <span>{ws?.name}</span>
-                      </DropdownMenuItem>
-                      </>
-                  )
-                }
+              {workspaces.map((ws) => (
+  <DropdownMenuItem
+    key={ws._id}
+    onClick={() => onWorkspaceSelected(ws)}
+    className={`flex items-center gap-2 cursor-pointer ${
+      selectedWorkspace?._id === ws._id
+        ? "bg-gray-100 font-semibold"
+        : ""
+    }`}
+  >
+    <div
+      className="flex items-center justify-center w-7 h-7 rounded-full text-white text-xs font-semibold"
+      style={{ backgroundColor: ws.color || "#6366f1" }}
+    >
+      {ws.name?.charAt(0).toUpperCase()}
+    </div>
+
+    <span>{ws.name}</span>
+  </DropdownMenuItem>
+))}
+
 
                 <DropdownMenuSeparator />
 
