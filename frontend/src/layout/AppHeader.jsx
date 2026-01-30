@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import { useSidebar } from "../context/SidebarContext";
 import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "@/store/auth/authSlice";
@@ -25,12 +25,7 @@ import {
 } from "lucide-react";
 import { logout } from "../../store/auth/authSlice";
 
-const workspaces =[
-  {_id:'1',name:"Ayaz"},
-  {_id:'2',name:"Ayaz"},
-  {_id:'3',name:"Ayaz"},
-];
-
+// const {workspaces} = useLoaderData();
 const AppHeader = ({
   onWorkspaceSelected,
   selectedWorkspace,
@@ -38,6 +33,7 @@ const AppHeader = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
+  const workspaces = []
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
