@@ -33,7 +33,8 @@ const AppHeader = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const workspaces = []
+  const {workspaces} = useSelector(store => store.workspace);;
+  console.log('w',workspaces)
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -138,7 +139,7 @@ const AppHeader = ({
                      onClick={() => onWorkspaceSelected(ws)}
                      >
                       {ws?.color && (
-                        <WorkspaceAvatar color={ws.color} name={ws.name} />
+                        <Avatar color={ws.color} name={ws.name} />
                     )}
                     <span>{ws?.name}</span>
                       </DropdownMenuItem>
