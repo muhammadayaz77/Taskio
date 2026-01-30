@@ -33,7 +33,8 @@ const AppHeader = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const workspaces = []
+  const {workspaces} = useLoaderData()
+  console.log('work : ',workspaces)
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
