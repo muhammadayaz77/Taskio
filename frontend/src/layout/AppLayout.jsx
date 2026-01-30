@@ -8,24 +8,15 @@ import Loader from "../components/common/Loader";
 import { useState } from "react";
 import CreateWorkspace from "../components/workspace/CreateWorkspace";
 import { fetchData } from "../api/axios";
-
-export const clientLoader = async() => {
-  try {
-    const [workspaces] = await Promise.all([
-      fetchData('/workspaces')
-    ])
-    console.log('work spaces : ',workspaces)
-    return {workspaces}
-  } catch (error) {
-    console.log("Error : ",error)
-  }
-}
+import useGetWorkspaces from "../hooks/workspace/useGetWorkspaces";
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   const { isAuthenticated, isLoading } = useSelector(store => store.auth);
   const [isCreatingWorkspace,setIsCreatingWorkspace] = useState(false);
   const [currentWorkspace,setCurrentWorkspace] = useState({});
+
+  useGetWorkspaces()
 
   if (isLoading) return <Loader />;
 

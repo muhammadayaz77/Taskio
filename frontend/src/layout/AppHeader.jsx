@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLoaderData } from "react-router";
+import { Link } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "@/store/auth/authSlice";
@@ -33,8 +33,7 @@ const AppHeader = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const {workspaces} = useLoaderData()
-  console.log('work : ',workspaces)
+  const workspaces = []
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
