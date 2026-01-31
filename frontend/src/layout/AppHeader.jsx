@@ -137,7 +137,6 @@ const AppHeader = ({
 
                 </button>
               </DropdownMenuTrigger>
-
               <DropdownMenuContent className="w-56">
               {workspaces.map((ws) => (
   <DropdownMenuItem
