@@ -118,18 +118,18 @@ const AppHeader = ({
             <DropdownMenu open={workspaceOpen} onOpenChange={setWorkspaceOpen}>
                   <DropdownMenuTrigger asChild>
                   <button 
-  className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:opacity-90 transition cursor-pointer"
+  className={`flex items-center gap-2 px-3 h-10 border rounded-lg hover:opacity-90 transition cursor-pointer ${selectedWorkspace?.color ? "text-white" : 'text-black'} "`}
   style={{ 
     backgroundColor: selectedWorkspace?.color || "#fff",
-    color: "white" // or use a function to determine if text should be white or black
+    // color: "white" // or use a function to determine if text should be white or black
   }}>
-    <Layers size={16} className="text-black" />
-    <span className="text-sm font-medium text-black">
+    <Layers size={16} />
+    <span className="text-sm font-medium ">
       {selectedWorkspace?.name || "Workspace"}
     </span>
     <ChevronDown
       size={16}
-      className={`transition-transform duration-200 text-black ${
+      className={`transition-transform duration-200 ${
         workspaceOpen ? "rotate-180" : ""
       }`}
     />

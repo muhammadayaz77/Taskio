@@ -3,15 +3,17 @@ import { Plus, Users, Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import CreateWorkspace from "../../components/workspace/CreateWorkspace";
+import { useNavigate } from "react-router-dom";
 
 const Workspaces = () => {
+  const navigate = useNavigate();
   const { workspaces } = useSelector((store) => store.workspace);
   console.log("workspaces : s ",workspaces)
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
 
   const formatDate = (date) => {
     try {
-      return format(new Date(date), "MMM dd, yyyy");
+      return format(new Date(date), "MMM dd, yyyy 'at' h:mm a");
     } catch (error) {
       return "N/A";
     }
@@ -19,6 +21,7 @@ const Workspaces = () => {
 
   const handleViewWorkspace = (workspaceId) => {
     // Navigate to workspace details
+    navigate(`/workspaces/${workspaceId}`)
     console.log("View workspace:", workspaceId);
   };
 
