@@ -9,6 +9,7 @@ import AuthProvider from '../providers/AuthProviders'
 import Dashboard from './Dashboard'
 import ForgotPassword from '../components/Auth/ForgotPassword'
 import ResetPassword from '../components/Auth/ResetPassword'
+import Workspaces from './WorkSpace'
 
  function Index() {
   return (
@@ -19,7 +20,7 @@ import ResetPassword from '../components/Auth/ResetPassword'
     <Routes>
 
     <Route element={<AppLayout />}>
-      <Route path="/" element={<>Dasboard</>} />
+      <Route path="/workspaces" element={<Workspaces />} />
       <Route path="/dashboard" element={<Dashboard />} />
     </Route>
       <Route path="/sign-in" element={<Login />} />
