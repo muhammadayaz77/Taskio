@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+// useGetWorkspaces.js
+import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { fetchData } from "../../api/axios";
 import { setWorkspaces } from "../../../store/auth/workspaceSlice";
@@ -6,21 +7,15 @@ import { setWorkspaces } from "../../../store/auth/workspaceSlice";
 const useGetWorkspaces = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const [workspaces] = await Promise.all([
-          fetchData("/workspaces"),
-        ]);
-        console.log('workssss : ',workspaces);
-        dispatch(setWorkspaces(workspaces));
-      } catch (error) {
-        console.error("App init failed:", error);
-      }
-    };
-
-    init();
-  }, [dispatch]);
+  return useQuery({
+    queryKey: ["workspaces"],
+    queryFn: async () => {
+      const workspaces = await fetchData("/workspaces");
+      dispatch(setWorkspaces(workspaces)); // Keep Redux in sync if needed
+      return workspaces;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 };
 
 export default useGetWorkspaces;
