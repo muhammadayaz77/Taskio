@@ -39,7 +39,7 @@ const AppHeader = ({
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  
+  console.log("selected : ",selectedWorkspace.color)
   const handleLogout = () => {
     dispatch(logout())
   }
@@ -117,14 +117,19 @@ const AppHeader = ({
             {/* WORKSPACE DROPDOWN */}
             <DropdownMenu open={workspaceOpen} onOpenChange={setWorkspaceOpen}>
                   <DropdownMenuTrigger asChild>
-  <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition cursor-pointer">
-    <Layers size={16} />
-    <span className="text-sm font-medium">
+                  <button 
+  className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:opacity-90 transition cursor-pointer"
+  style={{ 
+    backgroundColor: selectedWorkspace?.color || "#fff",
+    color: "white" // or use a function to determine if text should be white or black
+  }}>
+    <Layers size={16} className="text-black" />
+    <span className="text-sm font-medium text-black">
       {selectedWorkspace?.name || "Workspace"}
     </span>
     <ChevronDown
       size={16}
-      className={`transition-transform duration-200 ${
+      className={`transition-transform duration-200 text-black ${
         workspaceOpen ? "rotate-180" : ""
       }`}
     />
