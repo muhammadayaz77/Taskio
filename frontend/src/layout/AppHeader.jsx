@@ -33,8 +33,7 @@ const AppHeader = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const {workspaces} = useSelector(store => store.workspace);;
-  console.log('w',workspaces)
+  const {workspaces} = useSelector(store => store.workspace);
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -77,7 +76,7 @@ const AppHeader = ({
           <div className="flex items-center gap-2">
             {/* Sidebar Toggle */}
             <button
-              className="flex items-center justify-center w-10 h-10 border rounded-lg hover:bg-gray-100"
+              className="flex items-center justify-center w-10 h-10 border rounded-lg hover:bg-gray-100 cursor-pointer"
               onClick={handleToggle}
             >
                {isMobileOpen ? (
@@ -117,11 +116,8 @@ const AppHeader = ({
 
             {/* WORKSPACE DROPDOWN */}
             <DropdownMenu open={workspaceOpen} onOpenChange={setWorkspaceOpen}>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition">
-                  <Layers size={16} />
                   <DropdownMenuTrigger asChild>
-  <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition">
+  <button className="flex items-center gap-2 px-3 h-10 border rounded-lg hover:bg-gray-100 transition cursor-pointer">
     <Layers size={16} />
     <span className="text-sm font-medium">
       {selectedWorkspace?.name || "Workspace"}
@@ -135,8 +131,6 @@ const AppHeader = ({
   </button>
 </DropdownMenuTrigger>
 
-                </button>
-              </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
               {workspaces.map((ws) => (
   <DropdownMenuItem
@@ -162,7 +156,7 @@ const AppHeader = ({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onCreateWorkspace}>
+                <DropdownMenuItem onClick={onCreateWorkspace} className='cursor-pointer'>
                   <Plus className="mr-2 h-4 w-4" />
                   Create Workspace
                 </DropdownMenuItem>
