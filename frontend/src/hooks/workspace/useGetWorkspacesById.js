@@ -10,7 +10,7 @@ const useGetWorkspacesById = (workspaceId) => {
   return useQuery({
     queryKey: ["workspace",workspaceId],
     queryFn: async () => {
-      const workspaces = await fetchData(`/workspace/${workspaceId}`);
+      const workspaces = await fetchData(`/workspace/${workspaceId}/projects`);
       // dispatch(setWorkspaces(workspaces)); // Keep Redux in sync if needed
       return workspaces;
     },
