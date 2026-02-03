@@ -55,3 +55,25 @@ export const getWorkspace = async (req, res) => {
     });
   }
 };
+export const getWorkspaceDetails = async (req, res) => {
+  try {
+    const {workspaceId} = req.params;
+   const workSpace = await Workspace.findById(workspaceId).populate(
+    "members.user",
+    "name email profilePicture"
+   )
+   if(!workSpace){
+     return res.status(404).json({
+    message : "Workspace not found",
+    success : false
+   });
+   }
+   res.status(200).json(workSpace);
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};

@@ -2,7 +2,7 @@ import express from 'express';
 import { validateSchema } from '../libs/validateSchema.mjs';
 import { workspaceSchema } from '../libs/validate-schema.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
-import { createWorkspace, getWorkspace } from '../controller/workspace.controller.mjs';
+import { createWorkspace, getWorkspace, getWorkspaceDetails } from '../controller/workspace.controller.mjs';
 
 
 const router = express.Router();
@@ -15,6 +15,9 @@ router.post("/",
 router.get("/", 
     authMiddleware,
   getWorkspace)
+router.get("/:workspaceId", 
+    authMiddleware,
+  getWorkspaceDetails)
 
 
 export default router;
