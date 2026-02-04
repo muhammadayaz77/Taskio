@@ -10,9 +10,9 @@ const useGetWorkspacesById = (workspaceId) => {
   return useQuery({
     queryKey: ["workspace",workspaceId],
     queryFn: async () => {
-      const workspaces = await fetchData(`/workspace/${workspaceId}/projects`);
+      const data = await fetchData(`/workspaces/${workspaceId}/projects`);
       // dispatch(setWorkspaces(workspaces)); // Keep Redux in sync if needed
-      return workspaces;
+      return data;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });

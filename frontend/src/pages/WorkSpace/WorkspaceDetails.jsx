@@ -8,20 +8,21 @@ function WorkspaceDetails() {
   const [isCreateProject,setIsCreateProject] = useState(false);
   const [isInviteMember,setIsInviteMember] = useState(false);
   const {workspaceId} = useParams()
+  const {data,isLoading} = useGetWorkspacesById(workspaceId);
+  console.log("data : ",data?.workSpace);
   if(!workspaceId){
     return <div>No Workspace found</div>
   }
   if(isLoading){
     return <Loader />
   }
-  const {data,isLoading} = useGetWorkspacesById(workspaceId);
   return (
     <div
     className='space-y-8'
     >
       <WorkspaceHeader
-      workspace={data.workspace}
-      members={data.workspace.members}
+      workspace={data.workSpace}
+      members={data?.workSpace?.members}
       onCreateProject={()=>setIsCreateProject(true)}
       onInviteMember={() => setIsInviteMember(true)}
       />

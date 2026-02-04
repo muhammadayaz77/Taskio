@@ -6,4 +6,4 @@ let router = express.Router()
 router.use("/auth",authRouter)
 router.use("/workspaces",workspaceRouter)
 
-export default router
+export default router;
