@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "@/store/auth/authSlice";
@@ -32,6 +32,7 @@ const AppHeader = ({
   onCreateWorkspace,
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { user } = useSelector((store) => store.auth);
   const {workspaces} = useSelector(store => store.workspace);
   
@@ -57,6 +58,11 @@ const AppHeader = ({
 
   const inputRef = useRef(null);
 
+  const onSelected = (ws)=> {
+    console.log("id : ",ws._id)
+    onWorkspaceSelected(ws)
+    navigate(`/workspaces/${ws._id}`);
+  }
   useEffect(() => {
     const handleKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
@@ -140,7 +146,7 @@ const AppHeader = ({
               {workspaces.map((ws) => (
   <DropdownMenuItem
     key={ws._id}
-    onClick={() => onWorkspaceSelected(ws)}
+    onClick={() => onSelected(ws)}
     className={`flex items-center gap-2 cursor-pointer ${
       selectedWorkspace?._id === ws._id
         ? "bg-gray-100 font-semibold"

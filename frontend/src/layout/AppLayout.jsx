@@ -1,5 +1,5 @@
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useNavigate } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
@@ -11,6 +11,7 @@ import { fetchData } from "../api/axios";
 import useGetWorkspaces from "../hooks/workspace/useGetWorkspaces";
 
 const LayoutContent = () => {
+  const navigate = useNavigate()
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   const { isAuthenticated, isLoading } = useSelector(store => store.auth);
   const [isCreatingWorkspace,setIsCreatingWorkspace] = useState(false);
@@ -24,6 +25,7 @@ const LayoutContent = () => {
 
   const handleWorkspaceSelected = (workspace) => {
     setCurrentWorkspace(workspace);
+    navigate()
   }
 
   return (
