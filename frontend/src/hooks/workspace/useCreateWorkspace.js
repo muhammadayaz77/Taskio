@@ -9,7 +9,7 @@ export const useCreateWorkspace = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-
+  
   return useMutation({
     mutationFn: (data) => postData("/workspaces", data),
     onSuccess: (data) => {
