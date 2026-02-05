@@ -4,6 +4,7 @@ import useGetWorkspacesById from '../../hooks/workspace/useGetWorkspacesById'
 import Loader from '../../components/common/Loader'
 import WorkspaceHeader from '../../components/workspace/WorkspaceHeader';
 import ProjectList from '../../components/workspace/ProjectList';
+import CreateProjectDialog from '../../components/workspace/CreateProjectDialog';
 
 function WorkspaceDetails() {
   const [isCreateProject,setIsCreateProject] = useState(false);
@@ -31,6 +32,12 @@ function WorkspaceDetails() {
       workspaceId={workspaceId}
       onCreateProject={() => setIsCreateProject(true)}
       projects={data?.projects}
+      />
+        <CreateProjectDialog
+        isOpen={isCreateProject}
+        onOpenChange={setIsCreateProject}
+        workspaceId={workspaceId}
+        workspaceMembers={data?.workspace?.members}
       />
     </div>
   )
