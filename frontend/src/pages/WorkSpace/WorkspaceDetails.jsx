@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import useGetWorkspacesById from '../../hooks/workspace/useGetWorkspacesById'
 import Loader from '../../components/common/Loader'
 import WorkspaceHeader from '../../components/workspace/WorkspaceHeader';
+import ProjectList from '../../components/workspace/ProjectList';
 
 function WorkspaceDetails() {
   const [isCreateProject,setIsCreateProject] = useState(false);
@@ -25,6 +26,12 @@ function WorkspaceDetails() {
       members={data?.workspace?.members}
       onCreateProject={()=>setIsCreateProject(true)}
       onInviteMember={() => setIsInviteMember(true)}
+      />
+      <ProjectList
+      workspaceId={workspaceId}
+      isOpen={isCreateProject}
+      onOpenChange={setIsCreateProject}
+      workspaceMembers={data?.workspace?.members}
       />
     </div>
   )
