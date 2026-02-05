@@ -29,9 +29,8 @@ function WorkspaceDetails() {
       />
       <ProjectList
       workspaceId={workspaceId}
-      isOpen={isCreateProject}
-      onOpenChange={setIsCreateProject}
-      workspaceMembers={data?.workspace?.members}
+      onCreateProject={() => setIsCreateProject(true)}
+      projects={data?.projects}
       />
     </div>
   )
