@@ -71,18 +71,22 @@ function CreateProjectDialog({
     if (!validate()) return;
 
     const payload = {
-      title,
-      description,
-      status,
-      startDate,
-      dueDate,
-      members: members
-        .filter((m) => m.selected)
-        .map((m) => ({ user: m.userId, role: m.role })),
-      workspaceId,
-    };
+  title,
+  description,
+  status,
+  startDate,
+  dueDate,
+  workspaceId,
+  members: members
+    .filter((m) => m.selected)
+    .map((m) => ({
+      user: m.userId,
+      role: m.role,
+    })),
+};
 
-    console.log("Project payload:", payload);
+console.log("FINAL PROJECT PAYLOAD:", payload);
+
 
     // Reset form
     setTitle("");
@@ -207,7 +211,7 @@ function CreateProjectDialog({
 
           {/* Dropdown panel */}
           {membersDropdownOpen && (
-            <div className="absolute z-10 mt-1 w-full bg-white border rounded shadow max-h-48 overflow-y-auto">
+            <div   className="absolute z-10 mt-1 w-full bg-white border rounded shadow max-h-48 overflow-y-auto" >
               {workspaceMembers.map((wm) => {
                 const memberState = members.find(
                   (m) => m.userId === wm.user._id
@@ -216,50 +220,53 @@ function CreateProjectDialog({
 
                 return (
                   <div
-                    key={wm.user._id}
-                    className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    <div
-                      className="flex items-center gap-2"
-                      onClick={() => toggleMember(wm.user._id)}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        readOnly
-                        className="pointer-events-none"
-                      />
-                      <span>{wm.user.name}</span>
-                    </div>
+  key={wm.user._id}
+  className="flex items-center justify-between px-3 py-2 hover:bg-gray-100"
+>
+  {/* LEFT: checkbox + name */}
+  <div
+    className="flex items-center gap-2 cursor-pointer"
+    onClick={(e) => {
+      e.stopPropagation();
+      toggleMember(wm.user._id);
+    }}
+  >
+    <input
+      type="checkbox"
+      checked={isSelected}
+      readOnly
+      className="pointer-events-none"
+    />
+    <span>{wm.user.name}</span>
+  </div>
 
-                    {/* Role select appears only if checked */}
-                    {isSelected && (
-                      <Select
-                        value={memberState.role}
-                        onValueChange={(val) => {
-                          setMembers((prev) =>
-                            prev.map((m) =>
-                              m.userId === wm.user._id
-                                ? { ...m, role: val }
-                                : m
-                            )
-                          );
-                          console.log(`Member ${wm.user.name} role: ${val}`);
-                        }}
-                      >
-                        <SelectTrigger
-                          className="w-28"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="contributor">Contributor</SelectItem>
-                          <SelectItem value="manager">Manager</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
+  {/* RIGHT: role select */}
+  {isSelected && (
+    <Select
+      value={memberState.role}
+      onValueChange={(val) => {
+        setMembers((prev) =>
+          prev.map((m) =>
+            m.userId === wm.user._id ? { ...m, role: val } : m
+          )
+        );
+      }}
+    >
+      <SelectTrigger
+        className="w-28"
+        onMouseDown={(e) => e.stopPropagation()} // ⭐ VERY IMPORTANT
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent onMouseDown={(e) => e.stopPropagation()}>
+        <SelectItem value="contributor">Contributor</SelectItem>
+        <SelectItem value="manager">Manager</SelectItem>
+        <SelectItem value="viewer">Viewer</SelectItem>
+      </SelectContent>
+    </Select>
+  )}
+</div>
+
                 );
               })}
             </div>
