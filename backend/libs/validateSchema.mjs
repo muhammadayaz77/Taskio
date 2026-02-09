@@ -1,22 +1,24 @@
 // middlewares/validateSchema.js
 import { ZodError } from "zod";
 
-export const validateSchema = (schema) => (req, res, next) => {
-  try {
-    schema.parse(req.body); // validate body
-    next(); // proceed if valid
-  } catch (err) {
-    if (err instanceof ZodError) {
-      const issues = err.issues.map((issue) => ({
-        field: issue.path.join("."),
-        message: issue.message,
-      }));
+export const validateSchema =
+  ({ body, params }) =>
+  (req, res, next) => {
+    try {
+      if (body) body.parse(req.body);
+      if (params) params.parse(req.params);
 
-      return res.status(400).json({
-        success: false,
-        message: issues[0].message,
-      });
+      next();
+    } catch (err) {
+      if (err instanceof ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: err.issues[0].message,
+          field: err.issues[0].path.join("."),
+        });
+      }
+      next(err);
     }
-    next(err);
-  }
-};
+  };
+
+  

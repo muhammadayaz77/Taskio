@@ -146,3 +146,7 @@ export const resetPasswordSchema = z
       path: ["dueDate"],
     }
   );
+
+  export const workspaceParamsSchema = z.object({
+  workspaceId: z.string().min(1, "Workspace ID is required"),
+});
