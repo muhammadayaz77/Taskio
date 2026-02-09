@@ -1,4 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useCreateProject from "../../hooks/project/useCreateProject";
+
 import {
   Dialog,
   DialogContent,
@@ -16,32 +20,61 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 
+import { projectSchema } from "../../lib/schema"; // adjust path if needed
+
 function CreateProjectDialog({
   isOpen,
   onOpenChange,
   workspaceId,
   workspaceMembers,
 }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("todo");
-  const [startDate, setStartDate] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const { mutate, isPending } = useCreateProject();
 
-  // Members state: userId, selected, role
+  /* ---------------- RHF ---------------- */
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(projectSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      status: "todo",
+      startDate: "",
+      dueDate: "",
+      members: [],
+    },
+  });
+
+  /* ---------------- Members UI State ---------------- */
   const [members, setMembers] = useState(
     workspaceMembers?.map((m) => ({
       userId: m.user._id,
       selected: false,
-      role: "contributor", // default role
+      role: "member",
     })) || [],
   );
 
-  const [errors, setErrors] = useState({});
   const [membersDropdownOpen, setMembersDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Close members dropdown when clicking outside
+  /* -------- Sync selected members → RHF -------- */
+  useEffect(() => {
+    const selectedMembers = members
+      .filter((m) => m.selected)
+      .map((m) => ({
+        user: m.userId,
+        role: m.role,
+      }));
+
+    setValue("members", selectedMembers, { shouldValidate: true });
+  }, [members, setValue]);
+
+  /* -------- Close dropdown on outside click -------- */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -49,60 +82,33 @@ function CreateProjectDialog({
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Validate form
-  const validate = () => {
-    const newErrors = {};
-    if (!title.trim()) newErrors.title = "Title is required";
-    if (!startDate) newErrors.startDate = "Start date is required";
-    if (!dueDate) newErrors.dueDate = "Due date is required";
-    if (startDate && dueDate && new Date(startDate) > new Date(dueDate))
-      newErrors.dueDate = "Due date must be after start date";
-    if (!members.some((m) => m.selected))
-      newErrors.members = "Select at least one member";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleCreate = () => {
-    if (!validate()) return;
-
+  /* ---------------- Submit ---------------- */
+  const onSubmit = (data) => {
     const payload = {
-      title,
-      description,
-      status,
-      startDate,
-      dueDate,
+      ...data,
       workspaceId,
-      members: members
-        .filter((m) => m.selected)
-        .map((m) => ({
-          user: m.userId,
-          role: m.role,
-        })),
     };
 
     console.log("FINAL PROJECT PAYLOAD:", payload);
 
-    // Reset form
-    setTitle("");
-    setDescription("");
-    setStatus("todo");
-    setStartDate("");
-    setDueDate("");
-    setMembers(
-      workspaceMembers?.map((m) => ({
-        userId: m.user._id,
-        selected: false,
-        role: "contributor",
-      })) || [],
-    );
-    setErrors({});
-    setMembersDropdownOpen(false);
-    onOpenChange(false);
+    mutate(payload, {
+      onSuccess: () => {
+        reset();
+        setMembers(
+          workspaceMembers?.map((m) => ({
+            userId: m.user._id,
+            selected: false,
+            role: "member",
+          })) || [],
+        );
+        setMembersDropdownOpen(false);
+        onOpenChange(false);
+      },
+    });
   };
 
   const toggleMember = (userId) => {
@@ -125,12 +131,13 @@ function CreateProjectDialog({
           <label className="text-sm font-medium">Project Name</label>
           <Input
             placeholder="Enter project title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            {...register("title")}
             className={errors.title ? "border-red-500" : ""}
           />
           {errors.title && (
-            <p className="text-xs text-red-500 mt-1">{errors.title}</p>
+            <p className="text-xs text-red-500 mt-1">
+              {errors.title.message}
+            </p>
           )}
         </div>
 
@@ -139,24 +146,39 @@ function CreateProjectDialog({
           <label className="text-sm font-medium">Description</label>
           <Textarea
             placeholder="Enter project description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            {...register("description")}
           />
+          {errors.description && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors.description.message}
+            </p>
+          )}
         </div>
 
         {/* Status */}
         <div className="mb-3">
           <label className="text-sm font-medium">Status</label>
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todo">Todo</SelectItem>
-              <SelectItem value="in-progress">In Progress</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
-            </SelectContent>
-          </Select>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todo">Todo</SelectItem>
+                  <SelectItem value="in-progress">In Progress</SelectItem>
+                  <SelectItem value="done">Done</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.status && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors.status.message}
+            </p>
+          )}
         </div>
 
         {/* Dates */}
@@ -165,24 +187,27 @@ function CreateProjectDialog({
             <label className="text-sm font-medium">Start Date</label>
             <Input
               type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              {...register("startDate")}
               className={errors.startDate ? "border-red-500" : ""}
             />
             {errors.startDate && (
-              <p className="text-xs text-red-500 mt-1">{errors.startDate}</p>
+              <p className="text-xs text-red-500 mt-1">
+                {errors.startDate.message}
+              </p>
             )}
           </div>
+
           <div className="flex-1">
             <label className="text-sm font-medium">Due Date</label>
             <Input
               type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
+              {...register("dueDate")}
               className={errors.dueDate ? "border-red-500" : ""}
             />
             {errors.dueDate && (
-              <p className="text-xs text-red-500 mt-1">{errors.dueDate}</p>
+              <p className="text-xs text-red-500 mt-1">
+                {errors.dueDate.message}
+              </p>
             )}
           </div>
         </div>
@@ -191,7 +216,6 @@ function CreateProjectDialog({
         <div className="mb-3 relative" ref={dropdownRef}>
           <p className="text-sm font-medium mb-1">Members</p>
 
-          {/* Trigger */}
           <div
             onClick={() => setMembersDropdownOpen(!membersDropdownOpen)}
             className={`border rounded px-3 py-2 cursor-pointer flex justify-between items-center ${
@@ -199,72 +223,56 @@ function CreateProjectDialog({
             }`}
           >
             <span>
-              {members.filter((m) => m.selected).length > 0
-                ? `${members.filter((m) => m.selected).length} member${
-                    members.filter((m) => m.selected).length > 1 ? "s" : ""
-                  } selected`
+              {members.filter((m) => m.selected).length
+                ? `${members.filter((m) => m.selected).length} member(s) selected`
                 : "Select members"}
             </span>
-            <span className="ml-2">▾</span>
+            <span>▾</span>
           </div>
 
-          {/* Dropdown panel */}
           {membersDropdownOpen && (
             <div className="absolute z-10 mt-1 w-full bg-white border rounded shadow max-h-48 overflow-y-auto">
               {workspaceMembers.map((wm) => {
                 const memberState = members.find(
                   (m) => m.userId === wm.user._id,
                 );
-                const isSelected = memberState?.selected || false;
+                const isSelected = memberState?.selected;
 
                 return (
                   <div
                     key={wm.user._id}
                     className="flex items-center justify-between px-3 py-2 hover:bg-gray-100"
                   >
-                    {/* LEFT: checkbox + name */}
                     <div
                       className="flex items-center gap-2 cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleMember(wm.user._id);
-                      }}
+                      onClick={() => toggleMember(wm.user._id)}
                     >
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        readOnly
-                        className="pointer-events-none"
-                      />
+                      <input type="checkbox" checked={isSelected} readOnly />
                       <span>{wm.user.name}</span>
                     </div>
 
-                    {/* RIGHT: role select */}
                     {isSelected && (
                       <Select
                         value={memberState.role}
-                        onValueChange={(val) => {
+                        onValueChange={(val) =>
                           setMembers((prev) =>
                             prev.map((m) =>
                               m.userId === wm.user._id
                                 ? { ...m, role: val }
                                 : m,
                             ),
-                          );
-                        }}
+                          )
+                        }
                       >
                         <SelectTrigger
                           className="w-28"
-                          onMouseDown={(e) => e.stopPropagation()} // ⭐ VERY IMPORTANT
+                          onMouseDown={(e) => e.stopPropagation()}
                         >
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent onMouseDown={(e) => e.stopPropagation()}>
-                          <SelectItem value="contributor">
-                            Contributor
-                          </SelectItem>
-                          <SelectItem value="manager">Manager</SelectItem>
-                          <SelectItem value="viewer">Viewer</SelectItem>
+                          <SelectItem value="member">Member</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
                         </SelectContent>
                       </Select>
                     )}
@@ -275,7 +283,9 @@ function CreateProjectDialog({
           )}
 
           {errors.members && (
-            <p className="text-xs text-red-500 mt-1">{errors.members}</p>
+            <p className="text-xs text-red-500 mt-1">
+              {errors.members.message}
+            </p>
           )}
         </div>
 
@@ -288,8 +298,8 @@ function CreateProjectDialog({
           >
             Cancel
           </Button>
-          <Button size="sm" onClick={handleCreate}>
-            Create
+          <Button size="sm" onClick={handleSubmit(onSubmit)}>
+            {isPending ? "Creating..." : "Create"}
           </Button>
         </div>
       </DialogContent>
