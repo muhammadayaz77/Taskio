@@ -43,7 +43,7 @@ function CreateProjectDialog({
     defaultValues: {
       title: "",
       description: "",
-      status: "todo",
+      status: "Planning",
       startDate: "",
       dueDate: "",
       members: [],
@@ -167,9 +167,11 @@ function CreateProjectDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="todo">Todo</SelectItem>
-                  <SelectItem value="in-progress">In Progress</SelectItem>
-                  <SelectItem value="done">Done</SelectItem>
+                  <SelectItem value="Planning">Planning</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="On Hold">On Hold</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                  <SelectItem value="Cancelled">Cancelled</SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -271,8 +273,9 @@ function CreateProjectDialog({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent onMouseDown={(e) => e.stopPropagation()}>
-                          <SelectItem value="member">Member</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="manager">Manager</SelectItem>
+                          <SelectItem value="contributor">Contributor</SelectItem>
+                          <SelectItem value="viewer">Viewer</SelectItem>
                         </SelectContent>
                       </Select>
                     )}

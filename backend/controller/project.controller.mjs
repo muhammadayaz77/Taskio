@@ -37,8 +37,9 @@ export const createProject = async (req, res) => {
      const tagsArray = tags ? tags.split(',') : []
 
      const newProject = await Project.create({
-        title,
+      title,
       description,
+      workspace : workspaceId,
       status,
       startDate,
       dueDate,

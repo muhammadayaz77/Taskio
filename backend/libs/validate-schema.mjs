@@ -104,7 +104,7 @@ export const resetPasswordSchema = z
       .min(1, "User is required"),
   
     role: z
-      .enum(["admin", "member"])
+      .enum(["manager", "contributor","viewer"])
       .optional(), // role is optional
   });
   
@@ -119,7 +119,7 @@ export const resetPasswordSchema = z
       .regex(noEmojiRegex, "Emojis are not allowed in description")
       .optional(),
   
-    status: z.enum(["todo", "in-progress", "done"], {
+    status: z.enum(["Planning","In Progress","On Hold","Completed","Cancelled"], {
       errorMap: () => ({ message: "Invalid project status" }),
     }),
   

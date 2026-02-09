@@ -8,9 +8,6 @@ const useCreateProject = () => {
     mutationFn: (data) => postData(`/projects/${data.workspaceId}/create-project`,data),
     onSuccess : (data) => {
       window.toastify(data.message,'success');
-      console.log("data : ",data);
-      navigate("/sign-in");
-      
     },
     onError : (err) => {
       console.log('error : ',err)

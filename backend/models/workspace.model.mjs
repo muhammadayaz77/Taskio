@@ -22,18 +22,18 @@ const workspaceSchema = new mongoose.Schema({
   },
   role : {
     type: String, 
-    emun: ["owner","member"], 
+    enum: ["owner","member"], 
     default: "member"
   },
   jointAt : {
     type: Date,
     default : Date.now
   },
-  projects : [{
-    type : mongoose.Schema.Types.ObjectId,
-    ref :'Project'   
-  }]
 }],
+projects : [{
+  type : mongoose.Schema.Types.ObjectId,
+  ref :'Project'   
+}]
 
 }, { timestamps: true });
 
