@@ -97,3 +97,52 @@ export const resetPasswordSchema = z
 
   })
   
+// Members
+  const projectMemberSchema = z.object({
+    user: z
+      .string()
+      .min(1, "User is required"),
+  
+    role: z
+      .enum(["admin", "member"])
+      .optional(), // role is optional
+  });
+  
+  export const projectSchema = z.object({
+    title: z
+      .string()
+      .min(3, "Title must be at least 3 characters")
+      .regex(noEmojiRegex, "Emojis are not allowed in title"),
+  
+    description: z
+      .string()
+      .regex(noEmojiRegex, "Emojis are not allowed in description")
+      .optional(),
+  
+    status: z.enum(["todo", "in-progress", "done"], {
+      errorMap: () => ({ message: "Invalid project status" }),
+    }),
+  
+    startDate: z
+      .string()
+      .refine((date) => !isNaN(Date.parse(date)), {
+        message: "Invalid start date",
+      }),
+  
+    dueDate: z
+      .string()
+      .refine((date) => !isNaN(Date.parse(date)), {
+        message: "Invalid due date",
+      }),
+  
+    members: z
+      .array(projectMemberSchema)
+      .min(1, "At least one member is required"),
+  })
+  .refine(
+    (data) => new Date(data.startDate) <= new Date(data.dueDate),
+    {
+      message: "Due date must be after start date",
+      path: ["dueDate"],
+    }
+  );

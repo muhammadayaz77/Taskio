@@ -34,7 +34,7 @@ function CreateProjectDialog({
       userId: m.user._id,
       selected: false,
       role: "contributor", // default role
-    })) || []
+    })) || [],
   );
 
   const [errors, setErrors] = useState({});
@@ -71,22 +71,21 @@ function CreateProjectDialog({
     if (!validate()) return;
 
     const payload = {
-  title,
-  description,
-  status,
-  startDate,
-  dueDate,
-  workspaceId,
-  members: members
-    .filter((m) => m.selected)
-    .map((m) => ({
-      user: m.userId,
-      role: m.role,
-    })),
-};
+      title,
+      description,
+      status,
+      startDate,
+      dueDate,
+      workspaceId,
+      members: members
+        .filter((m) => m.selected)
+        .map((m) => ({
+          user: m.userId,
+          role: m.role,
+        })),
+    };
 
-console.log("FINAL PROJECT PAYLOAD:", payload);
-
+    console.log("FINAL PROJECT PAYLOAD:", payload);
 
     // Reset form
     setTitle("");
@@ -99,7 +98,7 @@ console.log("FINAL PROJECT PAYLOAD:", payload);
         userId: m.user._id,
         selected: false,
         role: "contributor",
-      })) || []
+      })) || [],
     );
     setErrors({});
     setMembersDropdownOpen(false);
@@ -109,8 +108,8 @@ console.log("FINAL PROJECT PAYLOAD:", payload);
   const toggleMember = (userId) => {
     setMembers((prev) =>
       prev.map((m) =>
-        m.userId === userId ? { ...m, selected: !m.selected } : m
-      )
+        m.userId === userId ? { ...m, selected: !m.selected } : m,
+      ),
     );
   };
 
@@ -211,62 +210,65 @@ console.log("FINAL PROJECT PAYLOAD:", payload);
 
           {/* Dropdown panel */}
           {membersDropdownOpen && (
-            <div   className="absolute z-10 mt-1 w-full bg-white border rounded shadow max-h-48 overflow-y-auto" >
+            <div className="absolute z-10 mt-1 w-full bg-white border rounded shadow max-h-48 overflow-y-auto">
               {workspaceMembers.map((wm) => {
                 const memberState = members.find(
-                  (m) => m.userId === wm.user._id
+                  (m) => m.userId === wm.user._id,
                 );
                 const isSelected = memberState?.selected || false;
 
                 return (
                   <div
-  key={wm.user._id}
-  className="flex items-center justify-between px-3 py-2 hover:bg-gray-100"
->
-  {/* LEFT: checkbox + name */}
-  <div
-    className="flex items-center gap-2 cursor-pointer"
-    onClick={(e) => {
-      e.stopPropagation();
-      toggleMember(wm.user._id);
-    }}
-  >
-    <input
-      type="checkbox"
-      checked={isSelected}
-      readOnly
-      className="pointer-events-none"
-    />
-    <span>{wm.user.name}</span>
-  </div>
+                    key={wm.user._id}
+                    className="flex items-center justify-between px-3 py-2 hover:bg-gray-100"
+                  >
+                    {/* LEFT: checkbox + name */}
+                    <div
+                      className="flex items-center gap-2 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleMember(wm.user._id);
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        readOnly
+                        className="pointer-events-none"
+                      />
+                      <span>{wm.user.name}</span>
+                    </div>
 
-  {/* RIGHT: role select */}
-  {isSelected && (
-    <Select
-      value={memberState.role}
-      onValueChange={(val) => {
-        setMembers((prev) =>
-          prev.map((m) =>
-            m.userId === wm.user._id ? { ...m, role: val } : m
-          )
-        );
-      }}
-    >
-      <SelectTrigger
-        className="w-28"
-        onMouseDown={(e) => e.stopPropagation()} // ⭐ VERY IMPORTANT
-      >
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent onMouseDown={(e) => e.stopPropagation()}>
-        <SelectItem value="contributor">Contributor</SelectItem>
-        <SelectItem value="manager">Manager</SelectItem>
-        <SelectItem value="viewer">Viewer</SelectItem>
-      </SelectContent>
-    </Select>
-  )}
-</div>
-
+                    {/* RIGHT: role select */}
+                    {isSelected && (
+                      <Select
+                        value={memberState.role}
+                        onValueChange={(val) => {
+                          setMembers((prev) =>
+                            prev.map((m) =>
+                              m.userId === wm.user._id
+                                ? { ...m, role: val }
+                                : m,
+                            ),
+                          );
+                        }}
+                      >
+                        <SelectTrigger
+                          className="w-28"
+                          onMouseDown={(e) => e.stopPropagation()} // ⭐ VERY IMPORTANT
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent onMouseDown={(e) => e.stopPropagation()}>
+                          <SelectItem value="contributor">
+                            Contributor
+                          </SelectItem>
+                          <SelectItem value="manager">Manager</SelectItem>
+                          <SelectItem value="viewer">Viewer</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </div>
                 );
               })}
             </div>
@@ -280,7 +282,6 @@ console.log("FINAL PROJECT PAYLOAD:", payload);
         {/* Actions */}
         <div className="flex justify-end gap-2 pt-2">
           <Button
-          
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}
