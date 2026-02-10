@@ -88,8 +88,10 @@ const LoginForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Login
+          <Button type="submit" className="w-full cursor-pointer" disabled={isPending}>
+            {
+              isPending ? 'Loading...' : 'Login'
+            }
           </Button>
         </form>
           <p className="text-gray-500 text-sm text-center mt-6">Don't have an account? <Link to='/sign-up' className="text-blue-700 hover:text-blue-900 border-blue-900">Signup</Link></p>
