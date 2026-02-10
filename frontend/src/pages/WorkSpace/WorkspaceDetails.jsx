@@ -4,7 +4,7 @@ import useGetWorkspacesById from '../../hooks/workspace/useGetWorkspacesById'
 import Loader from '../../components/common/Loader'
 import WorkspaceHeader from '../../components/workspace/WorkspaceHeader';
 import ProjectList from '../../components/workspace/ProjectList';
-import CreateProjectDialog from '../../components/workspace/CreateProjectDialog';
+import CreateProjectDialog from '../../components/project/CreateProjectDialog';
 
 function WorkspaceDetails() {
   const [isCreateProject,setIsCreateProject] = useState(false);
