@@ -11,7 +11,7 @@ function WorkspaceDetails() {
   const [isInviteMember,setIsInviteMember] = useState(false);
   const {workspaceId} = useParams()
   const {data,isLoading} = useGetWorkspacesById(workspaceId);
-  console.log("data : ",data?.workspace);
+  
   if(!workspaceId){
     return <div>No Workspace found</div>
   }
@@ -31,7 +31,7 @@ function WorkspaceDetails() {
       <ProjectList
       workspaceId={workspaceId}
       onCreateProject={() => setIsCreateProject(true)}
-      projects={data?.projects}
+      projects={data?.project}
       />
         <CreateProjectDialog
         isOpen={isCreateProject}

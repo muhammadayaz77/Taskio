@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 const statusColors = {
   Planning: "bg-blue-100 text-blue-700",
@@ -10,8 +11,9 @@ const statusColors = {
   Cancelled: "bg-red-100 text-red-700",
 };
 
-export default function ProjectCard({ project }) {
+export default function ProjectCard({ project,progress,workspaceId }) {
   return (
+    <Link to={`/workspaces/${workspaceId}/projects/${project._id}`}>
     <Card className="hover:shadow-md transition rounded-2xl">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
@@ -31,9 +33,9 @@ export default function ProjectCard({ project }) {
         <div className="space-y-1">
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>Progress</span>
-            <span>{project.progress}%</span>
+            <span>{progress}%</span>
           </div>
-          <Progress value={project.progress} />
+          <Progress value={progress} />
         </div>
 
         {/* Dates */}
@@ -47,5 +49,6 @@ export default function ProjectCard({ project }) {
         </div>
       </CardContent>
     </Card>
+    </Link>
   );
 }
