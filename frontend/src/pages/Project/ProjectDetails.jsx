@@ -4,7 +4,8 @@ import { Progress } from "../../components/ui/progress";
 import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { ArrowLeft } from "lucide-react";
-
+import useGetProject from "../../hooks/project/useGetProject";
+import {useParams} from 'react-router-dom'
 const tasks = [
   { id: 1, title: "Design landing page", status: "Todo" },
   { id: 2, title: "Setup backend API", status: "In Progress" },
@@ -24,8 +25,13 @@ function getStatusVariant(status) {
   }
 }
 
+
 function ProjectDetails() {
   const progress = 60;
+  const {projectId} = useParams()
+  console.log("project Id : ",projectId)
+  const {data,isLoading} = useGetProject(projectId)
+  console.log(data)
 
   return (
     <div className="p-4 space-y-4">

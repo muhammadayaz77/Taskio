@@ -26,7 +26,7 @@ router.get(
   "/:projectId/tasks",
   authMiddleware,
   validateSchema({
-    body: projectSchema,
+    // body: projectSchema,
     params: projectParamsSchema,
   }),
   getProjectTasks

@@ -1,9 +1,10 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { postData } from "../../api/axios";
+import { useQuery } from "@tanstack/react-query";
+import { fetchData } from "../../api/axios";
 const useGetProject = (projectId) => {
   return useQuery({
     queryKey : ['project',projectId],
-    queryFn: (data) => postData(`/projects/${projectId}/tasks`,data),
+
+    queryFn: (data) => fetchData(`/projects/${projectId}/tasks`,data),
     onSuccess : (data) => {
       window.toastify(data.message,'success');
     },

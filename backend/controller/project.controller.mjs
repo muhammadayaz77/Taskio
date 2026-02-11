@@ -104,8 +104,8 @@ export const getProjectTasks = async (req, res) => {
   try {
     const {projectId} = req.params;
 
-     const project = await Workspace.findById(projectId).populate('members.user')
-    
+     const project = await Project.findById(projectId).populate('members.user')
+
      if(!project){
       return res.status(404).json({
       message: "Project not found",
@@ -113,8 +113,11 @@ export const getProjectTasks = async (req, res) => {
     });
      }
 
-     const isMember = project.members.some((member) => member.user.toString() === req.user._id.toString())
+     console.log("req.user._id : ",req.user._id)
+     console.log("project : ",project.members)
 
+
+     const isMember = project.members.some((member) => member.user?._id.toString() === req.user._id.toString())
      if(!isMember){
       return res.status(404).json({
       message: "You are not a member of this workspace",
