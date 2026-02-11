@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import useGetProject from "../../hooks/project/useGetProject";
 import {useNavigate, useParams} from 'react-router-dom';
 import Loader from '../../components/common/Loader'
+import CreateTaskDialog from "../../components/task/CreateTaskDialog";
 // import CreateTaskDialog
 const tasks = [
   { id: 1, title: "Design landing page", status: "Todo" },
@@ -81,6 +82,7 @@ function ProjectDetails() {
           <Button
             size="sm"
             className="bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => setIsCreateTask}
           >
             Add Task
           </Button>

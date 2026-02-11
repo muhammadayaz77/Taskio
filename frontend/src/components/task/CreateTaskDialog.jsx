@@ -51,12 +51,12 @@ function CreateTaskDialog({
   });
 
   /* ---------------- Members UI State ---------------- */
-  const [members, setMembers] = useState(
-    workspaceMembers?.map((m) => ({
-      userId: m.user._id,
-      selected: false,
-      role: "member",
-    })) || [],
+  const [members, setMembers] = useState([]
+    // workspaceMembers?.map((m) => ({
+    //   userId: m.user._id,
+    //   selected: false,
+    //   role: "member",
+    // })) || [],
   );
 
   const [membersDropdownOpen, setMembersDropdownOpen] = useState(false);
