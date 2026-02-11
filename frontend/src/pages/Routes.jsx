@@ -11,6 +11,7 @@ import ForgotPassword from '../components/Auth/ForgotPassword'
 import ResetPassword from '../components/Auth/ResetPassword'
 import Workspaces from './WorkSpace'
 import WorkspaceDetails from './WorkSpace/WorkspaceDetails'
+import ProjectDetails from './Project/ProjectDetails'
 
  function Index() {
   return (
@@ -23,6 +24,7 @@ import WorkspaceDetails from './WorkSpace/WorkspaceDetails'
     <Route element={<AppLayout />}>
       <Route path="/workspaces" element={<Workspaces />} />
       <Route path="/workspaces/:workspaceId" element={<WorkspaceDetails />} />
+      <Route path="/workspaces/:workspaceId/projects/:projectId" element={<ProjectDetails />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/" element={<>Home</>} />
     </Route>
