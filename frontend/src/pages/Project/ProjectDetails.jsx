@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Progress } from "../../components/ui/progress";
 import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import useGetProject from "../../hooks/project/useGetProject";
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom';
+import Loader from '../../components/common/Loader'
+// import CreateTaskDialog
 const tasks = [
   { id: 1, title: "Design landing page", status: "Todo" },
   { id: 2, title: "Setup backend API", status: "In Progress" },
@@ -27,11 +29,17 @@ function getStatusVariant(status) {
 
 
 function ProjectDetails() {
+  const [isCreateTask,setIsCreateTask] = useState(false)
   const progress = 60;
   const {projectId} = useParams()
-  console.log("project Id : ",projectId)
+  const navigate = useNavigate();
   const {data,isLoading} = useGetProject(projectId)
-  console.log(data)
+
+  if(isLoading){
+    return <Loader />
+  }
+
+  const {project,tasks} = data;
 
   return (
     <div className="p-4 space-y-4">
@@ -43,6 +51,7 @@ function ProjectDetails() {
             variant="outline"
             size="sm"
             className="bg-white flex items-center gap-1"
+            onClick={() => navigate(-1)}
           >
             <ArrowLeft size={14} />
             Back
@@ -50,11 +59,12 @@ function ProjectDetails() {
 
           {/* Project Title */}
           <div>
-            <h1 className="text-xl font-semibold">Website Redesign</h1>
+            <h1 className="text-xl font-semibold">{project.title || "No title"}</h1>
+              {project?.description && 
             <p className="text-sm text-gray-500 mt-1 max-w-md">
-              Redesigning the company website with improved UI/UX and better
-              performance.
+              {project.description || "Not description"}
             </p>
+              }
           </div>
         </div>
 
@@ -93,6 +103,12 @@ function ProjectDetails() {
           </Card>
         ))}
       </div>
+      <CreateTaskDialog
+      isOpen={isCreateTask}
+      onOpenChange={setIsCreateTask}
+      projectId={projectId}
+      projectMembers={project.members}
+      />
     </div>
   );
 }

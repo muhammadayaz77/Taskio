@@ -113,10 +113,6 @@ export const getProjectTasks = async (req, res) => {
     });
      }
 
-     console.log("req.user._id : ",req.user._id)
-     console.log("project : ",project.members)
-
-
      const isMember = project.members.some((member) => member.user?._id.toString() === req.user._id.toString())
      if(!isMember){
       return res.status(404).json({
