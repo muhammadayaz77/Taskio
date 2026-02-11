@@ -150,3 +150,6 @@ export const resetPasswordSchema = z
   export const workspaceParamsSchema = z.object({
   workspaceId: z.string().min(1, "Workspace ID is required"),
 });
+  export const projectParamsSchema = z.object({
+  projectId: z.string().min(1, "Project ID is required"),
+});
