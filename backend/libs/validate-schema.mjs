@@ -153,3 +153,35 @@ export const resetPasswordSchema = z
   export const projectParamsSchema = z.object({
   projectId: z.string().min(1, "Project ID is required"),
 });
+
+
+export const createTaskSchema = z.object({
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(100, "Title is too long"),
+
+  description: z
+    .string()
+    .optional(),
+
+  status: z.enum(["To Do", "In Progress", "Done"], {
+    errorMap: () => ({ message: "Status is required" }),
+  }),
+
+  priority: z.enum(["Low", "Medium", "High"], {
+    errorMap: () => ({ message: "Priority is required" }),
+  }),
+
+  dueDate: z
+    .string()
+    .min(1, "Due date is required"),
+
+  assignees: z
+    .array(
+      z.object({
+        user: z.string(),
+      })
+    )
+    .min(1, "At least one assignee is required"),
+});

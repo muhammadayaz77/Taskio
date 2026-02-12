@@ -140,7 +140,7 @@ function CreateTaskDialog({ isOpen, onOpenChange, projectId, projectMembers }) {
             control={control}
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className="h-8 mt-1">
+                <SelectTrigger className="w-full h-8 mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -160,7 +160,7 @@ function CreateTaskDialog({ isOpen, onOpenChange, projectId, projectMembers }) {
             control={control}
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className="h-8 mt-1">
+                <SelectTrigger className="w-full h-8 mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
