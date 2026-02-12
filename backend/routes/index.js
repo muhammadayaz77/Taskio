@@ -8,6 +8,6 @@ let router = express.Router()
 router.use("/auth",authRouter)
 router.use("/workspaces",workspaceRouter)
 router.use("/projects",projectRouter)
-router.use("/task",taskRouter)
+router.use("/tasks",taskRouter)
 
 export default router;

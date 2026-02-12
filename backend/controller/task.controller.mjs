@@ -1,28 +1,37 @@
+import Project from "../models/projects.model.mjs";
+import Workspace from "../models/workspace.model.mjs";
 
 
 
 export const createTask = async (req, res) => {
   try {
-    const {workspaceId} = req.params;
+    const {projectId} = req.params;
+    console.log("Project Id : ",projectId)
     const {
       title,
       description,
       status,
-      startDate,
+      priority,
       dueDate,
-      tags,
-      members 
+      assignees 
      } = req.body;
 
-     const workspace = await Workspace.findById(workspaceId)
+     const project = await Project.findById(projectId)
     
+     if(!project){
+      return res.status(404).json({
+      message: "Project not found",
+      success : false
+    });
+     }
+     const workspace = await Workspace.findById(project.workspace)
+
      if(!workspace){
       return res.status(404).json({
       message: "Workspace not found",
       success : false
     });
-     }
-
+    }
      const isMember = workspace.members.some((member) => member.user.toString() === req.user._id.toString())
 
      if(!isMember){
@@ -33,25 +42,21 @@ export const createTask = async (req, res) => {
      }
    
 
-     const tagsArray = tags ? tags.split(',') : []
-
-     const newProject = await Project.create({
+     const newTask = await Project.create({
       title,
       description,
-      workspace : workspaceId,
       status,
-      startDate,
+      priority,
       dueDate,
-      tags : tagsArray,
-      members,
+      assignees,
       createdBy:req.user._id
      })
 
-     workspace.projects.push(newProject._id);
-     await workspace.save()
+     project.tasks.push(newTask._id);
+     await project.save()
     return res.status(201).json({
-      message: "Project created successfully",
-      newProject
+      message: "Task created successfully",
+      newTask
     });
   
   } catch (err) {

@@ -10,10 +10,10 @@ export const useCreateTask = () => {
   const dispatch = useDispatch();
 
   return useMutation({
-    mutationFn: (data) => postData(`/task/${data.projectId}/create-task`, data.taskData),
+    mutationFn: (data) => postData(`/tasks/${data.projectId}/create-task`, data.taskData),
     onSuccess: (data) => {
       // Option 1: Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["project",data.project] });
+      // queryClient.invalidateQueries({ queryKey: ["project",data.project] });
 
       window.toastify(
         data?.message || "Task created successfully",
