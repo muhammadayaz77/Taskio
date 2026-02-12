@@ -55,7 +55,7 @@ function CreateProjectDialog({
     workspaceMembers?.map((m) => ({
       userId: m.user._id,
       selected: false,
-      role: "member",
+      role: "manager",
     })) || [],
   );
 
@@ -255,6 +255,7 @@ function CreateProjectDialog({
 
                     {isSelected && (
                       <Select
+                      className='cursor-pointer'
                         value={memberState.role}
                         onValueChange={(val) =>
                           setMembers((prev) =>
@@ -272,7 +273,8 @@ function CreateProjectDialog({
                         >
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent onMouseDown={(e) => e.stopPropagation()}>
+                        <SelectContent
+                        onMouseDown={(e) => e.stopPropagation()}>
                           <SelectItem value="manager">Manager</SelectItem>
                           <SelectItem value="contributor">Contributor</SelectItem>
                           <SelectItem value="viewer">Viewer</SelectItem>

@@ -8,12 +8,6 @@ import useGetProject from "../../hooks/project/useGetProject";
 import {useNavigate, useParams} from 'react-router-dom';
 import Loader from '../../components/common/Loader'
 import CreateTaskDialog from "../../components/task/CreateTaskDialog";
-// import CreateTaskDialog
-const tasks = [
-  { id: 1, title: "Design landing page", status: "Todo" },
-  { id: 2, title: "Setup backend API", status: "In Progress" },
-  { id: 3, title: "Implement authentication", status: "Done" },
-];
 
 function getStatusVariant(status) {
   switch (status) {
@@ -34,13 +28,13 @@ function ProjectDetails() {
   const progress = 60;
   const {projectId} = useParams()
   const navigate = useNavigate();
-  const {data,isLoading} = useGetProject(projectId)
-
+  const {data,isLoading} = useGetProject(projectId) 
   if(isLoading){
     return <Loader />
   }
-
+  
   const {project,tasks} = data;
+  
 
   return (
     <div className="p-4 space-y-4">
@@ -82,7 +76,7 @@ function ProjectDetails() {
           <Button
             size="sm"
             className="bg-blue-600 hover:bg-blue-700 text-white"
-            onClick={() => setIsCreateTask}
+            onClick={() => setIsCreateTask(true)}
           >
             Add Task
           </Button>
