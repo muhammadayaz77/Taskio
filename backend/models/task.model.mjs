@@ -22,14 +22,14 @@ const taskSchema = new mongoose.Schema(
       enum: ["Low", "Medium", "High"],
       default: "Medium",
     },
-    assignees: {
+    assignees: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    watchers: {
+    }],
+    watchers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
+    }],
     completedAt: {
       type: Date,
     },
