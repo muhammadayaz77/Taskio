@@ -148,6 +148,7 @@ function ProjectDetails() {
               visibleStatuses.length === 1 ? "max-w-md" : "w-full"
             }`}
           >
+            
             <h2 className="text-sm font-medium mb-2">{status}</h2>
             <Card className="p-4 bg-gray-50">
               {tasksByStatus[status].length > 0 ? (
