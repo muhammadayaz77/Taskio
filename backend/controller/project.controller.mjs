@@ -123,10 +123,12 @@ export const getProjectTasks = async (req, res) => {
 
      const tasks = await Task.find({
       project : projectId,
-      isArchieved : false
+      isArchived : false
      })
      .populate("assignees","name profilePicture")
      .sort({createdAt : -1})
+
+     console.log("Tasks : ",tasks)
 
     return res.status(200).json({
       message: "Task and Project get successfully",

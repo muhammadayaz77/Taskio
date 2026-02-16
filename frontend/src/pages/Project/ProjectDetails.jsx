@@ -11,7 +11,7 @@ import CreateTaskDialog from "../../components/task/CreateTaskDialog";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 
 function getStatusVariant(status) {
-  switch (status) {
+  switch (status) { 
     case "To Do":
       return "secondary";
     case "In Progress":
@@ -30,7 +30,7 @@ function ProjectDetails() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProject(projectId);
-  console.log("tasks : ",data.project.tasks)
+  // console.log("tasks : ",data.tasks)
 
   if (isLoading) return <Loader />;
 
@@ -66,6 +66,7 @@ function ProjectDetails() {
     <div className="p-3">
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
+        <div className=""> 
         <Button
           variant="outline"
           size="sm"
@@ -74,12 +75,14 @@ function ProjectDetails() {
         >
           <ArrowLeft size={14} /> Back
         </Button>
-        <div>
+        <div className="mt-5">
           <h1 className="text-xl font-semibold">{project.title}</h1>
           {project.description && (
             <p className="text-sm text-gray-500 mt-1 max-w-md">{project.description}</p>
           )}
         </div>
+        </div>
+
         <div className="flex items-center gap-4">
           <div className="w-32 space-y-1">
             <div className="flex justify-between text-xs">
@@ -152,15 +155,38 @@ function ProjectDetails() {
 
             <h2 className="text-sm font-medium mb-2">{status}</h2>
             <Card className="p-4 bg-gray-50">
-              {tasksByStatus[status].length == 0 ? (
-                tasksByStatus[status].map((task) => (
-                  <div>
-                    Hello
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-400 text-xs">No tasks</p>
-              )}
+              {tasksByStatus[status].length > 0 ? (
+  tasksByStatus[status].map((task) => (
+    <Card
+      key={task._id}
+      className="mb-3 p-3 bg-white cursor-pointer hover:shadow-md transition"
+      onClick={() => navigate(`/tasks/${task._id}`)}
+    >
+      <div className="flex justify-between items-center">
+        <h3 className="text-sm font-medium">{task.title}</h3>
+        <Badge variant={getStatusVariant(task.status)}>
+          {task.status}
+        </Badge>
+      </div>
+
+      {task.description && (
+        <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+          {task.description}
+        </p>
+      )}
+
+      <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
+        <span>Priority: {task.priority}</span>
+        <span>
+          Due: {new Date(task.dueDate).toLocaleDateString()}
+        </span>
+      </div>
+    </Card>
+  ))
+) : (
+  <p className="text-gray-400 text-xs">No tasks</p>
+)}
+
             </Card>
           </div>
         ))}
