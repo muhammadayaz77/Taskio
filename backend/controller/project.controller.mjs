@@ -128,7 +128,6 @@ export const getProjectTasks = async (req, res) => {
      .populate("assignees")
      .sort({createdAt : -1})
 
-     console.log("Tasks : ",tasks)
 
     return res.status(200).json({
       message: "Task and Project get successfully",
