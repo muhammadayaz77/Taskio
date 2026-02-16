@@ -30,6 +30,7 @@ function ProjectDetails() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProject(projectId);
+  console.log("tasks : ",data.project.tasks)
 
   if (isLoading) return <Loader />;
 
@@ -148,17 +149,14 @@ function ProjectDetails() {
               visibleStatuses.length === 1 ? "max-w-md" : "w-full"
             }`}
           >
-            
+
             <h2 className="text-sm font-medium mb-2">{status}</h2>
             <Card className="p-4 bg-gray-50">
-              {tasksByStatus[status].length > 0 ? (
+              {tasksByStatus[status].length == 0 ? (
                 tasksByStatus[status].map((task) => (
-                  <CardContent
-                    key={task.id}
-                    className="border-b last:border-none py-2 text-sm"
-                  >
-                    {task.title}
-                  </CardContent>
+                  <div>
+                    Hello
+                  </div>
                 ))
               ) : (
                 <p className="text-gray-400 text-xs">No tasks</p>
