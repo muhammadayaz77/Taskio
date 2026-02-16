@@ -9,6 +9,35 @@ import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import CreateTaskDialog from "../../components/task/CreateTaskDialog";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
+import { CalendarDays, ArrowUp, ArrowDown } from "lucide-react";
+
+function getPriorityColor(priority) {
+  switch (priority) {
+    case "High":
+      return "bg-red-500";
+    case "Medium":
+      return "bg-orange-500";
+    case "Low":
+      return "bg-slate-400";
+    default:
+      return "bg-gray-300";
+  }
+}
+function getPriorityBadgeStyle(priority) {
+  switch (priority) {
+    case "High":
+      return "bg-red-100 text-red-600";
+    case "Medium":
+      return "bg-orange-100 text-orange-600";
+    case "Low":
+      return "bg-slate-100 text-slate-600";
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+}
+
+
 
 function getStatusVariant(status) {
   switch (status) { 
@@ -158,30 +187,85 @@ function ProjectDetails() {
               {tasksByStatus[status].length > 0 ? (
   tasksByStatus[status].map((task) => (
     <Card
-      key={task._id}
-      className="mb-3 p-3 bg-white cursor-pointer hover:shadow-md transition"
-      onClick={() => navigate(`/tasks/${task._id}`)}
-    >
-      <div className="flex justify-between items-center">
-        <h3 className="text-sm font-medium">{task.title}</h3>
-        <Badge variant={getStatusVariant(task.status)}>
-          {task.status}
-        </Badge>
+  key={task._id}
+  className="relative mb-3 bg-white hover:shadow-md transition cursor-pointer overflow-hidden"
+  onClick={() => navigate(`/tasks/${task._id}`)}
+>
+  {/* Left Priority Bar */}
+  <div
+    className={`absolute left-0 top-0 h-full w-1 ${getPriorityColor(
+      task.priority
+    )}`}
+  />
+
+  <div className="p-4 ml-2">
+    {/* Priority Controls */}
+   <div className="flex justify-between items-start">
+  <Badge
+    className={`${getPriorityBadgeStyle(
+      task.priority
+    )} border-none text-xs px-2 py-1`}
+  >
+    {task.priority}
+  </Badge>
+
+  <div
+    className="flex gap-2 text-gray-400"
+    onClick={(e) => e.stopPropagation()}
+  >
+    <ArrowUp size={16} className="cursor-pointer hover:text-red-500" />
+    <ArrowDown size={16} className="cursor-pointer hover:text-blue-500" />
+  </div>
+</div>
+ 
+
+
+    {/* Title */}
+    <h3 className="text-sm font-semibold mt-2">
+      {task.title}
+    </h3>
+
+    {/* Description */}
+    {task.description && (
+      <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+        {task.description}
+      </p>
+    )}
+
+    {/* Bottom Section */}
+    <div className="flex justify-between items-center mt-4">
+      
+      {/* Assignee Avatars */}
+      <div className="flex -space-x-2">
+        {task.assignees?.length > 0 ? (
+          task.assignees.map((user) => (
+            <Avatar
+              key={user._id}
+              className="h-7 w-7 border-2 border-white"
+            >
+              <AvatarImage src={user.profilePicture} />
+              <AvatarFallback>
+                {user.name?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          ))
+        ) : (
+          <span className="text-xs text-gray-400">
+            No Members
+          </span>
+        )}
       </div>
 
-      {task.description && (
-        <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-          {task.description}
-        </p>
-      )}
-
-      <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
-        <span>Priority: {task.priority}</span>
-        <span>
-          Due: {new Date(task.dueDate).toLocaleDateString()}
-        </span>
+      {/* Due Date */}
+      <div className="flex items-center gap-1 text-xs text-gray-400">
+        <CalendarDays size={14} />
+        {task.dueDate &&
+          new Date(task.dueDate).toLocaleDateString()}
       </div>
-    </Card>
+    </div>
+  </div>
+</Card>
+
   ))
 ) : (
   <p className="text-gray-400 text-xs">No tasks</p>

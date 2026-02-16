@@ -24,7 +24,7 @@ import {
 function CreateTaskDialog({ isOpen, onOpenChange, projectId, projectMembers }) {
   const { mutate, isPending } = useCreateTask();
 
-
+  console.log("project members : ",projectMembers)
   const {
     register,
     control,
@@ -213,7 +213,7 @@ function CreateTaskDialog({ isOpen, onOpenChange, projectId, projectMembers }) {
               >
                 <input
                   type="checkbox"
-                  checked={selectedUsers.includes(m._id)}
+                  checked={selectedUsers.includes(m.user._id)}
                   readOnly
                 />
                 <span>{m.user.name}</span>
