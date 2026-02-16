@@ -17,6 +17,8 @@ export const createTask = async (req, res) => {
       assignees,
     } = req.body;
 
+    console.log("assignees : ",assignees)
+
     const project = await Project.findById(projectId);
     if (!project) {
       return res.status(404).json({

@@ -125,7 +125,7 @@ export const getProjectTasks = async (req, res) => {
       project : projectId,
       isArchived : false
      })
-     .populate("assignees","name profilePicture")
+     .populate("assignees")
      .sort({createdAt : -1})
 
      console.log("Tasks : ",tasks)

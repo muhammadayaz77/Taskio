@@ -30,7 +30,7 @@ function ProjectDetails() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProject(projectId);
-  // console.log("tasks : ",data.tasks)
+  console.log("tasks : ",data?.tasks)
 
   if (isLoading) return <Loader />;
 
