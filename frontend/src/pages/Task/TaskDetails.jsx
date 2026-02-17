@@ -1,4 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
+import { Avatar, AvatarFallback } from "../../components/ui/avatar";
+import { Pencil } from "lucide-react";
+
 import { useNavigate, useParams } from "react-router-dom";
 import useGetTask from "../../hooks/task/useGetTask";
 
@@ -19,17 +24,39 @@ import {
   Activity,
 } from "lucide-react";
 
+
+
 function TaskDetails() {
   const { workspaceId, projectId, taskId } = useParams();
   const navigate = useNavigate();
 
   const { data, isLoading } = useGetTask(taskId);
 
+  // ✅ Move ALL hooks here
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isEditingDesc, setIsEditingDesc] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const priorityColor = {
+    HIGH : 'bg-red-500',
+    MEDIUM : 'bg-orange-500',
+    LOW : 'bg-slate-500'
+  }
+
+  // Sync data when loaded
+  useEffect(() => {
+    if (data?.task) {
+      setTitle(data.task.title || "");
+      setDescription(data.task.description || "");
+    }
+  }, [data]);
+
   if (isLoading) {
     return <Loader />;
   }
 
   const task = data?.task;
+
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -73,84 +100,151 @@ function TaskDetails() {
         <div className="md:col-span-2 space-y-6">
 
           {/* Task Main Info */}
-          <Card>
-            <CardContent className="p-5 space-y-5">
+        <Card>
+  <CardContent className="p-5 space-y-6">
 
-              {/* Priority */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <Flag size={16} />
-                  Priority
-                </div>
+    {/* 🔴 Priority Top */}
+    <div>
+      <Badge
+        className={`text-white ${
+          priorityColor[task?.priority] || "bg-orange-500"
+        }`}
+      >
+        {task?.priority || "Medium"} Priority
+      </Badge>
+    </div>
 
-                <Badge variant="secondary">
-                  {task?.priority || "Medium"}
-                </Badge>
-              </div>
+    {/* ✏️ Editable Title */}
+    <div>
+      {isEditingTitle ? (
+        <Input
+          value={title}
+          autoFocus
+          onChange={(e) => setTitle(e.target.value)}
+          onBlur={() => setIsEditingTitle(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") setIsEditingTitle(false);
+          }}
+        />
+      ) : (
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold">
+            {title || "Task Title"}
+          </h2>
+          <Pencil
+            size={16}
+            className="cursor-pointer text-muted-foreground"
+            onClick={() => setIsEditingTitle(true)}
+          />
+        </div>
+      )}
+    </div>
 
-              <Separator />
+    <Separator />
 
-              {/* Status */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <Activity size={16} />
-                  Status
-                </div>
+    {/* 📝 Editable Description */}
+    <div>
+      <p className="text-sm font-medium mb-2">Description</p>
 
-                <Badge>
-                  {task?.status || "In Progress"}
-                </Badge>
-              </div>
+      {isEditingDesc ? (
+        <Textarea
+          value={description}
+          autoFocus
+          onChange={(e) => setDescription(e.target.value)}
+          onBlur={() => setIsEditingDesc(false)}
+        />
+      ) : (
+        <div className="flex items-start gap-2">
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {description || "No description provided."}
+          </p>
+          <Pencil
+            size={16}
+            className="cursor-pointer mt-1 text-muted-foreground"
+            onClick={() => setIsEditingDesc(true)}
+          />
+        </div>
+      )}
+    </div>
 
-              <Separator />
+    <Separator />
 
-              {/* Assignee */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <User size={16} />
-                  Assignee
-                </div>
+    {/* 👥 Assignees Section */}
+    <div>
+      <p className="text-sm font-medium mb-4">
+        Assignees (3 Members)
+      </p>
 
-                <span className="text-sm text-muted-foreground">
-                  {task?.assignee?.name || "Not Assigned"}
-                </span>
-              </div>
+      <div className="space-y-3">
 
-              <Separator />
+        {/* Member 1 */}
+        <div className="flex items-center gap-3">
+          <Avatar>
+            <AvatarFallback>AK</AvatarFallback>
+          </Avatar>
+          <span className="text-sm">Awais Khan</span>
+        </div>
 
-              {/* Due Date */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <Calendar size={16} />
-                  Due Date
-                </div>
+        {/* Member 2 */}
+        <div className="flex items-center gap-3">
+          <Avatar>
+            <AvatarFallback>SA</AvatarFallback>
+          </Avatar>
+          <span className="text-sm">Sara Ali</span>
+        </div>
 
-                <span className="text-sm text-muted-foreground">
-                  {task?.dueDate
-                    ? new Date(task.dueDate).toLocaleDateString()
-                    : "No due date"}
-                </span>
-              </div>
+        {/* Member 3 */}
+        <div className="flex items-center gap-3">
+          <Avatar>
+            <AvatarFallback>MK</AvatarFallback>
+          </Avatar>
+          <span className="text-sm">Muneeb Khan</span>
+        </div>
 
-              <Separator />
+      </div>
+    </div>
 
-              {/* Progress */}
-              <div>
-                <p className="text-sm font-medium mb-2">Progress</p>
-                <Progress value={task?.progress || 60} />
-              </div>
+    <Separator />
 
-              <Separator />
+    {/* Status */}
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2 text-sm font-medium">
+        <Activity size={16} />
+        Status
+      </div>
 
-              {/* Description */}
-              <div>
-                <p className="text-sm font-medium mb-2">Description</p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {task?.description || "No description provided."}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+      <Badge>
+        {task?.status || "In Progress"}
+      </Badge>
+    </div>
+
+    <Separator />
+
+    {/* Due Date */}
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2 text-sm font-medium">
+        <Calendar size={16} />
+        Due Date
+      </div>
+
+      <span className="text-sm text-muted-foreground">
+        {task?.dueDate
+          ? new Date(task.dueDate).toLocaleDateString()
+          : "No due date"}
+      </span>
+    </div>
+
+    <Separator />
+
+    {/* Progress */}
+    <div>
+      <p className="text-sm font-medium mb-2">Progress</p>
+      <Progress value={task?.progress || 60} />
+    </div>
+
+  </CardContent>
+</Card>
+
 
         </div>
 
