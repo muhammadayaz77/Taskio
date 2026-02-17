@@ -153,6 +153,9 @@ export const resetPasswordSchema = z
   export const projectParamsSchema = z.object({
   projectId: z.string().min(1, "Project ID is required"),
 });
+  export const taskParamsSchema = z.object({
+  taskId : z.string().min(1, "Project ID is required"),
+});
 
 
 export const createTaskSchema = z.object({

@@ -1,6 +1,7 @@
 import Project from "../models/projects.model.mjs";
 import Task from "../models/task.model.mjs";
 import Workspace from "../models/workspace.model.mjs";
+import mongoose from 'mongoose'
 
 
 
@@ -73,6 +74,58 @@ export const createTask = async (req, res) => {
     res.status(500).json({
       message: "Internal Server error",
       error: err.message,
+    });
+  }
+};
+
+
+export const getTaskById = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    // 1️⃣ Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Task ID",
+      });
+    }
+
+    // 2️⃣ Find Task
+    const task = await Task.findById(taskId)
+    .populate('assignees')
+    .populate('watchers');
+
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    // 3️⃣ Find Project using task.project
+    const project = await Project.findById(task.project)
+    .populate('members.user');
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    // 4️⃣ Send Response
+    return res.status(200).json({
+      success: true,
+      task,
+      project,
+    });
+
+  } catch (error) {
+    console.error("Error in getTaskWithProject:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
     });
   }
 };
