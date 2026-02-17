@@ -82,6 +82,7 @@ export const createTask = async (req, res) => {
 export const getTaskById = async (req, res) => {
   try {
     const { taskId } = req.params;
+    console.log("task id ", taskId)
 
     // 1️⃣ Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(taskId)) {
@@ -93,8 +94,9 @@ export const getTaskById = async (req, res) => {
 
     // 2️⃣ Find Task
     const task = await Task.findById(taskId)
-    .populate('assignees')
+    .populate('assignees  ')
     .populate('watchers');
+
 
     if (!task) {
       return res.status(404).json({

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {createTask, getTaskById, getTaskById } from '../controller/task.controller.mjs';
+import {createTask, getTaskById } from '../controller/task.controller.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
 import { createTaskSchema, projectParamsSchema, taskParamsSchema } from '../libs/validate-schema.mjs';
 import { validateSchema } from '../libs/validateSchema.mjs';
@@ -13,13 +13,13 @@ router.post("/:projectId/create-task" ,
       params: projectParamsSchema,
       }),
     createTask)
-router.post("/:taskId" , 
+router.get("/:taskId" , 
     authMiddleware ,
     validateSchema({
-      body: createTaskSchema,
+      // body: createTaskSchema,
       params: taskParamsSchema,
       }),
-    getTaskById)
+    getTaskById);
 
 
 export default router;
