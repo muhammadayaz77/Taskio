@@ -207,9 +207,9 @@ function CreateTaskDialog({ isOpen, onOpenChange, projectId, projectMembers }) {
           <div className="absolute w-full bg-white border rounded shadow mt-1 max-h-36 overflow-y-auto z-10">
             {projectMembers.map((m) => (
               <div
-                key={m._id}
+                key={m.user._id}
                 className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 text-xs cursor-pointer"
-                onClick={() => toggleUser(m._id)}
+                onClick={() => toggleUser(m.user._id)}
               >
                 <input
                   type="checkbox"
