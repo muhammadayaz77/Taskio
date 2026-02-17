@@ -56,10 +56,14 @@ function ProjectDetails() {
   const [isCreateTask, setIsCreateTask] = useState(false);
   const [taskFilter, setTaskFilter] = useState("All");
 
-  const { projectId } = useParams();
+  const { projectId,workspaceId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProject(projectId);
   console.log("tasks : ",data?.tasks)
+
+    if(!workspaceId){
+    return <div>No Workspace found</div>
+  }
 
   if (isLoading) return <Loader />;
 
@@ -90,6 +94,11 @@ function ProjectDetails() {
   // Determine which statuses to show
   const visibleStatuses =
     taskFilter === "All" ? ["To Do", "In Progress", "Done"] : [taskFilter];
+
+    const handleTasks = (taskId) => {
+      console.log("task id : ",taskId)
+      navigate(`tasks/${taskId}`)  
+    }
 
   return (
     <div className="p-3">
@@ -189,7 +198,7 @@ function ProjectDetails() {
     <Card
   key={task._id}
   className="relative mb-3 bg-white hover:shadow-md transition cursor-pointer overflow-hidden"
-  onClick={() => navigate(`/tasks/${task._id}`)}
+  onClick={() => handleTasks(task._id)}
 >
   {/* Left Priority Bar */}
   <div

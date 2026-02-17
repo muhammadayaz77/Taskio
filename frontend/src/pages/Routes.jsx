@@ -12,6 +12,7 @@ import ResetPassword from '../components/Auth/ResetPassword'
 import Workspaces from './WorkSpace'
 import WorkspaceDetails from './WorkSpace/WorkspaceDetails'
 import ProjectDetails from './Project/ProjectDetails'
+import TaskDetails from './Task/TaskDetails'
 
  function Index() {
   return (
@@ -25,6 +26,7 @@ import ProjectDetails from './Project/ProjectDetails'
       <Route path="/workspaces" element={<Workspaces />} />
       <Route path="/workspaces/:workspaceId" element={<WorkspaceDetails />} />
       <Route path="/workspaces/:workspaceId/projects/:projectId" element={<ProjectDetails />} />
+      <Route path="/workspaces/:workspaceId/projects/:projectId/tasks/:taskId" element={<TaskDetails />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/" element={<>Home</>} />
     </Route>
