@@ -1,5 +1,6 @@
 // schema/loginSchema.js
 import { z } from "zod";
+import Task from "../models/task.model.mjs";
 
 const noEmojiRegex = /^[^\p{Extended_Pictographic}]*$/u;
 const fullNameRegex = /^[A-Za-z]+( [A-Za-z]+)?$/;
@@ -188,3 +189,10 @@ export const createTaskSchema = z.object({
     )
     .min(1, "At least one assignee is required"),
 });
+
+export const taskTittleNameSchema = z.object({
+   title: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(100, "Title is too long"),
+})

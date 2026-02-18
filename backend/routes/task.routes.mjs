@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {createTask, getTaskById } from '../controller/task.controller.mjs';
+import {createTask, getTaskById, updateTittleName } from '../controller/task.controller.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
 import { createTaskSchema, projectParamsSchema, taskParamsSchema } from '../libs/validate-schema.mjs';
 import { validateSchema } from '../libs/validateSchema.mjs';
@@ -13,13 +13,20 @@ router.post("/:projectId/create-task" ,
       params: projectParamsSchema,
       }),
     createTask)
-router.get("/:taskId" , 
-    authMiddleware ,
-    validateSchema({
-      // body: createTaskSchema,
-      params: taskParamsSchema,
-      }),
-    getTaskById);
-
+    router.get("/:taskId" , 
+        authMiddleware ,
+        validateSchema({
+          // body: createTaskSchema,
+          params: taskParamsSchema,
+          }),
+        getTaskById);
+    router.put("/:taskId/title" , 
+        authMiddleware ,
+        validateSchema({
+          body: z.object,
+          params: taskParamsSchema,
+          }),
+        updateTittleName);
+    
 
 export default router;
