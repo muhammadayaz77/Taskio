@@ -25,7 +25,7 @@ const activityLogSchema = new Schema({
       'added_attachment',
     ]
   },
-  resource_Type : {
+  resourceType : {
     type : String,
     required : true,
     enum : ['Task','Project','Comment','Workspace','User']
