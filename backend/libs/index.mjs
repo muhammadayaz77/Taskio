@@ -1,4 +1,4 @@
-import activityLog from "../models/activity";
+import activityLog from "../models/activity.mjs";
 
 export const recordActivity = async (
   userId,

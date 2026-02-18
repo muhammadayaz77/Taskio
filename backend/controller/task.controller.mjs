@@ -1,3 +1,4 @@
+import { recordActivity } from "../libs/index.mjs";
 import Project from "../models/projects.model.mjs";
 import Task from "../models/task.model.mjs";
 import Workspace from "../models/workspace.model.mjs";
@@ -115,6 +116,20 @@ export const updateTittleName = async (req, res) => {
         success: false,
       });
     }
+
+    const oldTitle = task.title
+
+    // add activity log
+
+    await recordActivity(
+      req.user._id,
+      'updated_task',
+      'Task',
+      taskId,
+      {
+        description : `Updated task tittle from ${oldTitle} to ${title}`
+      }
+    );
 
     task.title = title
     await task.save();

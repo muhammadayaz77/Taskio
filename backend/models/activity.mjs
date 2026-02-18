@@ -1,6 +1,4 @@
 import { model, Schema } from "mongoose";
-import { string } from "zod";
-
 
 
 const activityLogSchema = new Schema({
