@@ -96,37 +96,32 @@ export const updateTittleName = async (req, res) => {
       });
     }
 
-    const isMember = workspace.members.some(
-      (member) =>
-        member.user.toString() === req.user._id.toString()
-    );
-    if (!isMember) {
-      return res.status(403).json({
-        message: "You are not a member of this workspace",
+    const project = await Project.findById(task.project);
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found",
         success: false,
       });
     }
 
-    // 🔥 FIX 1 — Convert assignees to ObjectId array
-    const formattedAssignees = assignees?.map(a => a.user);
+    const isMember = project.members.some(
+      (member) =>
+        member.user.toString() === req.user._id.toString()
+    );
 
-    const newTask = await Task.create({
-      title,
-      description,
-      status,
-      priority,
-      dueDate,
-      assignees: formattedAssignees, // ✅ correct format
-      project: projectId,            // ✅ required field added
-      createdBy: req.user._id,
-    });
+    if (!isMember) {
+      return res.status(403).json({
+        message: "You are not a member of this project",
+        success: false,
+      });
+    }
 
-    project.tasks.push(newTask._id);
-    await project.save();
+    task.title = title
+    await task.save();
 
     return res.status(201).json({
-      message: "Task created successfully",
-      newTask,
+      message: "Task updated successfully",
+      task,
     });
 
   } catch (err) {

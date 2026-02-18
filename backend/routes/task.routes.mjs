@@ -2,7 +2,7 @@ import express from 'express';
 
 import {createTask, getTaskById, updateTittleName } from '../controller/task.controller.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
-import { createTaskSchema, projectParamsSchema, taskParamsSchema } from '../libs/validate-schema.mjs';
+import { createTaskSchema, projectParamsSchema, taskParamsSchema, taskTittleNameSchema } from '../libs/validate-schema.mjs';
 import { validateSchema } from '../libs/validateSchema.mjs';
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.post("/:projectId/create-task" ,
     router.put("/:taskId/title" , 
         authMiddleware ,
         validateSchema({
-          body: z.object,
+          body: taskTittleNameSchema,
           params: taskParamsSchema,
           }),
         updateTittleName);
