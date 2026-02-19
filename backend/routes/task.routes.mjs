@@ -4,6 +4,7 @@ import {
   createTask,
   getTaskById,
   updateTaskDescription,
+  updateTaskStatus,
   updateTittleName,
 } from "../controller/task.controller.mjs";
 import authMiddleware from "../middleware/auth.middleware.mjs";
@@ -62,7 +63,7 @@ router.put(
     body: taskStatusSchema,
     params: taskParamsSchema,
   }),
-  updateTaskDescription,
+  updateTaskStatus,
 );
 
 export default router;
