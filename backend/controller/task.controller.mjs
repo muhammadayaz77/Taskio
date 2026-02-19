@@ -147,6 +147,75 @@ export const updateTittleName = async (req, res) => {
     });
   }
 };
+export const updateTaskDescription = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    const {
+      description
+    } = req.body;
+
+
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({
+        message: "Task not found",
+        success: false,
+      });
+    }
+
+    const project = await Project.findById(task.project);
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found",
+        success: false,
+      });
+    }
+
+    const isMember = project.members.some(
+      (member) =>
+        member.user.toString() === req.user._id.toString()
+    );
+
+    if (!isMember) {
+      return res.status(403).json({
+        message: "You are not a member of this project",
+        success: false,
+      });
+    }
+
+    const oldDescription = task.description.substring(0,50) + (description.length > 50 ? '...' : '')
+    const newDescription = description.substring(0,50) + (description.length > 50 ? '...' : '')
+
+    // add activity log
+
+    await recordActivity(
+      req.user._id,
+      'updated_task',
+      'Task',
+      taskId,
+      {
+        description : `Updated task description from ${oldDescription} to ${newDescription}`
+      }
+    );
+
+    task.description = description
+
+    await task.save();
+
+    return res.status(201).json({
+      message: "Task updated successfully",
+      task,
+    });
+
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};
 
 
 export const getTaskById = async (req, res) => {
