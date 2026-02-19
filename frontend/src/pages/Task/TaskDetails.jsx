@@ -1,12 +1,12 @@
 import useGetTask from "../../hooks/task/useGetTask";
 import TaskInfoCard from "../../components/task/TaskInfoCard";
-import {useParams} from 'react-router-dom'
-import Loader from '../../components/common/Loader'
+import TaskLogs from "../../components/task/TaskLogs"; // 👈 create this
+import { useParams } from "react-router-dom";
+import Loader from "../../components/common/Loader";
 
 function TaskDetails() {
   const { taskId } = useParams();
   const { data, isLoading } = useGetTask(taskId);
-  console.log("data : ",data)
 
   if (isLoading) return <Loader />;
 
@@ -14,9 +14,23 @@ function TaskDetails() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <TaskInfoCard task={task} />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* LEFT SIDE */}
+        <div className="lg:col-span-2">
+          <TaskInfoCard task={task} />
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="bg-muted/40 rounded-xl p-4 border">
+          <TaskLogs taskId={taskId} />
+        </div>
+
+      </div>
+
     </div>
   );
 }
 
-export default TaskDetails
+export default TaskDetails;

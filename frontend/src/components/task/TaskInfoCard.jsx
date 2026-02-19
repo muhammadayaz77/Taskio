@@ -6,6 +6,8 @@ import { Calendar, Activity } from "lucide-react";
 
 import TaskTitle from "./TaskTitle";
 import TaskDescription from "./TaskDescription";
+import TaskDeleteButton from "./TaskDeleteButton";
+import TaskStatusSelect from "./TaskStatusSelect";
 
 function TaskInfoCard({ task }) {
   const priorityColor = {
@@ -18,38 +20,45 @@ function TaskInfoCard({ task }) {
     <Card>
       <CardContent className="p-5 space-y-6">
 
-        <Badge
-          className={`text-white ${
-            priorityColor[task?.priority] || "bg-orange-500"
-          }`}
-        >
-          {task?.priority || "Medium"} Priority
-        </Badge>
+     {/* TOP SECTION */}
+<div className="flex items-center justify-between">
+
+  {/* LEFT: Priority */}
+  <Badge
+    className={`text-white ${
+      priorityColor[task?.priority] || "bg-orange-500"
+    }`}
+  >
+    {task?.priority || "Medium"} Priority
+  </Badge>
+
+  {/* RIGHT: Status + Delete */}
+  <div className="flex items-center gap-3">
+    <TaskStatusSelect
+      taskId={task._id}
+      currentStatus={task.status}
+    />
+
+    <TaskDeleteButton
+      taskId={task._id}
+    />
+  </div>
+
+</div>
+
 
         <TaskTitle
           taskId={task._id}
           initialTitle={task.title}
         />
 
-        <Separator />
 
         <TaskDescription
           taskId={task._id}
           initialDescription={task.description}
         />
 
-        <Separator />
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <Activity size={16} />
-            Status
-          </div>
-
-          <Badge>
-            {task?.status || "In Progress"}
-          </Badge>
-        </div>
 
         <Separator />
 
