@@ -12,6 +12,7 @@ import {
   projectParamsSchema,
   taskDescriptionSchema,
   taskParamsSchema,
+  taskStatusSchema,
   taskTittleNameSchema,
 } from "../libs/validate-schema.mjs";
 import { validateSchema } from "../libs/validateSchema.mjs";
@@ -54,4 +55,14 @@ router.put(
   }),
   updateTaskDescription,
 );
+router.put(
+  "/:taskId/status",
+  authMiddleware,
+  validateSchema({
+    body: taskStatusSchema,
+    params: taskParamsSchema,
+  }),
+  updateTaskDescription,
+);
+
 export default router;
