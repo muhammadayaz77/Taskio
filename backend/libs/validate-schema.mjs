@@ -196,6 +196,7 @@ export const taskTittleNameSchema = z.object({
     .min(3, "Title must be at least 3 characters")
     .max(100, "Title is too long"),
 })
+
 export const taskDescriptionSchema = z.object({
    description : z
     .string()

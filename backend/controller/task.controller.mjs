@@ -155,6 +155,7 @@ export const updateTaskDescription = async (req, res) => {
       description
     } = req.body;
 
+    console.log('init des : ',description)
 
     const task = await Task.findById(taskId);
     if (!task) {
@@ -183,7 +184,7 @@ export const updateTaskDescription = async (req, res) => {
         success: false,
       });
     }
-
+    console.log("old desc : ",description)
     const oldDescription = task.description.substring(0,50) + (description.length > 50 ? '...' : '')
     const newDescription = description.substring(0,50) + (description.length > 50 ? '...' : '')
 
