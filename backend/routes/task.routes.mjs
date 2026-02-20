@@ -3,6 +3,7 @@ import express from "express";
 import {
   createTask,
   getTaskById,
+  updateTaskAssignees,
   updateTaskDescription,
   updateTaskStatus,
   updateTittleName,
