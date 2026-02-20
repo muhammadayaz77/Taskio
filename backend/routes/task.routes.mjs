@@ -20,6 +20,7 @@ import {
   taskTittleNameSchema,
 } from "../libs/validate-schema.mjs";
 import { validateSchema } from "../libs/validateSchema.mjs";
+import useUpdateTaskPriority from "../../frontend/src/hooks/task/useUpdateTaskPriority";
 const router = express.Router();
 
 router.post(
@@ -75,7 +76,7 @@ router.put(
     body: taskPrioritySchema,
     params: taskParamsSchema,
   }),
-  updateTaskStatus,
+  updateTaskPriority,
 );
 router.put(
   "/:taskId/assignees",
