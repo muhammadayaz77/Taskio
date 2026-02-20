@@ -80,7 +80,7 @@ function TaskInfoCard({ task,projectMembers }) {
 
 <TaskAssignees
   taskId={task._id}
-  assignees={projectMembers || []}
+  assignees={task.assignees || []}
   members={projectMembers || []}
 />
 
