@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Checkbox } from "../../components/ui/checkbox";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
+import { useCreateSubTask } from "../../hooks/task/useCreateSubTask";
 
 function TaskSubTasks({ taskId, subTasks = [] }) {
   const [tasks, setTasks] = useState(subTasks); // existing subtasks
   const [newTaskTitle, setNewTaskTitle] = useState("");
+
+  const { mutate: updateSubTasks, isPending } = useCreateSubTask();
 
   // Toggle completion
   const handleToggle = (index) => {
@@ -14,26 +17,28 @@ function TaskSubTasks({ taskId, subTasks = [] }) {
     setTasks(updated);
 
     console.log("Updated SubTasks:", updated);
-    // 🔥 Call API to update task.subTasks completion status
-    // updateSubTasks(taskId, updated)
+    // 🔥 Optionally call API to update completion status
+    // updateSubTasks(taskId, updated[index].title)
   };
 
   // Add new subtask
   const handleAdd = () => {
-    if (!newTaskTitle.trim()) return;
+    const title = newTaskTitle.trim();
+    if (!title) return;
 
+    // Call the mutate function with title only
+    updateSubTasks({ taskId, title });
+
+    // Optionally update local UI instantly
     const newTask = {
-      title: newTaskTitle.trim(),
+      title,
       completed: false,
       createdAt: new Date(),
     };
-
     setTasks((prev) => [...prev, newTask]);
     setNewTaskTitle("");
 
     console.log("New SubTask Added:", newTask);
-    // 🔥 Call API to add new subtask
-    // addSubTask(taskId, newTask)
   };
 
   return (
@@ -71,14 +76,14 @@ function TaskSubTasks({ taskId, subTasks = [] }) {
           placeholder="New Sub-Task"
           value={newTaskTitle}
           onChange={(e) => setNewTaskTitle(e.target.value)}
-          className="flex-1 h-10" // full width and fixed height
+          className="flex-1 h-10"
         />
         <Button
           onClick={handleAdd}
           className="h-10 bg-blue-500 text-white hover:bg-blue-600"
-          disabled={!newTaskTitle.trim()} // disabled if input empty
+          disabled={!newTaskTitle.trim() || isPending} // disabled if input empty or API pending
         >
-          Submit
+          {isPending ? "Adding..." : "Submit"}
         </Button>
       </div>
     </div>
