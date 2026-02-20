@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Checkbox } from "../../components/ui/checkbox";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
+import useUpdateTaskAssignees from '../../hooks/task/useUpdateTaskAssignees.js'
 
 function TaskAssignees({ taskId, assignees = [], members = [] }) {
   // State stores only IDs
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]); // final selected IDs
   const [tempIds, setTempIds] = useState([]); // temporary state while dropdown is open
+  const {mutate:updateAssignees,isPending} = useUpdateTaskAssignees()
 
   // Sync final selected state with props (assumes assignees is array of objects)
   useEffect(() => {
@@ -53,7 +55,7 @@ function TaskAssignees({ taskId, assignees = [], members = [] }) {
     console.log("Saved Assignee IDs:", tempIds);
 
     // 🔥 Call API here
-    // updateAssignees({ taskId, assignees: tempIds })
+    updateAssignees({ taskId, assignees: tempIds })
   };
 
   return (
