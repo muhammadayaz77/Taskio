@@ -4,84 +4,75 @@ import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
 
 function TaskAssignees({ taskId, assignees = [], members = [] }) {
+  // State stores only IDs
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState([]); // final selected
-  const [tempSelected, setTempSelected] = useState([]); // temporary state while dropdown is open
+  const [selectedIds, setSelectedIds] = useState([]); // final selected IDs
+  const [tempIds, setTempIds] = useState([]); // temporary state while dropdown is open
 
-  // Sync final selected state with props
+  // Sync final selected state with props (assumes assignees is array of objects)
   useEffect(() => {
-    setSelected(assignees);
+    setSelectedIds(assignees.map((a) => a._id));
   }, [assignees]);
 
-  // Open dropdown → copy selected to temp
+  // Open dropdown → copy selectedIds to temp
   const handleDropdownToggle = () => {
-    setTempSelected(selected);
+    setTempIds(selectedIds);
     setIsOpen((prev) => !prev);
   };
 
   // Toggle member in temporary state
   const handleToggle = (memberId) => {
-    const exists = tempSelected.some((u) => u._id === memberId);
-
-    if (exists) {
-      setTempSelected((prev) =>
-        prev.filter((u) => u._id !== memberId)
-      );
-    } else {
-      const member = members.find((m) => m.user._id === memberId);
-      if (!member) return;
-
-      setTempSelected((prev) => [...prev, member.user]);
-    }
+    setTempIds((prev) =>
+      prev.includes(memberId)
+        ? prev.filter((id) => id !== memberId)
+        : [...prev, memberId]
+    );
   };
 
   // Select All
   const handleSelectAll = () => {
-    setTempSelected(members.map((m) => m.user));
+    setTempIds(members.map((m) => m.user._id));
   };
 
   // Unselect All
   const handleUnselectAll = () => {
-    setTempSelected([]);
+    setTempIds([]);
   };
 
-  // Cancel → restore tempSelected from current selected
+  // Cancel → restore tempIds from current selectedIds
   const handleCancel = () => {
-    setTempSelected(selected);
+    setTempIds(selectedIds);
     setIsOpen(false);
   };
 
-  // Save → commit tempSelected to final selected
+  // Save → commit tempIds to final selectedIds
   const handleSave = () => {
-    setSelected(tempSelected);
+    setSelectedIds(tempIds);
     setIsOpen(false);
 
-    console.log("Saved Assignees:", tempSelected);
+    console.log("Saved Assignee IDs:", tempIds);
 
     // 🔥 Call API here
-    // updateAssignees({ taskId, assignees: tempSelected.map(u => u._id) })
+    // updateAssignees({ taskId, assignees: tempIds })
   };
 
   return (
     <div className="space-y-4 relative">
-
       {/* Header */}
-      <p className="text-sm font-medium">
-        Assignees ({selected.length})
-      </p>
+      <p className="text-sm font-medium">Assignees ({selectedIds.length})</p>
 
       {/* Selected Badges */}
       <div className="flex flex-wrap gap-2">
-        {selected.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            No members assigned
-          </p>
+        {selectedIds.length === 0 && (
+          <p className="text-sm text-muted-foreground">No members assigned</p>
         )}
-        {selected.map((user) => (
-          <Badge key={user._id} variant="secondary">
-            {user.name}
-          </Badge>
-        ))}
+        {members
+          .filter((m) => selectedIds.includes(m.user._id))
+          .map((m) => (
+            <Badge key={m.user._id} variant="secondary">
+              {m.user.name}
+            </Badge>
+          ))}
       </div>
 
       {/* Dropdown Button */}
@@ -92,7 +83,6 @@ function TaskAssignees({ taskId, assignees = [], members = [] }) {
       {/* Dropdown Panel */}
       {isOpen && (
         <div className="absolute z-50 w-full mt-2 bg-white border rounded-lg shadow-lg p-4 space-y-3">
-
           {/* Select/Unselect All */}
           <div className="flex justify-between">
             <Button variant="ghost" size="sm" className="text-xs" onClick={handleSelectAll}>
@@ -106,7 +96,7 @@ function TaskAssignees({ taskId, assignees = [], members = [] }) {
           {/* Members List */}
           <div className="space-y-2 max-h-52 overflow-y-auto">
             {members.map((member) => {
-              const checked = tempSelected.some((u) => u._id === member.user._id);
+              const checked = tempIds.includes(member.user._id);
               return (
                 <div key={member.user._id} className="flex items-center gap-2">
                   <Checkbox checked={checked} onCheckedChange={() => handleToggle(member.user._id)} />
