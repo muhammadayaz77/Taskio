@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  addSubTask,
   createTask,
   getTaskById,
   updateTaskAssignees,
@@ -86,6 +87,15 @@ router.put(
     params: taskParamsSchema,
   }),
   updateTaskAssignees,
+);
+router.post(
+  "/:taskId/add-subtask",
+  authMiddleware,
+  validateSchema({
+    body: taskTittleNameSchema,
+    params: taskParamsSchema,
+  }),
+  addSubTask,
 );
 
 export default router;
