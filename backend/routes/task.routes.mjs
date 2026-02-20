@@ -11,6 +11,7 @@ import authMiddleware from "../middleware/auth.middleware.mjs";
 import {
   createTaskSchema,
   projectParamsSchema,
+  taskAssigneesSchema,
   taskDescriptionSchema,
   taskParamsSchema,
   taskStatusSchema,
@@ -64,6 +65,15 @@ router.put(
     params: taskParamsSchema,
   }),
   updateTaskStatus,
+);
+router.put(
+  "/:taskId/assignees",
+  authMiddleware,
+  validateSchema({
+    body: taskAssigneesSchema,
+    params: taskParamsSchema,
+  }),
+  updateTaskAssignees,
 );
 
 export default router;

@@ -202,8 +202,6 @@ export const taskDescriptionSchema = z.object({
     .string()
     .optional()
 })
-export const taskStatusSchema = z.object({
-   status: z.enum(["To Do", "In Progress", "Done"], {
-    errorMap: () => ({ message: "Status is required" }),
-  }),
+export const taskAssigneesSchema = z.object({
+  assignees : z.array(z.string())
 })
