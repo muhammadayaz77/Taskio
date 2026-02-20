@@ -10,6 +10,7 @@ import TaskDeleteButton from "./TaskDeleteButton";
 import TaskStatusSelect from "./TaskStatusSelect";
 import TaskAssignees from "./TaskAssignees";
 import TaskPrioritySelector from "./TaskPrioritySelector";
+import TaskSubTasks from "./TaskSubTasks";
 
 function TaskInfoCard({ task,projectMembers }) {
   const priorityColor = {
@@ -89,6 +90,10 @@ function TaskInfoCard({ task,projectMembers }) {
       taskId={task._id}
       priority={task?.priority}
     />
+    <TaskSubTasks
+  taskId={task._id}
+  subTasks={task.subTasks || []}
+/>
 
         <div>
           <p className="text-sm font-medium mb-2">Progress</p>

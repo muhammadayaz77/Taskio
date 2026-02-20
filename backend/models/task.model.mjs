@@ -60,10 +60,12 @@ const taskSchema = new mongoose.Schema(
         }
       },
     ],
-    comments : [{
+    comments : [
+      {
       type : mongoose.Schema.Types.ObjectId,
       ref : "Comment"
-    }],
+    }
+  ],
     tags: [
       {
         type: String,
