@@ -8,9 +8,10 @@ function TaskDetails() {
   const { taskId } = useParams();
   const { data, isLoading } = useGetTask(taskId);
 
+  console.log("both data : ",data)
   if (isLoading) return <Loader />;
 
-  const task = data?.task;
+  const {task,project} = data;
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -19,7 +20,7 @@ function TaskDetails() {
         
         {/* LEFT SIDE */}
         <div className="lg:col-span-2">
-          <TaskInfoCard task={task} />
+          <TaskInfoCard task={task} projectMembers={project.members} />
         </div>
 
         {/* RIGHT SIDE */}

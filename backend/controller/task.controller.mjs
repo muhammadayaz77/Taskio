@@ -302,9 +302,8 @@ export const getTaskById = async (req, res) => {
     // 2️⃣ Find Task
     const task = await Task.findById(taskId)
     .populate('assignees')
-    .populate('watchers');
     
-    console.log("task id ", taskId)
+    console.log("task assignees : ", task)
 
     if (!task) {
       return res.status(404).json({
