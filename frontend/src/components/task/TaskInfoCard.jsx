@@ -9,6 +9,7 @@ import TaskDescription from "./TaskDescription";
 import TaskDeleteButton from "./TaskDeleteButton";
 import TaskStatusSelect from "./TaskStatusSelect";
 import TaskAssignees from "./TaskAssignees";
+import TaskPrioritySelector from "./TaskPrioritySelector";
 
 function TaskInfoCard({ task,projectMembers }) {
   const priorityColor = {
@@ -16,7 +17,7 @@ function TaskInfoCard({ task,projectMembers }) {
     MEDIUM: "bg-orange-500",
     LOW: "bg-slate-500",
   };
-  console.log("task ",projectMembers);
+  console.log("task ",task);
   return (
     <Card>
       <CardContent className="p-5 space-y-6">
@@ -84,6 +85,10 @@ function TaskInfoCard({ task,projectMembers }) {
   members={projectMembers || []}
 />
 
+<TaskPrioritySelector
+      taskId={task._id}
+      priority={task?.priority}
+    />
 
         <div>
           <p className="text-sm font-medium mb-2">Progress</p>
