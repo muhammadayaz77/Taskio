@@ -13,9 +13,9 @@ import TaskPrioritySelector from "./TaskPrioritySelector";
 
 function TaskInfoCard({ task,projectMembers }) {
   const priorityColor = {
-    HIGH: "bg-red-500",
-    MEDIUM: "bg-orange-500",
-    LOW: "bg-slate-500",
+    High: "bg-red-500",
+    Medium: "bg-orange-500",
+    Low: "bg-slate-500",
   };
   console.log("task ",task);
   return (
