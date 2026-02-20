@@ -15,6 +15,7 @@ import {
   taskAssigneesSchema,
   taskDescriptionSchema,
   taskParamsSchema,
+  taskPrioritySchema,
   taskStatusSchema,
   taskTittleNameSchema,
 } from "../libs/validate-schema.mjs";
@@ -63,6 +64,15 @@ router.put(
   authMiddleware,
   validateSchema({
     body: taskStatusSchema,
+    params: taskParamsSchema,
+  }),
+  updateTaskStatus,
+);
+router.put(
+  "/:taskId/priority",
+  authMiddleware,
+  validateSchema({
+    body: taskPrioritySchema,
     params: taskParamsSchema,
   }),
   updateTaskStatus,
