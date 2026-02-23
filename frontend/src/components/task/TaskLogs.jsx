@@ -1,15 +1,25 @@
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import TaskActivity from "./TaskActivity";
+
 function TaskLogs({ taskId }) {
   return (
-    <div>
-      <h3 className="text-lg font-semibold mb-4">Activity Logs</h3>
+    <div className="space-y-6">
 
-      <div className="space-y-3 text-sm text-muted-foreground">
-        <p>Task created</p>
-        <p>Description updated</p>
-        <p>Status changed to In Progress</p>
-      </div>
+      {/* Watchers Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Watchers</CardTitle>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground">
+          <p>No watchers added yet.</p>
+        </CardContent>
+      </Card>
+
+      {/* Activity Section */}
+      <TaskActivity />
+
     </div>
   );
 }
 
-export default TaskLogs;
+export default TaskLogs;  

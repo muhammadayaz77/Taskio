@@ -8,7 +8,6 @@ function TaskDetails() {
   const { taskId } = useParams();
   const { data, isLoading } = useGetTask(taskId);
 
-  console.log("both data : ",data)
   if (isLoading) return <Loader />;
 
   const {task,project} = data;
@@ -24,7 +23,7 @@ function TaskDetails() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="bg-muted/40 rounded-xl p-4 border">
+        <div className=" rounded-xl">
           <TaskLogs taskId={taskId} />
         </div>
 
