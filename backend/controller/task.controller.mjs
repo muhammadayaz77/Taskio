@@ -551,7 +551,7 @@ export const getTaskActivity = async (req, res) => {
     // 2️⃣ Find Task
     const activity = await activityLog.find({resourceId})
     .populate("user")
-    // .sort(-1)
+    .sort({ createdAt: -1 })
     ;
     console.log('activity : ',activity)
 

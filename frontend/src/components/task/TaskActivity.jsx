@@ -6,7 +6,7 @@ import { getActionIcon } from "../../utils/getActionIcon.jsx"; // your icon func
 function TaskActivity({ taskId }) {
   const { data, isPending } = useGetActivity(taskId);
 
-  cso
+  console.log('data ac : ',data)
 
   if (isPending) {
     return (
@@ -28,8 +28,8 @@ function TaskActivity({ taskId }) {
       </CardHeader>
 
       <CardContent className="space-y-3">
-        {data && data.length > 0 ? (
-          data.map((act) => (
+        {data && data.activity.length > 0 ? (
+          data.activity.map((act) => (
             <div
               key={act._id}
               className="flex items-start gap-3 bg-gray-50 p-2 rounded-lg hover:bg-gray-100 transition"
