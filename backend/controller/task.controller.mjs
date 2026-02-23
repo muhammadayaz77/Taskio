@@ -549,11 +549,11 @@ export const getTaskActivity = async (req, res) => {
     }
 
     // 2️⃣ Find Task
-    const activity = await activityLog.findById(resourceId)
+    const activity = await activityLog.find({resourceId})
     .populate("user")
-    .sort(-1)
+    // .sort(-1)
     ;
-
+    console.log('activity : ',activity)
 
     if (!activity) {
       return res.status(404).json({

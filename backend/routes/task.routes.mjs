@@ -3,6 +3,7 @@ import express from "express";
 import {
   addSubTask,
   createTask,
+  getTaskActivity,
   getTaskById,
   updateSubTask,
   updateTaskAssignees,
@@ -13,6 +14,7 @@ import {
 } from "../controller/task.controller.mjs";
 import authMiddleware from "../middleware/auth.middleware.mjs";
 import {
+  activityParamsSchema,
   completedSchema,
   createTaskSchema,
   projectParamsSchema,
@@ -114,9 +116,9 @@ router.get(
   authMiddleware,
   validateSchema({
     // body: completedSchema,
-    params: subTaskParamsSchema,
+    params: activityParamsSchema,
   }),
-  updateSubTask,
+  getTaskActivity,
 );
 
 export default router;

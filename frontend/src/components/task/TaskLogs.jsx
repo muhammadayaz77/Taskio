@@ -16,7 +16,7 @@ function TaskLogs({ taskId }) {
       </Card>
 
       {/* Activity Section */}
-      <TaskActivity />
+      <TaskActivity taskId={taskId} />
 
     </div>
   );
