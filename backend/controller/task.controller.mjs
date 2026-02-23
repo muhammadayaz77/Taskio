@@ -417,6 +417,61 @@ export const addSubTask = async (req, res) => {
     });
   }
 };
+export const updateSubTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    const { completed } = req.body;
+
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({
+        message: "Task not found",
+        success: false,
+      });
+    }
+
+    const project = await Project.findById(task.project);
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found",
+        success: false,
+      });
+    }
+
+    const isMember = project.members.some(
+      (member) => member.user.toString() === req.user._id.toString(),
+    );
+
+    if (!isMember) {
+      return res.status(403).json({
+        message: "You are not a member of this project",
+        success: false,
+      });
+    }
+
+
+    // add activity log
+    
+    task.subTasks.completed = completed
+    await task.save();
+     
+        await recordActivity(req.user._id, "updated_subtask", "Task", taskId, {
+          description: `Updated sub-task to ${completed ? "Completed" : "Not completed"}`,
+        });
+
+    return res.status(201).json({
+      message: "Sub Task updated successfully",
+      task, 
+    });
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};
 
 export const getTaskById = async (req, res) => {
   try {

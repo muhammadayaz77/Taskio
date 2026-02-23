@@ -215,3 +215,5 @@
       priority : z.enum(["Low", "Medium", "High"], {
       errorMap: () => ({ message: "Priority is required" }),
     })})
+
+export const completedSchema = z.boolean();

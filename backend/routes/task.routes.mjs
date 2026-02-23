@@ -4,6 +4,7 @@ import {
   addSubTask,
   createTask,
   getTaskById,
+  updateSubTask,
   updateTaskAssignees,
   updateTaskDescription,
   updateTaskPriority,
@@ -12,6 +13,7 @@ import {
 } from "../controller/task.controller.mjs";
 import authMiddleware from "../middleware/auth.middleware.mjs";
 import {
+  completedSchema,
   createTaskSchema,
   projectParamsSchema,
   taskAssigneesSchema,
@@ -96,6 +98,15 @@ router.post(
     params: taskParamsSchema,
   }),
   addSubTask,
+);
+router.put(
+  "/:taskId/update-subtask",
+  authMiddleware,
+  validateSchema({
+    body: completedSchema,
+    params: taskParamsSchema,
+  }),
+  updateSubTask,
 );
 
 export default router;
