@@ -16,6 +16,7 @@ import {
   completedSchema,
   createTaskSchema,
   projectParamsSchema,
+  subTaskParamsSchema,
   taskAssigneesSchema,
   taskDescriptionSchema,
   taskParamsSchema,
@@ -100,11 +101,11 @@ router.post(
   addSubTask,
 );
 router.put(
-  "/:taskId/update-subtask",
+  "/:taskId/update-subtask/:subTaskId",
   authMiddleware,
   validateSchema({
     body: completedSchema,
-    params: taskParamsSchema,
+    params: subTaskParamsSchema,
   }),
   updateSubTask,
 );

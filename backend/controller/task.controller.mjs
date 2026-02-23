@@ -419,7 +419,8 @@ export const addSubTask = async (req, res) => {
 };
 export const updateSubTask = async (req, res) => {
   try {
-    const { taskId } = req.params;
+    const { taskId,subTaskId } = req.params;
+    console.log("ids : ",taskId,subTaskId)
 
     const { completed } = req.body;
 

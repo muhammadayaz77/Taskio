@@ -152,10 +152,10 @@
     workspaceId: z.string().min(1, "Workspace ID is required"),
   });
     export const projectParamsSchema = z.object({
-    projectId: z.string().min(1, "Project ID is required"),
+    projectId: z.string().min(1, "Task ID is required"),
   });
     export const taskParamsSchema = z.object({
-    taskId : z.string().min(1, "Project ID is required"),
+    taskId : z.string().min(1, "Task ID is required"),
   });
 
 
@@ -216,4 +216,11 @@
       errorMap: () => ({ message: "Priority is required" }),
     })})
 
-export const completedSchema = z.boolean();
+export const completedSchema = z.object({
+  completed: z.boolean(),
+});
+
+export const subTaskParamsSchema = z.object({
+    taskId : z.string().min(1, "Sub task ID is required"),
+    subTaskId : z.string().min(1, "Sub task ID is required"),
+  });

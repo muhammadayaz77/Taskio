@@ -1,93 +1,120 @@
-import { useState } from "react";
-import { Checkbox } from "../../components/ui/checkbox";
-import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import { useCreateSubTask } from "../../hooks/task/useCreateSubTask";
+  import { useState, useEffect } from "react";
+  import { Checkbox } from "../../components/ui/checkbox";
+  import { Input } from "../../components/ui/input";
+  import { Button } from "../../components/ui/button";
+  import { useCreateSubTask } from "../../hooks/task/useCreateSubTask";
+  import useUpdateSubTask from "../../hooks/task/useUpdateSubTask";
 
-function TaskSubTasks({ taskId, subTasks = [] }) {
-  const [tasks, setTasks] = useState(subTasks); // existing subtasks
-  const [newTaskTitle, setNewTaskTitle] = useState("");
+  function TaskSubTasks({ taskId, subTasks = [] }) {
+    const [tasks, setTasks] = useState(subTasks);
+    const [newTaskTitle, setNewTaskTitle] = useState("");
 
-  const { mutate: updateSubTasks, isPending } = useCreateSubTask();
+    const { mutate: createSubTask, isPending } = useCreateSubTask();
+    const { mutate: updateStatus, isPending: isUpdating } = useUpdateSubTask();
 
-  // Toggle completion
-  const handleToggle = (index) => {
-    const updated = [...tasks];
-    updated[index].completed = !updated[index].completed;
-    setTasks(updated);
+    // 🔥 Sync if backend updates subtasks
+    useEffect(() => {
+      setTasks(subTasks);
+    }, [subTasks]);
 
-    console.log("Updated SubTasks:", updated);
-    // 🔥 Optionally call API to update completion status
-    // updateSubTasks(taskId, updated[index].title)
-  };
+    // ✅ Toggle completion
+    const handleToggle = (subTaskId, index) => {
+      const updatedTasks = [...tasks];
 
-  // Add new subtask
-  const handleAdd = () => {
-    const title = newTaskTitle.trim();
-    if (!title) return;
+      const newCompleted = !updatedTasks[index].completed;
+      updatedTasks[index].completed = newCompleted;
 
-    // Call the mutate function with title only
-    updateSubTasks({ taskId, title });
+      // Update UI immediately
+      setTasks(updatedTasks);
 
-    // Optionally update local UI instantly
-    const newTask = {
-      title,
-      completed: false,
-      createdAt: new Date(),
+      // Console full object
+      console.log({
+        taskId,
+        subTaskId,
+        completed: newCompleted,
+      });
+
+      // Send to backend
+      updateStatus({
+        taskId,
+        subTaskId,
+        completed: newCompleted,
+      });
     };
-    setTasks((prev) => [...prev, newTask]);
-    setNewTaskTitle("");
 
-    console.log("New SubTask Added:", newTask);
-  };
+    // ✅ Add new subtask
+    const handleAdd = () => {
+      const title = newTaskTitle.trim();
+      if (!title) return;
 
-  return (
-    <div className="space-y-3">
-      <p className="text-sm font-medium">Sub-Tasks</p>
+      createSubTask({ taskId, title });
 
-      {/* Existing SubTasks */}
-      <div className="space-y-2 max-h-48 overflow-y-auto p-2 border rounded-lg bg-gray-50">
-        {tasks.length > 0 ? (
-          tasks.map((sub, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <Checkbox
-                checked={sub.completed}
-                onCheckedChange={() => handleToggle(index)}
-              />
-              <span
-                className={`${
-                  sub.completed ? "line-through text-muted-foreground" : ""
-                }`}
-              >
-                {sub.title}
-              </span>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-sm text-gray-400 italic">
-            No sub-task available
-          </p>
-        )}
+      const newTask = {
+        _id: Date.now().toString(), // temporary id for UI
+        title,
+        completed: false,
+        createdAt: new Date(),
+      };
+
+      setTasks((prev) => [...prev, newTask]);
+      setNewTaskTitle("");
+
+      console.log("New SubTask Added:", newTask);
+    };
+
+    return (
+      <div className="space-y-4">
+        <p className="text-sm font-medium">Sub-Tasks</p>
+
+        {/* SubTask List */}
+        <div className="space-y-2 max-h-48 overflow-y-auto p-3 border rounded-xl bg-gray-50">
+          {tasks.length > 0 ? (
+            tasks.map((sub, index) => (
+              <div key={sub._id} className="flex items-center gap-3">
+                <Checkbox
+                  checked={sub.completed}
+                  disabled={isUpdating}
+                  onCheckedChange={() =>
+                    handleToggle(sub._id, index)
+                  }
+                />
+
+                <span
+                  className={`text-sm ${
+                    sub.completed
+                      ? "line-through text-muted-foreground"
+                      : ""
+                  }`}
+                >
+                  {sub.title}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-sm text-gray-400 italic">
+              No sub-task available
+            </p>
+          )}
+        </div>
+
+        {/* Add SubTask */}
+        <div className="flex gap-2">
+          <Input
+            placeholder="New Sub-Task"
+            value={newTaskTitle}
+            onChange={(e) => setNewTaskTitle(e.target.value)}
+            className="flex-1 h-10"
+          />
+          <Button
+            onClick={handleAdd}
+            className="h-10 bg-blue-500 text-white hover:bg-blue-600"
+            disabled={!newTaskTitle.trim() || isPending}
+          >
+            {isPending ? "Adding..." : "Submit"}
+          </Button>
+        </div>
       </div>
+    );
+  }
 
-      {/* Add new SubTask */}
-      <div className="flex gap-2">
-        <Input
-          placeholder="New Sub-Task"
-          value={newTaskTitle}
-          onChange={(e) => setNewTaskTitle(e.target.value)}
-          className="flex-1 h-10"
-        />
-        <Button
-          onClick={handleAdd}
-          className="h-10 bg-blue-500 text-white hover:bg-blue-600"
-          disabled={!newTaskTitle.trim() || isPending} // disabled if input empty or API pending
-        >
-          {isPending ? "Adding..." : "Submit"}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-export default TaskSubTasks;
+  export default TaskSubTasks;
