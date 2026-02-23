@@ -419,9 +419,7 @@ export const addSubTask = async (req, res) => {
 };
 export const updateSubTask = async (req, res) => {
   try {
-    const { taskId,subTaskId } = req.params;
-    console.log("ids : ",taskId,subTaskId)
-
+    const { taskId, subTaskId } = req.params;
     const { completed } = req.body;
 
     const task = await Task.findById(taskId);
@@ -441,7 +439,7 @@ export const updateSubTask = async (req, res) => {
     }
 
     const isMember = project.members.some(
-      (member) => member.user.toString() === req.user._id.toString(),
+      (member) => member.user.toString() === req.user._id.toString()
     );
 
     if (!isMember) {
@@ -451,19 +449,32 @@ export const updateSubTask = async (req, res) => {
       });
     }
 
+    // ✅ Correct way to find subdocument
+    const selectedSubTask = task.subTasks.id(subTaskId);
 
-    // add activity log
-    
-    task.subTasks.completed = completed
+    if (!selectedSubTask) {
+      return res.status(404).json({
+        message: "SubTask not found",
+        success: false,
+      });
+    }
+
+    // ✅ Update completed field
+    selectedSubTask.completed = completed;
+
     await task.save();
-     
-        await recordActivity(req.user._id, "updated_subtask", "Task", taskId, {
-          description: `Updated sub-task to ${completed ? "Completed" : "Not completed"}`,
-        });
 
-    return res.status(201).json({
+    // ✅ Activity Log
+    await recordActivity(req.user._id, "updated_subtask", "Task", taskId, {
+      description: `Updated sub-task to ${
+        completed ? "Completed" : "Not completed"
+      }`,
+    });
+
+    return res.status(200).json({
       message: "Sub Task updated successfully",
-      task, 
+      success: true,
+      task,
     });
   } catch (err) {
     console.log("Error : ", err);
