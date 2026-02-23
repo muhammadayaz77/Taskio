@@ -109,5 +109,14 @@ router.put(
   }),
   updateSubTask,
 );
+router.get(
+  "/:resourceId/activity",
+  authMiddleware,
+  validateSchema({
+    // body: completedSchema,
+    params: subTaskParamsSchema,
+  }),
+  updateSubTask,
+);
 
 export default router;

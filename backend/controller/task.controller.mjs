@@ -1,4 +1,5 @@
 import { recordActivity } from "../libs/index.mjs";
+import activityLog from "../models/activity.mjs";
 import Project from "../models/projects.model.mjs";
 import Task from "../models/task.model.mjs";
 import Workspace from "../models/workspace.model.mjs";
@@ -526,6 +527,46 @@ export const getTaskById = async (req, res) => {
       success: true,
       task,
       project,
+    });
+  } catch (error) {
+    console.error("Error in getTaskWithProject:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+export const getTaskActivity = async (req, res) => {
+  try {
+    const { resourceId } = req.params;
+
+    // 1️⃣ Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(resourceId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Rescource ID",
+      });
+    }
+
+    // 2️⃣ Find Task
+    const activity = await activityLog.findById(resourceId)
+    .populate("user")
+    .sort(-1)
+    ;
+
+
+    if (!activity) {
+      return res.status(404).json({
+        success: false,
+        message: "Activity Log not found",
+      });
+    }
+
+
+    // 4️⃣ Send Response
+    return res.status(200).json({
+      success: true,
+      activity
     });
   } catch (error) {
     console.error("Error in getTaskWithProject:", error);

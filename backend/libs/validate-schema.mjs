@@ -224,3 +224,6 @@ export const subTaskParamsSchema = z.object({
     taskId : z.string().min(1, "Sub task ID is required"),
     subTaskId : z.string().min(1, "Sub task ID is required"),
   });
+export const activityParamsSchema = z.object({
+    resourceId : z.string().min(1, "Rescource ID is required"),
+  });
