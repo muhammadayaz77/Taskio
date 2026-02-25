@@ -12,10 +12,13 @@ export const useCreateSubTask = () => {
 
     onSuccess: (response, variables) => {
       // Invalidate query for this task to refetch updated subtasks
+      
       queryClient.invalidateQueries({
         queryKey: ["task", variables.taskId],
       });
-
+        queryClient.invalidateQueries({
+          queryKey: ["task-activity", variables.taskId],
+        });
       window.toastify(
         response?.message || "Sub Task created successfully",
         "success"

@@ -13,6 +13,9 @@ import { updateData } from "../../api/axios";
       queryClient.invalidateQueries({
         queryKey: ["task", variables.taskId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["task-activity", variables.taskId],
+      });
 
       window.toastify(
         response?.message || "Assignees updated successfully",

@@ -536,6 +536,7 @@ export const getTaskById = async (req, res) => {
     });
   }
 };
+
 export const getTaskActivity = async (req, res) => {
   try {
     const { resourceId } = req.params;

@@ -3,7 +3,7 @@ import { fetchData } from "../../api/axios";
 
 const useGetActivity = (taskId) => {
   return useQuery({
-    queryKey : ['activity',taskId],
+    queryKey : ['task-activity',taskId],
 
     queryFn: (data) => fetchData(`/tasks/${taskId}/activity`,data),
     onSuccess : (data) => {
