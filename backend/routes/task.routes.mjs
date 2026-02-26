@@ -1,4 +1,5 @@
 import express from "express";
+import {z} from 'zod'
 
 import {
   addSubTask,
@@ -119,6 +120,25 @@ router.get(
     params: activityParamsSchema,
   }),
   getTaskActivity,
+);
+
+router.get(
+  "/:taskId/comment",
+  authMiddleware,
+  validateSchema({
+    body: taskTittleNameSchema,
+    // params: taskParamsSchema,
+  }),
+  getCommentsByTaskId,   
+);
+router.post(
+  "/:taskId/add-comment",
+  authMiddleware,
+  validateSchema({
+    body: z.object({text : z.string()}),
+    params: taskParamsSchema,
+  }),
+  addComment,
 );
 
 export default router;
