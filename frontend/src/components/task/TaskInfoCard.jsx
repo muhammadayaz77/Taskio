@@ -11,6 +11,7 @@ import TaskStatusSelect from "./TaskStatusSelect";
 import TaskAssignees from "./TaskAssignees";
 import TaskPrioritySelector from "./TaskPrioritySelector";
 import TaskSubTasks from "./TaskSubTasks";
+import CommentSection from "./CommentSection";
 
 function TaskInfoCard({ task,projectMembers }) {
   const priorityColor = {
@@ -94,7 +95,8 @@ function TaskInfoCard({ task,projectMembers }) {
   taskId={task._id}
   subTasks={task.subTasks || []}
 />
-
+    <Separator />
+    <CommentSection taskId={task._id} members={projectMembers} />
         <div>
           <p className="text-sm font-medium mb-2">Progress</p>
           <Progress value={task?.progress || 60} />

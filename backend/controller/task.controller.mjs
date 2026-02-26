@@ -284,7 +284,7 @@ export const updateTaskAssignees = async (req, res) => {
     // add activity log
 
     await recordActivity(req.user._id, "updated_task", "Task", taskId, {
-      description: `Updated task assignees from ${oldAssignees.length} to ${assignees.lenght}`,
+      description: `Updated task assignees`,
     });
 
     task.assignees = assignees;
