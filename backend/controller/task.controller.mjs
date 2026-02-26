@@ -1,5 +1,6 @@
 import { recordActivity } from "../libs/index.mjs";
 import activityLog from "../models/activity.mjs";
+import Comment from "../models/comment.model.mjs";
 import Project from "../models/projects.model.mjs";
 import Task from "../models/task.model.mjs";
 import Workspace from "../models/workspace.model.mjs";
@@ -574,6 +575,86 @@ export const getTaskActivity = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
+    });
+  }
+};
+
+export const addComment = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    const { text } = req.body;
+
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({
+        message: "Task not found",
+        success: false,
+      });
+    }
+
+    const project = await Project.findById(task.project);
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found",
+        success: false,
+      });
+    }
+
+    const isMember = project.members.some(
+      (member) => member.user.toString() === req.user._id.toString(),
+    );
+
+    if (!isMember) {
+      return res.status(403).json({
+        message: "You are not a member of this project",
+        success: false,
+      });
+    }
+    const newComment = await Comment.create({
+      text,
+      task :taskId,
+      author : req.user._id
+    })
+    // add activity log
+
+    await recordActivity(req.user._id, "added_comment", "Comment", taskId, {
+      description: `Comment Added ${text}`,
+    });
+
+    task.comments.push(newComment._id);
+
+    await task.save();
+
+    return res.status(201).json({
+      message: "Comment added successfully",
+      newComment,
+    });
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};
+export const getCommentsByTaskId = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    const comments = await Comment.find({
+      task: taskId
+    })
+    .populate('author')
+    .sort({createdAt: -1})
+    return res.status(200).json({
+      comments,
+    });
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
     });
   }
 };

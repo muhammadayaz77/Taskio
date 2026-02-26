@@ -2,8 +2,10 @@ import express from "express";
 import {z} from 'zod'
 
 import {
+  addComment,
   addSubTask,
   createTask,
+  getCommentsByTaskId,
   getTaskActivity,
   getTaskById,
   updateSubTask,
