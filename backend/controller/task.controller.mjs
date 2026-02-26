@@ -502,8 +502,6 @@ export const getTaskById = async (req, res) => {
     // 2️⃣ Find Task
     const task = await Task.findById(taskId).populate("assignees");
 
-    console.log("task assignees : ", task);
-
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -555,7 +553,6 @@ export const getTaskActivity = async (req, res) => {
     .populate("user")
     .sort({ createdAt: -1 })
     ;
-    console.log('activity : ',activity)
 
     if (!activity) {
       return res.status(404).json({
@@ -646,7 +643,8 @@ export const getCommentsByTaskId = async (req, res) => {
       task: taskId
     })
     .populate('author')
-    .sort({createdAt: -1})
+    .sort({createdAt: -1});
+    console.log('comments : ',comments.text)
     return res.status(200).json({
       comments,
     });

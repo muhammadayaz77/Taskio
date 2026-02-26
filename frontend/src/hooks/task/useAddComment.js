@@ -14,7 +14,7 @@ export const useAddComment = () => {
       // Invalidate query for this task to refetch updated subtasks
       
       queryClient.invalidateQueries({
-        queryKey: ["comments", variables.task],
+        queryKey: ["comment", variables.task],
       });
         queryClient.invalidateQueries({
           queryKey: ["task-activity", variables.task],
@@ -27,7 +27,7 @@ export const useAddComment = () => {
 
     onError: (err) => {
       window.toastify(
-        err?.response?.data?.message || "Sub Task creation failed",
+        err?.response?.data?.message || "Comment creation failed",
         "error"
       );
     },

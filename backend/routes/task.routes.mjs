@@ -125,12 +125,12 @@ router.get(
 );
 
 router.get(
-  "/:taskId/comment",
+  "/:taskId/comments",
   authMiddleware,
-  validateSchema({
-    body: taskTittleNameSchema,
-    // params: taskParamsSchema,
-  }),
+  // validateSchema({
+  //   // body: z.object({}),
+  //   // params: taskParamsSchema,
+  // }),
   getCommentsByTaskId,   
 );
 router.post(
