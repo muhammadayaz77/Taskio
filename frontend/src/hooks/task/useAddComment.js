@@ -2,7 +2,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postData } from "../../api/axios";
 
-export const useCreateSubTask = () => {
+export const useAddComment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
