@@ -143,4 +143,20 @@ router.post(
   addComment,
 );
 
+router.post(
+  "/:taskId/watch",
+  authMiddleware,
+  validateSchema({
+    params: taskParamsSchema,
+  }),
+  watchTask,
+);
+router.post(
+  "/:taskId/archived",
+  authMiddleware,a
+  validateSchema({
+    params: taskParamsSchema,
+  }),
+  archivedTask,
+);
 export default router;

@@ -12,9 +12,9 @@ export const useAddComment = () => {
 
     onSuccess: (response, variables) => {
       // Invalidate query for this task to refetch updated subtasks
-      
+
       queryClient.invalidateQueries({
-        queryKey: ["comment", variables.task],
+        queryKey: ["comment", variables.taskId],
       });
         queryClient.invalidateQueries({
           queryKey: ["task-activity", variables.task],
@@ -24,7 +24,7 @@ export const useAddComment = () => {
         "success"
       );
     },
-
+    
     onError: (err) => {
       window.toastify(
         err?.response?.data?.message || "Comment creation failed",
