@@ -84,7 +84,7 @@ const taskSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    isArchived: {
+    archieved: {
       type: Boolean,
       default: false,
     },

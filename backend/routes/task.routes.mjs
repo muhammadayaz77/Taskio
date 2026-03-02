@@ -4,6 +4,7 @@ import {z} from 'zod'
 import {
   addComment,
   addSubTask,
+  archievedTask,
   createTask,
   getCommentsByTaskId,
   getTaskActivity,
@@ -14,6 +15,7 @@ import {
   updateTaskPriority,
   updateTaskStatus,
   updateTittleName,
+  watchTask,
 } from "../controller/task.controller.mjs";
 import authMiddleware from "../middleware/auth.middleware.mjs";
 import {
@@ -152,11 +154,11 @@ router.post(
   watchTask,
 );
 router.post(
-  "/:taskId/archived",
-  authMiddleware,a
+  "/:taskId/archieved", 
+  authMiddleware,
   validateSchema({
     params: taskParamsSchema,
   }),
-  archivedTask,
+  archievedTask,
 );
 export default router;
