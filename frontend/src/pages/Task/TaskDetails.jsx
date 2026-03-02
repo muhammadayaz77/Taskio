@@ -1,6 +1,7 @@
 import useGetTask from "../../hooks/task/useGetTask";
 import TaskInfoCard from "../../components/task/TaskInfoCard";
-import TaskLogs from "../../components/task/TaskLogs"; // 👈 create this
+import TaskLogs from "../../components/task/TaskLogs";
+import TaskDetailsHeader from "../../components/task/TaskDetailsHeader"; // 👈 new
 import { useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 
@@ -10,25 +11,29 @@ function TaskDetails() {
 
   if (isLoading) return <Loader />;
 
-  const {task,project} = data;
+  const { task, project } = data;
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       
+      {/* HEADER */}
+      <TaskDetailsHeader
+        title={task.title}
+        isWatching={task.isWatching}
+        isArchived={task.isArchived}
+      />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* LEFT SIDE */}
         <div className="lg:col-span-2">
           <TaskInfoCard task={task} projectMembers={project.members} />
         </div>
 
-        {/* RIGHT SIDE */}
-        <div className=" rounded-xl">
+        <div className="rounded-xl">
           <TaskLogs taskId={taskId} />
         </div>
 
       </div>
-
     </div>
   );
 }

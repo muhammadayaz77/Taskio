@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateData } from "../../api/axios";
+import { postData, updateData } from "../../api/axios";
 
  const useArchievedTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ taskId }) =>
-      updateData(`/tasks/${taskId}/title`, {}),
+      postData(`/tasks/${taskId}/title`, {}),
 
     onSuccess: (response, variables) => {
       // ✅ invalidate correct task
@@ -18,14 +18,16 @@ import { updateData } from "../../api/axios";
       });
 
       window.toastify(
-        response?.message || "Task updated successfully",
+        response?.message || "Archive updated successfully",
         "success"
       );
     },
 
     onError: (err) => {
+      console.log("task id : ",taskId)
+
       window.toastify(
-        err?.response?.data?.message || "Task update failed",
+        err?.response?.data?.message || "Archive update failed",   
         "error"
       );
     },
