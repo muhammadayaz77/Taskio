@@ -154,7 +154,7 @@ router.post(
   watchTask,
 );
 router.post(
-  "/:taskId/archieved", 
+  "/:taskId/archive", 
   authMiddleware,
   validateSchema({
     params: taskParamsSchema,

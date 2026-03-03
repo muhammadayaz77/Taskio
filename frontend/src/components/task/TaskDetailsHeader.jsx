@@ -14,7 +14,6 @@ import { useSelector } from "react-redux";
 function TaskDetailsHeader({
   task,
   title,
-  archieved,
 }) {
   const navigate = useNavigate();
 
@@ -42,6 +41,9 @@ const isWatching = task?.watchers?.some(
     // alert(isWatching)
     toggleWatch({ taskId : task?._id })
   }
+  const handleArchive = () => {
+    toggleArchive({ taskId : task?._id })
+  }
   return (
     <div className="flex items-center justify-between mb-6 border-b pb-4">
       
@@ -50,7 +52,7 @@ const isWatching = task?.watchers?.some(
         <Button
           variant="outline"
           size="sm"
-          className="bg-white flex items-center gap-1"
+          className="bg-white flex items-center gap-1 cursor-pointer"
           onClick={() => navigate(-1)}
         >
           <ArrowLeft size={14} />
@@ -61,7 +63,7 @@ const isWatching = task?.watchers?.some(
           {title}
         </h1>
 
-        {archieved && (
+        {task?.archieved && (
           <span className="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-600">
             Archived
           </span>
@@ -76,7 +78,7 @@ const isWatching = task?.watchers?.some(
           variant="outline"
           disabled={watchLoading}
           onClick={handleWatch}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 cursor-pointer"
         >
           {isWatching ? (
             <>
@@ -94,11 +96,11 @@ const isWatching = task?.watchers?.some(
         {/* ARCHIVE BUTTON */}
         <Button
           variant="secondary"
-          disabled={archiveLoading}
-          onClick={() => toggleArchive({ taskId })}
-          className="flex items-center gap-2"
+          // disabled={archiveLoading}
+          onClick={handleArchive}
+          className="flex items-center gap-2 cursor-pointer"
         >
-          {archieved ? (
+          {task?.archieved ? (
             <>
               <ArchiveRestore className="h-4 w-4" />
               Unarchive

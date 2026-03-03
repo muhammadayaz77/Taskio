@@ -6,7 +6,7 @@ import { postData, updateData } from "../../api/axios";
 
   return useMutation({
     mutationFn: ({ taskId }) =>
-      postData(`/tasks/${taskId}/title`, {}),
+      postData(`/tasks/${taskId}/archive`, {}),
 
     onSuccess: (response, variables) => {
       // ✅ invalidate correct task
@@ -17,10 +17,6 @@ import { postData, updateData } from "../../api/axios";
         queryKey: ["task-activity", variables.taskId],
       });
 
-      window.toastify(
-        response?.message || "Archive updated successfully",
-        "success"
-      );
     },
 
     onError: (err) => {
