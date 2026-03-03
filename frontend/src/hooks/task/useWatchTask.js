@@ -9,6 +9,7 @@ import { postData, updateData } from "../../api/axios";
       postData(`/tasks/${taskId}/watch`, {}),
 
     onSuccess: (response, variables) => {
+      console.log("variables : ",variables.taskId);
       // ✅ invalidate correct task
       queryClient.invalidateQueries({
         queryKey: ["task", variables.taskId],
@@ -16,15 +17,9 @@ import { postData, updateData } from "../../api/axios";
       queryClient.invalidateQueries({
         queryKey: ["task-activity", variables.taskId],
       });
-
-      window.toastify(
-        response?.message || "Watchers updated successfully",
-        "success"
-      );
     },
 
     onError: (err) => {
-      console.log("task id : ",taskId)
       window.toastify(
         err?.response?.data?.message || "Watchers update failed",
         "error"

@@ -660,6 +660,7 @@ export const getCommentsByTaskId = async (req, res) => {
 export const watchTask = async (req, res) => {
   try {
     const { taskId } = req.params;
+    console.log('running watch task controller')
 
     const task = await Task.findById(taskId);
     if (!task) {
@@ -693,7 +694,7 @@ export const watchTask = async (req, res) => {
       task.watchers.push(req.user._id);
     } else {
       task.watchers = task.watchers.filter(
-        (watcher) => watcher.toString() !== req.user._id,
+        (watcher) => watcher.toString() !== req.user._id.toString(),
       );
     }
     await task.save();

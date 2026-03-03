@@ -32,16 +32,16 @@ function TaskDetailsHeader({
     isPending: archiveLoading,
   } = useArchivedTask();
 
- const isWatching = task?.watchers?.some(
-  (watcher) =>
-    watcher?._id?.toString() === user?._id?.toString()
+const isWatching = task?.watchers?.some(
+  (watcherId) =>
+    watcherId?.toString() === user?._id?.toString()
 );
-  
+
+  // console.log("watchers : ",user._id.toString());
   const handleWatch = () => {
     // alert(isWatching)
     toggleWatch({ taskId : task?._id })
   }
-  console.log("is watching : ",isWatching )
   return (
     <div className="flex items-center justify-between mb-6 border-b pb-4">
       
@@ -78,7 +78,7 @@ function TaskDetailsHeader({
           onClick={handleWatch}
           className="flex items-center gap-2"
         >
-          {!isWatching ? (
+          {isWatching ? (
             <>
               <EyeOff className="h-4 w-4" />
               Unwatch

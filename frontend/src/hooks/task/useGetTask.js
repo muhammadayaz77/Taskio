@@ -4,7 +4,6 @@ import { fetchData } from "../../api/axios";
 const useGetTask = (taskId) => {
   return useQuery({
     queryKey : ['task',taskId],
-
     queryFn: (data) => fetchData(`/tasks/${taskId}`,data),
     onSuccess : (data) => {
       window.toastify(data.message,'success');
