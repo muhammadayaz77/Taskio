@@ -395,21 +395,21 @@ export const addSubTask = async (req, res) => {
 
     const newSubtask = {
       title,
-      completed : false
-    }
+      completed: false,
+    };
 
     // add activity log
-    
+
     task.subTasks.push(newSubtask);
     await task.save();
-     
-        await recordActivity(req.user._id, "created_subtask", "Task", taskId, {
-          description: `Created sub-task : ${title}`,
-        });
+
+    await recordActivity(req.user._id, "created_subtask", "Task", taskId, {
+      description: `Created sub-task : ${title}`,
+    });
 
     return res.status(201).json({
       message: "Sub Task created successfully",
-      task, 
+      task,
     });
   } catch (err) {
     console.log("Error : ", err);
@@ -441,7 +441,7 @@ export const updateSubTask = async (req, res) => {
     }
 
     const isMember = project.members.some(
-      (member) => member.user.toString() === req.user._id.toString()
+      (member) => member.user.toString() === req.user._id.toString(),
     );
 
     if (!isMember) {
@@ -549,11 +549,10 @@ export const getTaskActivity = async (req, res) => {
     }
 
     // 2️⃣ Find Task
-    const activity = await activityLog.find({resourceId})
-    .populate("user")
-    .sort({ createdAt: -1 })
-    ;
-
+    const activity = await activityLog
+      .find({ resourceId })
+      .populate("user")
+      .sort({ createdAt: -1 });
     if (!activity) {
       return res.status(404).json({
         success: false,
@@ -561,11 +560,10 @@ export const getTaskActivity = async (req, res) => {
       });
     }
 
-
     // 4️⃣ Send Response
     return res.status(200).json({
       success: true,
-      activity
+      activity,
     });
   } catch (error) {
     console.error("Error in getTaskWithProject:", error);
@@ -610,9 +608,9 @@ export const addComment = async (req, res) => {
     }
     const newComment = await Comment.create({
       text,
-      task :taskId,
-      author : req.user._id
-    })
+      task: taskId,
+      author: req.user._id,
+    });
     // add activity log
 
     await recordActivity(req.user._id, "added_comment", "Comment", taskId, {
@@ -640,11 +638,11 @@ export const getCommentsByTaskId = async (req, res) => {
     const { taskId } = req.params;
 
     const comments = await Comment.find({
-      task: taskId
+      task: taskId,
     })
-    .populate('author')
-    .sort({createdAt: -1});
-    console.log('comments : ',comments.text)
+      .populate("author")
+      .sort({ createdAt: -1 });
+    console.log("comments : ", comments.text);
     return res.status(200).json({
       comments,
     });
@@ -662,8 +660,6 @@ export const getCommentsByTaskId = async (req, res) => {
 export const watchTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-
-    const { text } = req.body;
 
     const task = await Task.findById(taskId);
     if (!task) {
@@ -691,18 +687,17 @@ export const watchTask = async (req, res) => {
         success: false,
       });
     }
-   const isWatching = task.watchers.includes(req.user._id);
+    const isWatching = task.watchers.includes(req.user._id);
 
-   if(!isWatching){
-    task.watchers.push(req.user._id)
-   }
-   else{
-    task.watchers = task.watchers.filter((watcher) => 
-    watcher.toString() !== req.user._id
-    )
-   }
-   await task.save();
-
+    if (!isWatching) {
+      task.watchers.push(req.user._id);
+    } else {
+      task.watchers = task.watchers.filter(
+        (watcher) => watcher.toString() !== req.user._id,
+      );
+    }
+    await task.save();
+    console.log("task : ", task);
     // add activity log
 
     await recordActivity(req.user._id, "updated_task", "Task", taskId, {
@@ -711,10 +706,8 @@ export const watchTask = async (req, res) => {
 
     // task.comments.push(newComment._id);
 
-
-    return res.status(201).json({
-      message: "Comment added successfully",
-      newComment,
+    return res.status(200).json({
+      task,
     });
   } catch (err) {
     console.log("Error : ", err);
@@ -754,18 +747,17 @@ export const archievedTask = async (req, res) => {
         success: false,
       });
     }
-    
-    const isArchieved = task.archieved;
-    task.archieved = !isArchieved 
 
-   await task.save();
+    const isArchieved = task.archieved;
+    task.archieved = !isArchieved;
+
+    await task.save();
 
     // add activity log
 
     await recordActivity(req.user._id, "updated_task", "Task", taskId, {
       description: `Task is ${isArchieved ? "Archieved" : "Stopped Watching"}`,
     });
-
 
     return res.status(200).json({
       task,

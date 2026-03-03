@@ -9,9 +9,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import useArchivedTask from "../../hooks/task/useArchievedTask";
 import useWatchTask from "../../hooks/task/useWatchTask";
+import { useSelector } from "react-redux";
 
 function TaskDetailsHeader({
-  taskId,
+  task,
   title,
   archieved,
 }) {
@@ -21,22 +22,26 @@ function TaskDetailsHeader({
   const {
     mutate: toggleWatch,
     isPending: watchLoading,
-  } = useWatchTask(taskId);
+  } = useWatchTask();
+
+  const {user} = useSelector(store => store.auth)
 
   // Archive mutation
   const {
     mutate: toggleArchive,
     isPending: archiveLoading,
-  } = useArchivedTask(taskId);
+  } = useArchivedTask();
 
-  const isWatching = task?.watchers?.some(
-    (watcher) => watcher._id.toString() === user
-  )
-
+ const isWatching = task?.watchers?.some(
+  (watcher) =>
+    watcher?._id?.toString() === user?._id?.toString()
+);
+  
   const handleWatch = () => {
-    alert(isWatching)
-    toggleWatch({ taskId })
+    // alert(isWatching)
+    toggleWatch({ taskId : task?._id })
   }
+  console.log("is watching : ",isWatching )
   return (
     <div className="flex items-center justify-between mb-6 border-b pb-4">
       
@@ -73,7 +78,7 @@ function TaskDetailsHeader({
           onClick={handleWatch}
           className="flex items-center gap-2"
         >
-          {isWatching ? (
+          {!isWatching ? (
             <>
               <EyeOff className="h-4 w-4" />
               Unwatch

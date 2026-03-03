@@ -6,7 +6,7 @@ import { postData, updateData } from "../../api/axios";
 
   return useMutation({
     mutationFn: ({ taskId }) =>
-      postData(`/tasks/${taskId}/title`, {}),
+      postData(`/tasks/${taskId}/watch`, {}),
 
     onSuccess: (response, variables) => {
       // ✅ invalidate correct task

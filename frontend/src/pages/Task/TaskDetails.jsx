@@ -19,6 +19,7 @@ function TaskDetails() {
       
       {/* HEADER */}
       <TaskDetailsHeader
+      task={task}
         title={task.title}
         isWatching={task.isWatching}
         isArchived={task.isArchived}
