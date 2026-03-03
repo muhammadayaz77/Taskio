@@ -12,6 +12,7 @@ function TaskDetails() {
   if (isLoading) return <Loader />;
 
   const { task, project } = data;
+  console.log("task : ",task)
 
   return (
     <div className="p-6 max-w-7xl mx-auto">

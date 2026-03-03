@@ -13,7 +13,6 @@ import useWatchTask from "../../hooks/task/useWatchTask";
 function TaskDetailsHeader({
   taskId,
   title,
-  isWatching,
   archieved,
 }) {
   const navigate = useNavigate();
@@ -30,6 +29,14 @@ function TaskDetailsHeader({
     isPending: archiveLoading,
   } = useArchivedTask(taskId);
 
+  const isWatching = task?.watchers?.some(
+    (watcher) => watcher._id.toString() === user
+  )
+
+  const handleWatch = () => {
+    alert(isWatching)
+    toggleWatch({ taskId })
+  }
   return (
     <div className="flex items-center justify-between mb-6 border-b pb-4">
       
@@ -63,7 +70,7 @@ function TaskDetailsHeader({
         <Button
           variant="outline"
           disabled={watchLoading}
-          onClick={() => toggleWatch({ taskId })}
+          onClick={handleWatch}
           className="flex items-center gap-2"
         >
           {isWatching ? (
