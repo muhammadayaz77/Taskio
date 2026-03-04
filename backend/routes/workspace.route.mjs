@@ -2,7 +2,7 @@ import express from 'express';
 import { validateSchema } from '../libs/validateSchema.mjs';
 import { workspaceSchema } from '../libs/validate-schema.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
-import { createWorkspace, getWorkspace, getWorkspaceDetails, getWorkspaceProjects } from '../controller/workspace.controller.mjs';
+import { createWorkspace, getWorkspace, getWorkspaceDetails, getWorkspaceProjects, getWorkspaceStats } from '../controller/workspace.controller.mjs';
 
 
 const router = express.Router();
