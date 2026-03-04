@@ -110,3 +110,33 @@ export const getWorkspaceProjects = async (req, res) => {
     });
   }
 };
+export const getWorkspaceStats = async (req, res) => {
+  try {
+    const {workspaceId} = req.params;
+   const workspace = await Workspace.findOne({
+    _id : workspaceId,
+    "members.user" : req.user._id,
+   }).populate("members.user","name email profilePicture")
+   console.log(workspace)
+   if(!workspace){
+     return res.status(404).json({
+    message : "Workspace not found",
+    success : false
+   });
+   }
+   const project = await Project.find({
+    workspace : workspaceId,
+    isArchived : false,
+    // members : {$in : [req.user._id]}
+   })
+  //  .populate("tasks","status")
+   .sort({createdAt : -1})
+   res.status(200).json({project,workspace});
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};

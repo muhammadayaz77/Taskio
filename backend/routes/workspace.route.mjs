@@ -21,6 +21,9 @@ router.get("/:workspaceId",
 router.get("/:workspaceId/projects",
     authMiddleware,
   getWorkspaceProjects)
+router.get("/:workspaceId/stats",
+    authMiddleware,
+  getWorkspaceStats)
 
 
 export default router;
