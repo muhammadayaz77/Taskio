@@ -2,15 +2,20 @@ import React from 'react'
 import { Button } from '../components/ui/button'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../store/auth/authSlice'
+import useGetWorkspaceStats from '../hooks/workspace/useGetWorkspaceStats'
+import { useSearchParams } from 'react-router-dom'
 
 function Dashboard() {
-  const dispatch = useDispatch();
-  const handleLogout = () => {
-    dispatch(logout())
+  const [searchParams] = useSearchParams();
+ const workspaceId = searchParams.get("workspaceId");
+  const {data,isPending} = useGetWorkspaceStats(workspaceId);
+  if(isPending){  
+    return <Loader />
   }
+  console.log('data : dashboards : ',data)
   return (
     <div>
-      <Button onClick={handleLogout}>Logout</Button>
+      Dashboard
     </div>
   )
 }
