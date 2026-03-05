@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "@/store/auth/authSlice";
@@ -38,6 +38,7 @@ const AppHeader = ({
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  const isOnWorkspacePage = useLocation().pathname.includes('/workspace')
   
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   console.log("selected : ",selectedWorkspace.color)
@@ -58,10 +59,16 @@ const AppHeader = ({
 
   const inputRef = useRef(null);
 
-  const onSelected = (ws)=> {
-    console.log("id : ",ws._id)
+  const handleOnClick = (ws)=> {
     onWorkspaceSelected(ws)
+    const location = window.location;
+    if(isOnWorkspacePage){
     navigate(`/workspaces/${ws._id}`);
+    }
+    else{
+      const basePath =  location.pathname
+      navigate(`${basePath}?workspaceId=${ws._id}`);
+    }
   }
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -74,6 +81,7 @@ const AppHeader = ({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
       <div className="flex flex-col lg:flex-row lg:px-6">
@@ -146,7 +154,7 @@ const AppHeader = ({
               {workspaces.map((ws) => (
   <DropdownMenuItem
     key={ws._id}
-    onClick={() => onSelected(ws)}
+    onClick={() => handleOnClick(ws)}
     className={`flex items-center gap-2 cursor-pointer ${
       selectedWorkspace?._id === ws._id
         ? "bg-gray-100 font-semibold"
