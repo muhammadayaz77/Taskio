@@ -3,11 +3,15 @@ import { Link, useLocation } from "react-router";
 // import { GridIcon, ChevronDownIcon, HorizontaLDots } from "../icons";
 
 import { Grid as GridIcon, ChevronDown as ChevronDownIcon, MoreHorizontal as HorizontaLDots } from "lucide-react";
-import {  UserCog as User } from "lucide-react";
-
+import { LayoutDashboard } from "lucide-react";
 import { Store, CheckSquare, Users, Settings, Archive, Folder, Clipboard } from "lucide-react";
 
 const navItems = [
+   {
+    icon: <LayoutDashboard />,
+    name: "Dashboard",
+    path: "/dashboard",
+  },
   {
     icon: <Folder />,
     name: "Workspaces",
@@ -174,7 +178,9 @@ const AppSidebar = () => {
                               : "lg:justify-start"
                           }`}
                       >
-                        <span className="w-4 h-4">{nav.icon}</span>
+                        <span className="flex items-center justify-center w-5 h-5">
+  {nav.icon}
+</span>
                         {(isExpanded || isHovered || isMobileOpen) && (
                           <span className="text-sm font-medium whitespace-nowrap">
                             {nav.name}
@@ -201,7 +207,9 @@ const AppSidebar = () => {
                                 : "text-gray-700 hover:bg-gray-50"
                             }`}
                         >
-                          <span className="w-4 h-4">{nav.icon}</span>
+                          <span className="flex items-center justify-center w-5 h-5">
+  {nav.icon}
+</span>
                           {(isExpanded || isHovered || isMobileOpen) && (
                             <span className="text-sm font-medium whitespace-nowrap">
                               {nav.name}

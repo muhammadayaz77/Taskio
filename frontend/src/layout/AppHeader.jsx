@@ -41,7 +41,7 @@ const AppHeader = ({
   const isOnWorkspacePage = useLocation().pathname.includes('/workspace')
   
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  console.log("selected : ",selectedWorkspace.color)
+  console.log("selected : ",isOnWorkspacePage)
   const handleLogout = () => {
     dispatch(logout())
   }
@@ -67,6 +67,7 @@ const AppHeader = ({
     }
     else{
       const basePath =  location.pathname
+      console.log('base path : ',basePath)
       navigate(`${basePath}?workspaceId=${ws._id}`);
     }
   }
@@ -81,6 +82,7 @@ const AppHeader = ({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  
   
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
