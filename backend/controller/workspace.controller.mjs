@@ -121,7 +121,6 @@ export const getWorkspaceStats = async (req, res) => {
     success : false
    });
    }
-   const project = await Project.findById(task.project);
 
     const isMember = workspace.members.some(
       (member) => member.user.toString() === req.user._id.toString(),
@@ -134,14 +133,16 @@ export const getWorkspaceStats = async (req, res) => {
       });
     }
 
-    const [totalProjects,projects] = Promise.all([
-      Project.countDocuments({workspace:workspaceId}),
-      Project.find({workspace : workspaceId}).populate('task','title status dueDate isArchived priority')
-    ]).sort({createdAt : -1})
+    const [totalProjects, projects] = await Promise.all([
+  Project.countDocuments({ workspace: workspaceId }),
+  Project.find({ workspace: workspaceId })
+    .populate("tasks", "title status dueDate isArchived priority")
+    .sort({ createdAt: -1 })
+]);
 
     const totalTasks = projects.reduce((acc,project) => {
       return acc + project.tasks.length
-    })
+    },0)
 
     const totalProjectProgress = projects.filter((project) => project.status == "In Progress");
     const totalProjectCompleted = projects.filter((project) => project.status == "Completed");
@@ -181,7 +182,7 @@ export const getWorkspaceStats = async (req, res) => {
 
      const last7Days = Array.from({length : 7},(_,i) => {
        const date = new Date();
-       date.setDate(today.getData() - i)
+       date.setDate(date.getDate() - i)
       return date
   }).reverse()
 
@@ -206,13 +207,13 @@ export const getWorkspaceStats = async (req, res) => {
         if(dayData){
             switch(task.status){
               case "Done" : 
-              date.completed++;
+              dayData.completed++;
               break
               case "In Progress" : 
-              date.InProgress++;
+              dayData.InProgress++;
               break
               case "To Do" : 
-              date.Todo++;
+              dayData.Todo++;
               break
             }
         }
@@ -228,7 +229,7 @@ export const getWorkspaceStats = async (req, res) => {
     { name: "Planning",value : 0 , color : "#f59e0b"}
   ];
 
-  for (project of projects){
+  for (const project of projects){
     switch(project.status){
       case "Completed":
         projectStatusData[0].value++
@@ -253,13 +254,13 @@ export const getWorkspaceStats = async (req, res) => {
   for (const task of tasks){ 
     switch(task.priority){
       case "High":
-        projectStatusData[0].value++
+        taskPriorityData[0].value++
         break;
       case "Medium":
-        projectStatusData[1].value++
+        taskPriorityData[1].value++
         break;
       case "Low":
-        projectStatusData[2].value++
+        taskPriorityData[2].value++
         break;
     }
   }
@@ -267,14 +268,14 @@ export const getWorkspaceStats = async (req, res) => {
   const workspaceProductivityData = [];
 
   for(const project of projects){
-    const projectTask = tasks.filter((task) => task.project.toString() !== project._id.toString());
+    const projectTask = tasks.filter((task) => task.project.toString() === project._id.toString());
 
     const completedTask = projectTask.filter(
       (task) => task.status === 'Done' && task.isArchived === false
     )
     workspaceProductivityData.push({
       name : project.title,
-      completed : completedTask.lenght,
+      completed : completedTask.length,
       total : projectTask.length
     })
   }
@@ -283,6 +284,7 @@ export const getWorkspaceStats = async (req, res) => {
     totalProjects,
     totalTasks,
     totalProjectProgress,
+    totalProjectCompleted,
     totalTaskCompleted,
     totalTaskTodo,
     totalTaskInProgress

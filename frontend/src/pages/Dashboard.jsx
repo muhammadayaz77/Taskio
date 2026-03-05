@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { logout } from '../../store/auth/authSlice'
 import useGetWorkspaceStats from '../hooks/workspace/useGetWorkspaceStats'
 import { useSearchParams } from 'react-router-dom'
+import Loader from '../components/common/Loader'
 
 function Dashboard() {
   const [searchParams] = useSearchParams();
