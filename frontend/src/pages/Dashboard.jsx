@@ -5,6 +5,8 @@ import { logout } from '../../store/auth/authSlice'
 import useGetWorkspaceStats from '../hooks/workspace/useGetWorkspaceStats'
 import { useSearchParams } from 'react-router-dom'
 import Loader from '../components/common/Loader'
+import StatsCard from '../components/dashboard/StatsCard'
+import StatisticsCharts from '../components/dashboard/StatisticsCharts'
 
 function Dashboard() {
   const [searchParams] = useSearchParams();
@@ -16,7 +18,15 @@ function Dashboard() {
   console.log('data : dashboards : ',data)
   return (
     <div>
-      Dashboard
+      <h1>Dashboard</h1>
+      <StatsCard data={data.stats} />
+      <StatisticsCharts 
+      stata={data.stats}
+      projectStatusData={data.projectStatusData}
+      taskPriorityData={data.taskPriorityData}
+      taskTrendsData={data.taskTrendsData}
+      workspaceProductivityData={data.workspaceProductivityData}
+      />
     </div>
   )
 }
