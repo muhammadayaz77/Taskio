@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom'
 import Loader from '../components/common/Loader'
 import StatsCard from '../components/dashboard/StatsCard'
 import StatisticsCharts from '../components/dashboard/StatisticsCharts'
+import RecentProjects from '../components/workspace/RecentProjects'
 
 function Dashboard() {
   const [searchParams] = useSearchParams();
@@ -26,6 +27,9 @@ function Dashboard() {
       taskPriorityData={data.taskPriorityData}
       taskTrendsData={data.taskTrendsData}
       workspaceProductivityData={data.workspaceProductivityData}
+      />
+      <RecentProjects
+      data={data.recentProjects}
       />
     </div>
   )
