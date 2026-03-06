@@ -28,9 +28,10 @@ function Dashboard() {
       taskTrendsData={data.taskTrendsData}
       workspaceProductivityData={data.workspaceProductivityData}
       />
-      <RecentProjects
-      data={data.recentProjects}
-      />
+      <div className="grid grid-cols-12 gap-6">
+  <RecentProjects data={data.recentProjects} />
+  {/* <StatisticsCharts ... /> */}
+</div>
     </div>
   )
 }

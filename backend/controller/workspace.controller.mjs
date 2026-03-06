@@ -141,7 +141,7 @@ export const getWorkspaceStats = async (req, res) => {
       Project.find({ workspace: workspaceId })
         .populate(
           "tasks",
-          "title status dueDate archieved priority updatedAt project"
+          // "title status dueDate archieved priority updatedAt project"
         )
         .sort({ createdAt: -1 }),
     ]);

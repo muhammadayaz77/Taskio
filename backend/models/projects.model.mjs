@@ -29,7 +29,11 @@ const projectSchema = new mongoose.Schema(
       max: 100,
       default: 0,
     },
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+    tasks: [
+      { type: mongoose.Schema.Types.ObjectId, 
+      ref: "Task"
+      }
+    ],
     members: [
       {
         user: {
