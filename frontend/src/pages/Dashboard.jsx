@@ -8,6 +8,7 @@ import Loader from '../components/common/Loader'
 import StatsCard from '../components/dashboard/StatsCard'
 import StatisticsCharts from '../components/dashboard/StatisticsCharts'
 import RecentProjects from '../components/workspace/RecentProjects'
+import UpcomingTasks from '../components/workspace/UpcomingTasks'
 
 function Dashboard() {
   const [searchParams] = useSearchParams();
@@ -30,7 +31,7 @@ function Dashboard() {
       />
       <div className="grid grid-cols-12 gap-6">
   <RecentProjects data={data.recentProjects} />
-  {/* <StatisticsCharts ... /> */}
+  <UpcomingTasks data={data.upcomingTasks} />
 </div>
     </div>
   )
