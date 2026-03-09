@@ -22,6 +22,10 @@ const taskSchema = new mongoose.Schema(
       enum: ["Low", "Medium", "High"],
       default: "Medium",
     },
+     isArchived: {
+      type: Boolean,
+      default: false,
+    },
     assignees : [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
