@@ -77,7 +77,6 @@ function UpcomingTasks({ data }) {
             </div>
           ))}
         </CardContent>
-
       </Card>
     </div>
   );
