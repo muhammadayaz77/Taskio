@@ -8,7 +8,7 @@ const useCreateProject = () => {
     mutationFn: (data) => postData(`/projects/${data.workspaceId}/create-project`,data),
     onSuccess : (data) => {
       console.log(data,"is projectId")
-      queryClient.invalidateQueries(["project", projectId])
+      queryClient.invalidateQueries(["project"])
       window.toastify(data.message,'success');
     },
     onError : (err) => {

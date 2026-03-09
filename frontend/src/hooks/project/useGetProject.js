@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../../api/axios";
 const useGetProject = (projectId) => {
   return useQuery({
-    queryKey : ['project',projectId],
+    queryKey : ['project'],
 
     queryFn: (data) => fetchData(`/projects/${projectId}/tasks`,data),
     onSuccess : (data) => {
