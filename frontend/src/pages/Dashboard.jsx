@@ -21,7 +21,7 @@ function Dashboard() {
   return (
     <div>
       <h1>Dashboard</h1>
-      <StatsCard data={data.stats} />
+      <StatsCard data={data?.stats} />
       <StatisticsCharts 
       stata={data.stats}
       projectStatusData={data.projectStatusData}
