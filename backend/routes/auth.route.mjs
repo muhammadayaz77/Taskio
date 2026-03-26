@@ -9,7 +9,7 @@ router.post("/login",
   validateRequest({
     body : loginSchema
   })
-  ,login)
+  ,login);
   
 router.post("/register",
   validateSchema(registerSchema)
