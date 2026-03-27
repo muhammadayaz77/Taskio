@@ -41,6 +41,6 @@ export const {
   updateProject,
   deleteProject,
   selectProject,
-} = projectSlice.actions;
+} = projectSlice.actions
 
 export default projectSlice.reducer;
