@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+console.log("Process Env : ",process.env.SEND_GRID_API)
+
 sgMail.setApiKey(process.env.SEND_GRID_API)
 const fromEmail = process.env.FROM_EMAIL;
 

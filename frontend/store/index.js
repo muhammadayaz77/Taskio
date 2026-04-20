@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     workspace : workspaceReducer,
-    project : projectReducer
+    project : projectReducer,
   },
 });
 

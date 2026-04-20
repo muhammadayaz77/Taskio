@@ -10,20 +10,20 @@ export const register = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
-    const decision = await aj.protect(req, { email }); // Deduct 5 tokens from the bucket
-    console.log("Arcjet decision", decision);
+    // const decision = await aj.protect(req, { email }); // Deduct 5 tokens from the bucket
+    // console.log("Arcjet decision", decision);
 
-    if (decision.isDenied()) {
-      if (decision.isDenied()) {
-        return res.status(403).json({
-          message: "Invalid Email address",
-          success: false,
-        });
-      }
-    }
+    // if (decision.isDenied()) {
+    //   if (decision.isDenied()) {
+    //     return res.status(403).json({
+    //       message: "Invalid Email address",
+    //       success: false,
+    //     });
+    //   }
+    // }
 
     let existUser = await User.findOne({ email });
-    console.log("User");
+    console.log("User",existUser);
     // console.log(existUser);
     if (existUser && existUser.isEmailVerified) {
       return res.status(400).json({
@@ -34,7 +34,8 @@ export const register = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password,salt);
- 
+    
+
 
     // const managerId = req.user._id;
     let newUser = await User.create({
@@ -57,6 +58,8 @@ export const register = async (req, res) => {
     const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
     const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email</p>`;
     const emailSubject = "Verify your email";
+console.log("Process Env : ",process.env.SEND_GRID_API)
+    
     const isEmailSent = await sendEmail(email, emailSubject, emailBody);
     console.log("isemail sent : ", isEmailSent);
 
@@ -79,6 +82,7 @@ export const register = async (req, res) => {
       success: false,
     });
   } catch (err) {
+    console.log('register error : ',err)
     res.status(500).json({
       message: "Internal Server error",
       error: err.message,
