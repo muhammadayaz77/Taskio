@@ -161,4 +161,12 @@ router.post(
   }),
   archievedTask,
 );
+router.get(
+  "/my-tasks", 
+  authMiddleware,
+  validateSchema({
+    params: taskParamsSchema,
+  }),
+  archievedTask,
+);
 export default router;
