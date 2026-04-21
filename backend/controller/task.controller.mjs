@@ -776,17 +776,20 @@ export const archievedTask = async (req, res) => {
 export const getMyTasks = async (req,res) => {
   try {
 
+    console.log('runnn')
     const tasks = await Task.find({
       assignees : { $in : [req.user._id]}
     })
     .populate("project","title workspace")
     .sort({createdAt : -1})
 
+    console.log('tasks : ',tasks)
     res.status(200).json({
       tasks
     })
     
   } catch (error) {
+    console.log("error : ",error)
     return res.status(500).json({
       message : "Internal Server error",
       success : false

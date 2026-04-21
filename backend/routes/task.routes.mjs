@@ -7,6 +7,7 @@ import {
   archievedTask,
   createTask,
   getCommentsByTaskId,
+  getMyTasks,
   getTaskActivity,
   getTaskById,
   updateSubTask,
@@ -164,9 +165,6 @@ router.post(
 router.get(
   "/my-tasks", 
   authMiddleware,
-  validateSchema({
-    params: taskParamsSchema,
-  }),
-  archievedTask,
+  getMyTasks,
 );
 export default router;
