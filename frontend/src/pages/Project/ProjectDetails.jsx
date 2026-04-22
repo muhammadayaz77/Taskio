@@ -59,7 +59,7 @@ function ProjectDetails() {
   const { projectId,workspaceId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProject(projectId);
-  console.log("tasks : ",data)
+  console.log("tasks : ",data);
 
     if(!workspaceId){
     return <div>No Workspace found</div>

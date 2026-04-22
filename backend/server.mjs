@@ -28,6 +28,10 @@ app.use(express.json())
 import route from './routes/index.js'
 app.use("/api/v1" , route);
 
+app.get('/test',(req,res) => {
+  res.json({data : "test"} )
+})
+
 // error middleware
 app.use((err,req,res,next) => {
   console.log("Error : ",err.stack)

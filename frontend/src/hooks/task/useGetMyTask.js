@@ -1,18 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../../api/axios";
 
-const useGetMyTask = (taskId) => {
+const useGetMyTask = () => {
   return useQuery({
-    queryKey : ['my-tasks','user'],
-    queryFn: (data) => fetchData(`/tasks/my-tasks`),
-    onSuccess : (data) => {
-      window.toastify(data.message,'success');
-    },
-    onError : (err) => {
-      console.log('error : ',err)
-      window.toastify(err?.response?.data?.message || 'error occured','error')
+    queryKey: ['my-tasks', 'user'],
+    queryFn: async () => {
+      const data = await fetchData('/tasks/my-tasks');
+      console.log('data: use get task', data);
+      return data;
     }
   });
 };
-
 export default useGetMyTask

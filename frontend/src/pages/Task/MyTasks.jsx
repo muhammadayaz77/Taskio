@@ -3,7 +3,7 @@ import useGetMyTask from '../../hooks/task/useGetMyTask'
 
 function MyTasks() {
     const {data,isLoading} = useGetMyTask();
-    console.log("data : ",data,isLoading)
+    console.log("data : ",isLoading,data) 
   return (
     <div>
       tasks

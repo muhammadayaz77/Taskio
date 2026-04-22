@@ -9,7 +9,7 @@ import CreateProjectDialog from '../../components/project/CreateProjectDialog';
 function WorkspaceDetails() {
   const [isCreateProject,setIsCreateProject] = useState(false);
   const [isInviteMember,setIsInviteMember] = useState(false);
-  const {workspaceId} = useParams()
+  const {workspaceId} = useParams();
   const {data,isLoading} = useGetWorkspacesById(workspaceId);
   
   if(!workspaceId){

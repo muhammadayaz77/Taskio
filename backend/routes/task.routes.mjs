@@ -35,6 +35,11 @@ import {
 import { validateSchema } from "../libs/validateSchema.mjs";
 const router = express.Router();
 
+router.get(
+  "/my-tasks", 
+  authMiddleware,
+  getMyTasks,
+);
 router.post(
   "/:projectId/create-task",
   authMiddleware,
@@ -162,9 +167,5 @@ router.post(
   }),
   archievedTask,
 );
-router.get(
-  "/my-tasks", 
-  authMiddleware,
-  getMyTasks,
-);
+
 export default router;
