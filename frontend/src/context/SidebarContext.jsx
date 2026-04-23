@@ -36,7 +36,7 @@ export const SidebarProvider = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [])
 
   const toggleSidebar = () => {
     setIsExpanded((prev) => !prev);
