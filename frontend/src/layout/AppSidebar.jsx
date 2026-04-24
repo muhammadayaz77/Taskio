@@ -261,7 +261,7 @@ const AppSidebar = () => {
         </nav>
       </div>
     </aside>
-  );
+  )
 };
 
 export default AppSidebar;

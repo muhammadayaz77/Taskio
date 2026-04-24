@@ -1,3 +1,5 @@
+import { ArrowUpRight, Folder } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import React, { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useGetMyTask from '../../hooks/task/useGetMyTask'
@@ -85,6 +87,14 @@ export default function MyTasks() {
 
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
+
+          {/* Search */}
+          <input
+            value={search}
+            onChange={e => update('search', e.target.value)}
+            placeholder="Search tasks…"
+            className="bg-white border border-slate-300 text-sm px-3 py-2 text- rounded-lg w- outline-none focus:border-violet-500"
+          />
         <div className="flex items-center gap-2">
           <button
             onClick={() => update('sort', sort === 'new' ? 'old' : 'new')}
@@ -96,19 +106,8 @@ export default function MyTasks() {
           <FilterDropdown current={filter} onSelect={f => update('filter', f)} />
         </div>
 
-        {/* Search */}
-        <input
-          value={search}
-          onChange={e => update('search', e.target.value)}
-          placeholder="Search tasks…"
-          className="bg-white border border-slate-300 text-sm px-3 py-2 rounded-lg w-52 outline-none focus:border-violet-500"
-        />
       </div>
 
-      {/* Results */}
-      <div className="text-xs text-slate-500 mb-3">
-        {filtered.length} {filtered.length === 1 ? 'task' : 'tasks'}
-      </div>
 
       {/* List */}
       <div className="flex flex-col gap-2">
@@ -125,26 +124,74 @@ export default function MyTasks() {
   )
 }
 
+
 function TaskCard({ task }) {
   const dueCls = getDueDateClass(task.dueDate)
 
+  const statusColor = {
+    'To Do': 'bg-blue-100 text-blue-600',
+    'In Progress': 'bg-yellow-100 text-yellow-600',
+    Done: 'bg-green-100 text-green-600',
+    Archived: 'bg-gray-200 text-gray-600'
+  }
+
+  const priorityColor = {
+    High: 'bg-red-100 text-red-600',
+    Medium: 'bg-orange-100 text-orange-600',
+    Low: 'bg-green-100 text-green-600'
+  }
+
+  const link = `/workspaces/${task.project.workspace}/projects/${task.projectId}/tasks/${task._id}`
+
   return (
-    <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-50">
-      <div>
-        <div className="font-semibold">{task.title}</div>
-        <div className="text-xs text-slate-500 flex gap-2 mt-1">
-          <span>{task.status}</span>
-          <span>{task.priority}</span>
+    <Link to={link}>
+      <div className="group flex items-center justify-between px-5 py-4 rounded-2xl bg-white border border-slate-200 hover:shadow-md hover:border-violet-300 transition-all duration-200 cursor-pointer">
+        
+        {/* LEFT */}
+        <div className="flex flex-col gap-2">
+          
+          {/* Title + Arrow */}
+          <div className="flex items-center gap-2">
+            <h2 className="font-semibold text-slate-800 group-hover:text-violet-600 transition">
+              {task.title}
+            </h2>
+            <ArrowUpRight size={16} className="text-slate-400 group-hover:text-violet-500" />
+          </div>
+
+          {/* Status + Priority */}
+          <div className="flex items-center gap-2 text-xs">
+            <span className={`px-2 py-0.5 rounded-full ${statusColor[task.status]}`}>
+              {task.status}
+            </span>
+
+            <span className={`px-2 py-0.5 rounded-full ${priorityColor[task.priority]}`}>
+              {task.priority}
+            </span>
+
+            {task.archieved && (
+              <span className="px-2 py-0.5 rounded-full bg-gray-300 text-gray-700">
+                Archived
+              </span>
+            )}
+          </div>
+
+          {/* Workspace */}
+          <div className="flex items-center gap-1 text-xs text-slate-500">
+            <Folder size={14} />
+            <span>{task.workspace || 'General Workspace'}</span>
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="flex flex-col items-end gap-1">
+          <div className={`text-xs font-medium ${dueCls}`}>
+            {formatDate(task.dueDate)}
+          </div>
         </div>
       </div>
-
-      <div className={`text-xs ${dueCls}`}>
-        {formatDate(task.dueDate)}
-      </div>
-    </div>
+    </Link>
   )
 }
-
 function FilterDropdown({ current, onSelect }) {
   const [open, setOpen] = React.useState(false)
   const ref = React.useRef()
@@ -175,7 +222,7 @@ function FilterDropdown({ current, onSelect }) {
                 onSelect(f)
                 setOpen(false)
               }}
-              className="block w-full text-left px-3 py-1 text-sm hover:bg-slate-100 rounded"
+              className="block w-[130px] text-left px-3 py-1 text-sm hover:bg-slate-100 rounded"
             >
               {f}
             </button>
