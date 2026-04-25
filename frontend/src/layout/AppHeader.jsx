@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "@/store/auth/authSlice";
+import { useSearchParams } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -29,12 +30,14 @@ import { logout } from "../../store/auth/authSlice";
 const AppHeader = ({
   onWorkspaceSelected,
   selectedWorkspace,
+  setSelectedWorkspace,
   onCreateWorkspace,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const { user } = useSelector((store) => store.auth);
   const {workspaces} = useSelector(store => store.workspace);
+
   
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -42,6 +45,23 @@ const AppHeader = ({
   
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   console.log("selected : ",isOnWorkspacePage)
+
+
+  // Persist the Selected Workspace
+  const [searchParams] = useSearchParams();
+const workspaceId = searchParams.get("workspaceId");
+
+useEffect(() => {
+  if(!workspaceId){
+    setSelectedWorkspace(null)
+  }
+  if (workspaceId && workspaces.length > 0) {
+    const ws = workspaces.find(w => w._id === workspaceId);
+    if (ws) {
+      setSelectedWorkspace(ws);
+    }
+  }
+}, [workspaceId, workspaces]);
   const handleLogout = () => {
     dispatch(logout())
   }

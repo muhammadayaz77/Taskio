@@ -9,18 +9,28 @@ import StatsCard from '../components/dashboard/StatsCard'
 import StatisticsCharts from '../components/dashboard/StatisticsCharts'
 import RecentProjects from '../components/workspace/RecentProjects'
 import UpcomingTasks from '../components/workspace/UpcomingTasks'
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 function Dashboard() {
   const [searchParams] = useSearchParams();
- const workspaceId = searchParams.get("workspaceId");
+  const navigate = useNavigate();
+  const { workspaces } = useSelector(store => store.workspace);
+  const workspaceId = searchParams.get("workspaceId");
   const {data,isPending} = useGetWorkspaceStats(workspaceId);
+  useEffect(() => {
+    if (!workspaceId && workspaces.length > 0) {
+      navigate(`/dashboard?workspaceId=${workspaces[0]._id}`);
+    }
+  }, [workspaceId, workspaces]);
   if(isPending){  
     return <Loader />
   }
   console.log('data : dashboards : ',data)
   return (
     <div>
-      <h1>Dashboard</h1>
       <StatsCard data={data?.stats} />
       <StatisticsCharts 
       stata={data.stats}

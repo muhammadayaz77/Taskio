@@ -42,6 +42,7 @@ const LayoutContent = () => {
         <AppHeader
         onWorkspaceSelected={handleWorkspaceSelected}
         selectedWorkspace={currentWorkspace}
+        setSelectedWorkspace={setCurrentWorkspace}
         onCreateWorkspace={() => setIsCreatingWorkspace(true)}
         />
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
