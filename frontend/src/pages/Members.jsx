@@ -57,7 +57,7 @@ function Members() {
             className={`px-4 py-1.5 rounded-lg border transition ${
               view === "grid"
                 ? "bg-black text-white"
-                : "bg-white hover:bg-gray-100"
+                : "bg-white hover:bg-"
             }`}
           >
             Grid

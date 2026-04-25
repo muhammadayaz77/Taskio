@@ -155,7 +155,7 @@ function TaskCard({ task }) {
             <h2 className="font-semibold text-slate-800 group-hover:text-violet-600 transition">
               {task.title}
             </h2>
-            <ArrowUpRight size={16} className="text-slate-400 group-hover:text-violet-500" />
+            <ArrowUpRight size={16} className="text-slate-800 group-hover:text-violet-500" />
           </div>
 
           {/* Status + Priority */}
