@@ -14,6 +14,7 @@ import WorkspaceDetails from './WorkSpace/WorkspaceDetails'
 import ProjectDetails from './Project/ProjectDetails'
 import TaskDetails from './Task/TaskDetails'
 import MyTasks from './Task/MyTasks'
+import Members from './Members'
 
  function Index() {
   return (
@@ -29,6 +30,7 @@ import MyTasks from './Task/MyTasks'
       <Route path="/workspaces/:workspaceId/projects/:projectId" element={<ProjectDetails />} />
       <Route path="/workspaces/:workspaceId/projects/:projectId/tasks/:taskId" element={<TaskDetails />} />
       <Route path="/my-tasks" element={<MyTasks />} />
+      <Route path="/members" element={<Members />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/" element={<>Home</>} />
     </Route>
