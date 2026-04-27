@@ -353,3 +353,31 @@ export const getWorkspaceStats = async (req, res) => {
     });
   }
 };
+
+
+const inviteUserToWorkspace = async (req,res) => {
+  try {
+    const {workspaceId} = req.params;
+    const {email,role} = req.body;
+    const worksapce = Workspace.findById(workspaceId);
+    if(!workspace){
+      res.status(404).json({
+        message : 'Workspace not found',
+        success : false
+      })
+    }
+    const userMemberInfo = workspace.find((member) => member.user.toString() === req.user._id.toString())
+
+    if(!userMemberInfo || !['admin','owner'].includes(userMemberInfo.role)){
+      res.status(403).json({
+        message : 'You are not authorized to invite members to this workspace'
+      })
+    }
+      const userAlreadyMember = workspace.
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: err.message,
+    })
+  }
+}

@@ -1,6 +1,6 @@
 import express from 'express';
 import { validateSchema } from '../libs/validateSchema.mjs';
-import { workspaceSchema } from '../libs/validate-schema.mjs';
+import { inviteMemberSchema, workspaceSchema } from '../libs/validate-schema.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
 import { createWorkspace, getWorkspace, getWorkspaceDetails, getWorkspaceProjects, getWorkspaceStats } from '../controller/workspace.controller.mjs';
 
@@ -12,6 +12,14 @@ router.post("/",
     authMiddleware,
     validateSchema(workspaceSchema)
   ,createWorkspace)
+router.post("/?workspaceId/invite-member", 
+    authMiddleware,
+   
+     validateSchema({
+       body: inviteMemberSchema,
+       params: projectParamsSchema,
+     }),
+  inviteUserToWorkspace)
 router.get("/", 
     authMiddleware,
   getWorkspace)

@@ -24,6 +24,15 @@
       .email("Invalid email address")
       .regex(noEmojiRegex, "Emojis are not allowed in email"),
   });
+  export const inviteMemberSchema = z.object({
+    email: z
+      .string()
+      .email("Invalid email address")
+      .regex(noEmojiRegex, "Emojis are not allowed in email"),
+         role: z
+        .enum(["manager", "contributor","viewer"])
+        .optional(), // role is optional
+  });
 
   export const registerSchema = z
     .object({
