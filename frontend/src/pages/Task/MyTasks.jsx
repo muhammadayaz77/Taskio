@@ -127,7 +127,7 @@ export default function MyTasks() {
 
 function TaskCard({ task }) {
   const dueCls = getDueDateClass(task.dueDate)
-
+  console.log("task : ",task)
   const statusColor = {
     'To Do': 'bg-blue-100 text-blue-600',
     'In Progress': 'bg-yellow-100 text-yellow-600',
@@ -178,7 +178,7 @@ function TaskCard({ task }) {
           {/* Workspace */}
           <div className="flex items-center gap-1 text-xs text-slate-500">
             <Folder size={14} />
-            <span>{task.workspace || 'General Workspace'}</span>
+            <span>{task.project.title || 'General Project'}</span>
           </div>
         </div>
 

@@ -1,5 +1,9 @@
 import Workspace from "../models/workspace.model.mjs";
 import Project from '../models/projects.model.mjs'
+import User from "../models/user.model.mjs";
+import jwt from "jsonwebtoken";
+import WorkspaceInvite from "../models/workspace.invite.model.mjs";
+import { sendEmail } from '../libs/send-email.js'
 
 
 export const createWorkspace = async (req, res) => {
@@ -359,9 +363,9 @@ export const inviteUserToWorkspace = async (req,res) => {
   try {
     const {workspaceId} = req.params;
     const {email,role} = req.body;
-    const worksapce = Workspace.findById(workspaceId);
+    const workspace = Workspace.findById(workspaceId);
     if(!workspace){
-      res.status(404).json({
+      return res.status(404).json({
         message : 'Workspace not found',
         success : false
       })
@@ -369,11 +373,77 @@ export const inviteUserToWorkspace = async (req,res) => {
     const userMemberInfo = workspace.find((member) => member.user.toString() === req.user._id.toString())
 
     if(!userMemberInfo || !['admin','owner'].includes(userMemberInfo.role)){
-      res.status(403).json({
+      return res.status(403).json({
         message : 'You are not authorized to invite members to this workspace'
       })
     }
-      // const userAlreadyMember = workspace.
+      const existingUser = User.findOne({email});
+      if(!existingUser){
+      return res.status(400).json({
+        message : 'User not found'
+      })
+    } 
+    const isMember = workspace.members.some((mem) => mem.user.toString() === existingUser._id.toString())
+     if(isMember){
+      return res.status(400).json({
+        message : 'User already a member of this workspac'
+      })
+    } 
+    const isInvited = await WorkspaceInvite.findOne({
+       user : existingUser._id,
+       workspaceId : workspaceId, 
+    })
+
+    if(isInvited && isInvited.expiresAt > new Date()){
+      return res.status(400).json({
+        message : "User already invited to this workspace"
+      })
+    }
+    
+    if(isInvited && isInvited.expiresAt < new Date()){
+      await WorkspaceInvite.deleteOne({
+        _id : isInvited._id
+      })
+    }
+
+    const inviteToken = await jwt.sign({
+      user : existingUser._id,
+      workspaceId,
+      role : role || 'member'
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn : '7d'
+    }
+  )
+  
+  await WorkspaceInvite.create({
+      user : existingUser._id,
+      workspaceId,
+      token : inviteToken,
+      role : role || 'member',
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  })
+
+  const invitationLink = `${process.env.FRONTEND_URL}/workspace-invite/${workspace._id}?tk=${inviteToken}`
+
+  const emailContent = 
+  `
+  <p>You have been invited to join ${workspace.name} </p>
+  <p>Click here to join <a href=${invitationLink}>${invitationLink}</a>
+  `
+
+
+
+  await sendEmail(
+    email,
+    "You have been invited to join workspace",
+    emailContent
+  )
+  res.status(200).json({
+      message : 'Invitation sent successfully'
+  })
+
   } catch (error) {
     res.status(500).json({
       message: "Internal Server Error",

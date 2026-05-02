@@ -20,15 +20,15 @@ function Dashboard() {
   const { workspaces } = useSelector(store => store.workspace);
   const workspaceId = searchParams.get("workspaceId");
   const {data,isPending} = useGetWorkspaceStats(workspaceId);
-  useEffect(() => {
-    if (!workspaceId && workspaces.length > 0) {
-      navigate(`/dashboard?workspaceId=${workspaces[0]._id}`);
-    }
-  }, [workspaceId, workspaces]);
+  // useEffect(() => {
+  //   if (!workspaceId && workspaces.length > 0) {
+  //     navigate(`/dashboard?workspaceId=${workspaces[0]._id}`);
+  //   }
+  // }, [workspaceId, workspaces]);
   if(isPending){  
     return <Loader />
   }
-  console.log('data : dashboards : ',data)
+  // console.log('data : dashboards : ',data)
   return (
     <div>
       <StatsCard data={data?.stats} />
