@@ -355,7 +355,7 @@ export const getWorkspaceStats = async (req, res) => {
 };
 
 
-const inviteUserToWorkspace = async (req,res) => {
+export const inviteUserToWorkspace = async (req,res) => {
   try {
     const {workspaceId} = req.params;
     const {email,role} = req.body;
@@ -373,7 +373,7 @@ const inviteUserToWorkspace = async (req,res) => {
         message : 'You are not authorized to invite members to this workspace'
       })
     }
-      const userAlreadyMember = workspace.
+      // const userAlreadyMember = workspace.
   } catch (error) {
     res.status(500).json({
       message: "Internal Server Error",

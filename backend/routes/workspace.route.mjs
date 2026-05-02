@@ -1,9 +1,9 @@
 import express from 'express';
 import { validateSchema } from '../libs/validateSchema.mjs';
-import { inviteMemberSchema, workspaceSchema } from '../libs/validate-schema.mjs';
+import { inviteMemberSchema, workspaceParamsSchema, workspaceSchema } from '../libs/validate-schema.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
 import { createWorkspace, getWorkspace, getWorkspaceDetails, getWorkspaceProjects, getWorkspaceStats } from '../controller/workspace.controller.mjs';
-
+import {inviteUserToWorkspace} from '../controller/workspace.controller.mjs'
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.post("/?workspaceId/invite-member",
    
      validateSchema({
        body: inviteMemberSchema,
-       params: projectParamsSchema,
+       params: workspaceParamsSchema,
      }),
   inviteUserToWorkspace)
 router.get("/", 
