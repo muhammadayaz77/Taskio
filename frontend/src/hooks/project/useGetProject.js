@@ -1,18 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../../api/axios";
+
 const useGetProject = (projectId) => {
   return useQuery({
-    queryKey : ['project'],
-
-    queryFn: (data) => fetchData(`/projects/${projectId}/tasks`,data),
-    onSuccess : (data) => {
-      window.toastify(data.message,'success');
-    },
-    onError : (err) => {
-      console.log('error : ',err)
-      window.toastify(err?.response?.data?.message || 'error occured','error')
-    }
+    queryKey: ["project", projectId],
+    queryFn: () => fetchData(`/projects/${projectId}/tasks`),
+    enabled: Boolean(projectId),
   });
 };
 
-export default useGetProject
+export default useGetProject;
