@@ -52,12 +52,8 @@ function ArchivedTaskCard({ task, workspaceId, accentColor }) {
 
   const inner = (
     <article
-      className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg"
-      style={
-        {
-          "--archive-accent": accent,
-        }
-      }
+      className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-300 hover:border-[color:var(--archive-accent)] hover:shadow-lg"
+      style={{ "--archive-accent": accent }}
     >
       <div
         className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -71,14 +67,11 @@ function ArchivedTaskCard({ task, workspaceId, accentColor }) {
           <div className="flex min-w-0 flex-1 flex-col gap-2">
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600 ring-1 ring-slate-200/80">
-                <ArchiveIcon className="size-3" />
+                <ArchiveIcon className="size-3" style={{ color: accent }} />
                 Archived
               </span>
             </div>
-            <h2
-              className="text-base font-semibold leading-snug text-slate-900 transition-colors"
-              style={{ "--tw-group-hover': accent }}
-            >
+            <h2 className="text-base font-semibold leading-snug text-slate-900 transition-colors group-hover:[color:var(--archive-accent)]">
               {task.title}
             </h2>
             <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -95,7 +88,7 @@ function ArchivedTaskCard({ task, workspaceId, accentColor }) {
             </div>
           </div>
           {href && (
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition group-hover:border-violet-200 group-hover:bg-violet-50 group-hover:text-violet-600">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition group-hover:border-[color:var(--archive-accent)] group-hover:bg-[color-mix(in_srgb,var(--archive-accent)_12%,white)] group-hover:text-[color:var(--archive-accent)]">
               <ArrowUpRight className="size-4" />
             </span>
           )}
@@ -103,7 +96,7 @@ function ArchivedTaskCard({ task, workspaceId, accentColor }) {
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
           <span className="inline-flex items-center gap-1.5 font-medium text-slate-600">
-            <FolderKanban className="size-3.5 text-violet-500" />
+            <FolderKanban className="size-3.5 shrink-0" style={{ color: accent }} />
             {project?.title || "Project"}
           </span>
           <span className="inline-flex items-center gap-1.5">
@@ -138,6 +131,7 @@ function ArchivedTaskCard({ task, workspaceId, accentColor }) {
 
 export default function Archive() {
   const workspaceId = useActiveWorkspaceId();
+  const { workspaces } = useSelector((s) => s.workspace);
   const { memberOf, denyClient } = useWorkspaceMembership(workspaceId);
   const [query, setQuery] = useState("");
 
@@ -145,6 +139,14 @@ export default function Archive() {
     workspaceId,
     { enabled: memberOf }
   );
+
+  const workspaceColor = useMemo(() => {
+    const fromApi = data?.workspace?.color;
+    const fromStore = workspaces.find(
+      (w) => String(w._id) === String(workspaceId)
+    )?.color;
+    return fromApi || fromStore || "#6366f1";
+  }, [data?.workspace?.color, workspaces, workspaceId]);
 
   const tasks = useMemo(() => {
     const list = Array.isArray(data?.tasks) ? data.tasks : [];
@@ -206,6 +208,7 @@ export default function Archive() {
 
   const workspaceName = data?.workspace?.name || "Workspace";
   const total = Array.isArray(data?.tasks) ? data.tasks.length : 0;
+  const accent = workspaceColor;
 
   return (
     <div className="mx-auto max-w-6xl px-2 pb-16 sm:px-4">
@@ -218,7 +221,13 @@ export default function Archive() {
               Workspace archive
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex size-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg shadow-violet-600/25">
+              <div
+                className="flex size-12 items-center justify-center rounded-2xl text-white shadow-lg"
+                style={{
+                  backgroundColor: accent,
+                  boxShadow: `0 10px 40px -10px ${accent}66`,
+                }}
+              >
                 <ArchiveIcon className="size-6" />
               </div>
               <div>
@@ -244,7 +253,12 @@ export default function Archive() {
               <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
                 Showing
               </p>
-              <p className="text-2xl font-bold tabular-nums text-violet-700">{tasks.length}</p>
+              <p
+                className="text-2xl font-bold tabular-nums"
+                style={{ color: accent }}
+              >
+                {tasks.length}
+              </p>  
             </div>
           </div>
         </div>
@@ -265,8 +279,14 @@ export default function Archive() {
 
       {tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 px-8 py-20 text-center">
-          <div className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
-            <ArchiveIcon className="size-8 text-slate-300" />
+          <div
+            className="mb-4 flex size-16 items-center justify-center rounded-2xl text-white shadow-md"
+            style={{
+              backgroundColor: accent,
+              boxShadow: `0 12px 40px -12px ${accent}55`,
+            }}
+          >
+            <ArchiveIcon className="size-8 text-white opacity-95" />
           </div>
           <p className="text-lg font-medium text-slate-700">
             {total === 0 ? "No archived tasks yet" : "No matches"}
@@ -281,7 +301,11 @@ export default function Archive() {
         <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {tasks.map((task) => (
             <li key={task._id}>
-              <ArchivedTaskCard task={task} workspaceId={workspaceId} />
+              <ArchivedTaskCard
+                task={task}
+                workspaceId={workspaceId}
+                accentColor={accent}
+              />
             </li>
           ))}
         </ul>

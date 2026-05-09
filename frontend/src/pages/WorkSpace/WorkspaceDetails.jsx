@@ -38,6 +38,7 @@ function WorkspaceDetails() {
       workspaceId={workspaceId}
       onCreateProject={() => setIsCreateProject(true)}
       projects={data?.project}
+      workspaceColor={data?.workspace?.color}
       />
         <CreateProjectDialog
         isOpen={isCreateProject}

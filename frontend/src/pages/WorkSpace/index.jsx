@@ -120,13 +120,25 @@ const Workspaces = () => {
 
 const WorkspaceCard = ({ workspace, formatDate, onViewWorkspace }) => {
   const color = workspace.color || "#6366f1";
+  const accentLight = `${color}22`;
 
   return (
     <button
       type="button"
       onClick={() => onViewWorkspace(workspace._id)}
-      className="group w-full rounded-2xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-500/10 focus-visible:outline focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+      className="group relative w-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:border-[color:var(--ws-accent)] hover:shadow-lg focus-visible:outline focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+      style={{
+        "--ws-accent": color,
+        borderColor: "rgb(226 232 240 / 0.9)",
+      }}
     >
+      <div
+        className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `linear-gradient(to bottom right, ${accentLight}, transparent)`,
+        }}
+      />
+
       <div className="mb-4 flex items-start gap-4">
         <div
           className="flex size-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white shadow-inner"
@@ -135,7 +147,7 @@ const WorkspaceCard = ({ workspace, formatDate, onViewWorkspace }) => {
           {workspace.name?.charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-lg font-semibold text-slate-900 transition group-hover:text-violet-700">
+          <h3 className="truncate text-lg font-semibold text-slate-900 transition group-hover:[color:var(--ws-accent)]">
             {workspace.name}
           </h3>
           <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
@@ -146,7 +158,7 @@ const WorkspaceCard = ({ workspace, formatDate, onViewWorkspace }) => {
       </div>
 
       <div className="mb-4 flex items-center gap-2 text-sm text-slate-600">
-        <Users className="size-4 text-violet-500" />
+        <Users className="size-4" style={{ color }} />
         <span className="font-medium">
           {workspace.members?.length || 0} member
           {workspace.members?.length !== 1 ? "s" : ""}
@@ -157,7 +169,7 @@ const WorkspaceCard = ({ workspace, formatDate, onViewWorkspace }) => {
         {workspace.description || "No description yet"}
       </p>
 
-      <div className="flex items-center gap-1.5 text-sm font-semibold text-violet-700 transition group-hover:gap-2">
+      <div className="flex items-center gap-1.5 text-sm font-semibold transition group-hover:gap-2" style={{ color }}>
         <span>Open workspace</span>
         <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
       </div>

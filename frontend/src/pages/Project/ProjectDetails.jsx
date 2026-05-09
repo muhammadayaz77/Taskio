@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button } from "../../components/ui/button";
-import { Progress } from "../../components/ui/progress";
 import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { ArrowLeft } from "lucide-react";
@@ -11,6 +10,8 @@ import CreateTaskDialog from "../../components/task/CreateTaskDialog";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { CalendarDays, ArrowUp, ArrowDown } from "lucide-react";
+import TaskStatusProgressBar from "../../components/common/TaskStatusProgressBar";
+import { calculateTaskProgress, getTaskStatusBreakdown } from "../../utils/progress";
 
 function getPriorityColor(priority) {
   switch (priority) {
@@ -36,22 +37,6 @@ function getPriorityBadgeStyle(priority) {
       return "bg-gray-100 text-gray-600";
   }
 }
-
-
-
-function getStatusVariant(status) {
-  switch (status) { 
-    case "To Do":
-      return "secondary";
-    case "In Progress":
-      return "default";
-    case "Done":
-      return "outline";
-    default:
-      return "secondary";
-  }
-}
-
 function ProjectDetails() {
   const [isCreateTask, setIsCreateTask] = useState(false);
   const [taskFilter, setTaskFilter] = useState("All");
@@ -59,7 +44,10 @@ function ProjectDetails() {
   const { projectId,workspaceId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProject(projectId);
-  console.log("tasks : ",data);
+  const tasks = data?.tasks ?? [];
+  const progressData = useMemo(() => calculateTaskProgress(tasks), [tasks]);
+  const statusBreakdown = useMemo(() => getTaskStatusBreakdown(tasks), [tasks]);
+  const progress = progressData.value;
 
     if(!workspaceId){
     return <div>No Workspace found</div>
@@ -67,7 +55,7 @@ function ProjectDetails() {
 
   if (isLoading) return <Loader />;
 
-  const { project, tasks } = data;
+  const { project } = data;
 
   // Left filter tabs
   const leftTabs = [
@@ -96,7 +84,6 @@ function ProjectDetails() {
     taskFilter === "All" ? ["To Do", "In Progress", "Done"] : [taskFilter];
 
     const handleTasks = (taskId) => {
-      console.log("task id : ",taskId)
       navigate(`tasks/${taskId}`)  
     }
 
@@ -122,12 +109,12 @@ function ProjectDetails() {
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-32 space-y-1">
+          <div className="w-60 space-y-1 rounded-xl border border-slate-200 bg-white/80 px-3 py-2">
             <div className="flex justify-between text-xs">
               <span className="text-muted-foreground">Progress</span>
-              <span className="font-medium">60%</span>
+              <span className="font-semibold text-violet-700">{progress}%</span>
             </div>
-            <Progress value={60} className="h-2" />
+            <TaskStatusProgressBar breakdown={statusBreakdown} compact />
           </div>
           <Button
             size="sm"
@@ -192,14 +179,15 @@ function ProjectDetails() {
           >
 
             <h2 className="text-sm font-medium mb-2">{status}</h2>
-            <Card className="p-4 bg-gray-50">
+            <Card className="border-slate-200/90 bg-slate-50/70 p-4 shadow-sm">
               {tasksByStatus[status].length > 0 ? (
   tasksByStatus[status].map((task) => (
     <Card
   key={task._id}
-  className="relative mb-3 bg-white hover:shadow-md transition cursor-pointer overflow-hidden"
+  className="group relative mb-3 cursor-pointer overflow-hidden border-slate-200/90 bg-white transition-all duration-300 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-500/10"
   onClick={() => handleTasks(task._id)}
 >
+  <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-gradient-to-br from-violet-100/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
   {/* Left Priority Bar */}
   <div
     className={`absolute left-0 top-0 h-full w-1 ${getPriorityColor(
@@ -230,13 +218,13 @@ function ProjectDetails() {
 
 
     {/* Title */}
-    <h3 className="text-sm font-semibold mt-2">
+    <h3 className="mt-2 text-sm font-semibold text-slate-900 transition-colors group-hover:text-violet-700">
       {task.title}
     </h3>
 
     {/* Description */}
     {task.description && (
-      <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+      <p className="mt-1 line-clamp-2 text-xs text-gray-500">
         {task.description}
       </p>
     )}
@@ -267,7 +255,7 @@ function ProjectDetails() {
 
       {/* Due Date */}
       <div className="flex items-center gap-1 text-xs text-gray-400">
-        <CalendarDays size={14} />
+        <CalendarDays size={14} className="text-violet-500" />
         {task.dueDate &&
           new Date(task.dueDate).toLocaleDateString()}
       </div>
