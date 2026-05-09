@@ -1,13 +1,16 @@
 import React, { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useActiveWorkspaceId } from "../hooks/useActiveWorkspaceId";
+import { useWorkspaceMembership } from "../hooks/useWorkspaceMembership";
 import useGetWorkspacesById from "../hooks/workspace/useGetWorkspacesById";
-import { Users } from "lucide-react";
+import { Users, Lock } from "lucide-react";
 
 function Members() {
-  const [searchParams] = useSearchParams();
-  const workspaceId = searchParams.get("workspaceId");
+  const workspaceId = useActiveWorkspaceId();
+  const { memberOf, denyClient } = useWorkspaceMembership(workspaceId);
 
-  const { data, isLoading } = useGetWorkspacesById(workspaceId);
+  const { data, isLoading } = useGetWorkspacesById(workspaceId, {
+    enabled: memberOf,
+  });
 
   const [view, setView] = useState("list");
   const [search, setSearch] = useState("");
@@ -20,6 +23,26 @@ function Members() {
       m.user.email.toLowerCase().includes(search.toLowerCase())
     );
   }, [members, search]);
+
+  if (!workspaceId) {
+    return (
+      <p className="p-6 text-gray-600">
+        Choose a workspace from the header to view members.
+      </p>
+    );
+  }
+
+  if (denyClient) {
+    return (
+      <div className="mx-auto max-w-lg p-6 text-center">
+        <Lock className="mx-auto mb-3 size-10 text-amber-600" />
+        <p className="font-medium text-gray-900">No access</p>
+        <p className="mt-2 text-sm text-gray-600">
+          Member lists are only available for workspaces you belong to. Select a workspace in the header.
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading) return <div className="p-4">Loading...</div>;
 

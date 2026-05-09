@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "@/store/auth/authSlice";
-import { useSearchParams } from "react-router-dom";
+import { useActiveWorkspaceId } from "../hooks/useActiveWorkspaceId";
 
 import {
   DropdownMenu,
@@ -47,9 +47,7 @@ const AppHeader = ({
   console.log("selected : ",isOnWorkspacePage)
 
 
-  // Persist the Selected Workspace
-  const [searchParams] = useSearchParams();
-const workspaceId = searchParams.get("workspaceId");
+  const workspaceId = useActiveWorkspaceId();
 
 useEffect(() => {
   if(!workspaceId){

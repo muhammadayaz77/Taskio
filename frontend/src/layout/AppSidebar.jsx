@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
+import {
+  pathWithWorkspaceQuery,
+  useActiveWorkspaceId,
+} from "../hooks/useActiveWorkspaceId";
 // import { GridIcon, ChevronDownIcon, HorizontaLDots } from "../icons";
 
 import { Grid as GridIcon, ChevronDown as ChevronDownIcon, MoreHorizontal as HorizontaLDots } from "lucide-react";
 import { LayoutDashboard } from "lucide-react";
-import { Store, CheckSquare, Users, Settings, Archive, Folder, Clipboard } from "lucide-react";
+import { Users, Settings, Archive, Folder, Clipboard } from "lucide-react";
 
 const navItems = [
    {
@@ -28,9 +32,9 @@ const navItems = [
     path: "/members",
   },
   {
-    icon: <CheckSquare />,
-    name: "Achieved",
-    path: "/achieved",
+    icon: <Archive />,
+    name: "Archive",
+    path: "/archive",
   },
   {
     icon: <Settings />,
@@ -60,6 +64,7 @@ const adminNavItems = [
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const activeWorkspaceId = useActiveWorkspaceId();
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [subMenuHeight, setSubMenuHeight] = useState({});
   const subMenuRefs = useRef({});
@@ -199,7 +204,10 @@ const AppSidebar = () => {
                     ) : (
                       nav.path && (
                         <Link
-                          to={nav.path}
+                          to={pathWithWorkspaceQuery(
+                            nav.path,
+                            activeWorkspaceId
+                          )}
                           className={`flex items-center w-full gap-3 px-3 py-2 rounded-lg transition-colors duration-200
                             ${
                               isActive(nav.path)

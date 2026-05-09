@@ -1,32 +1,37 @@
 import React from 'react'
-import { Button } from '../components/ui/button'
-import { useDispatch } from 'react-redux'
-import { logout } from '../../store/auth/authSlice'
 import useGetWorkspaceStats from '../hooks/workspace/useGetWorkspaceStats'
-import { useSearchParams } from 'react-router-dom'
+import { useActiveWorkspaceId } from '../hooks/useActiveWorkspaceId'
+import { useWorkspaceMembership } from '../hooks/useWorkspaceMembership'
 import Loader from '../components/common/Loader'
 import StatsCard from '../components/dashboard/StatsCard'
 import StatisticsCharts from '../components/dashboard/StatisticsCharts'
 import RecentProjects from '../components/workspace/RecentProjects'
 import UpcomingTasks from '../components/workspace/UpcomingTasks'
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 
 function Dashboard() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const { workspaces } = useSelector(store => store.workspace);
-  const workspaceId = searchParams.get("workspaceId");
-  const {data,isPending} = useGetWorkspaceStats(workspaceId);
-  // useEffect(() => {
-  //   if (!workspaceId && workspaces.length > 0) {
-  //     navigate(`/dashboard?workspaceId=${workspaces[0]._id}`);
-  //   }
-  // }, [workspaceId, workspaces]);
-  if(isPending){  
-    return <Loader />
+  const workspaceId = useActiveWorkspaceId();
+  const { memberOf, denyClient } = useWorkspaceMembership(workspaceId);
+  const { data, isPending } = useGetWorkspaceStats(workspaceId, {
+    enabled: memberOf,
+  });
+
+  if (!workspaceId) {
+    return (
+      <p className="text-gray-600">
+        Choose a workspace from the header to see dashboard stats.
+      </p>
+    );
+  }
+  if (denyClient) {
+    return (
+      <p className="text-gray-600">
+        You do not have access to this workspace. Choose one you are a member of in the header.
+      </p>
+    );
+  }
+  if (isPending) {
+    return <Loader />;
   }
   // console.log('data : dashboards : ',data)
   return (

@@ -1,5 +1,6 @@
 import Workspace from "../models/workspace.model.mjs";
 import Project from '../models/projects.model.mjs'
+import Task from "../models/task.model.mjs";
 import User from "../models/user.model.mjs";
 import jwt from "jsonwebtoken";
 import WorkspaceInvite from "../models/workspace.invite.model.mjs";
@@ -114,6 +115,71 @@ export const getWorkspaceProjects = async (req, res) => {
     });
   }
 };
+
+/** Archived tasks across all projects in a workspace — only for workspace members (`archieved` + `isArchived`). */
+export const getWorkspaceArchivedTasks = async (req, res) => {
+  try {
+    const { workspaceId } = req.params;
+
+    // Same access rule as getWorkspaceDetails: only members resolve this document
+    const workspace = await Workspace.findOne({
+      _id: workspaceId,
+      "members.user": req.user._id,
+    }).select("_id name color description");
+
+    if (!workspace) {
+      return res.status(404).json({
+        message: "Workspace not found",
+        success: false,
+      });
+    }
+
+    const projects = await Project.find({ workspace: workspaceId }).select("_id");
+    const projectIds = projects.map((p) => p._id);
+
+    if (projectIds.length === 0) {
+      return res.status(200).json({
+        workspace: {
+          _id: workspace._id,
+          name: workspace.name,
+          color: workspace.color,
+          description: workspace.description,
+        },
+        tasks: [],
+      });
+    }
+
+    const tasks = await Task.find({
+      project: { $in: projectIds },
+      $or: [{ archieved: true }, { isArchived: true }],
+    })
+      .populate("assignees", "name email profilePicture")
+      .populate("createdBy", "name email profilePicture")
+      .populate({
+        path: "project",
+        select:
+          "title description workspace status progress startDate dueDate members",
+      })
+      .sort({ updatedAt: -1 });
+
+    return res.status(200).json({
+      workspace: {
+        _id: workspace._id,
+        name: workspace.name,
+        color: workspace.color,
+        description: workspace.description,
+      },
+      tasks,
+    });
+  } catch (err) {
+    console.log("Error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};
+
 export const getWorkspaceStats = async (req, res) => {
   try {
     const { workspaceId } = req.params;
