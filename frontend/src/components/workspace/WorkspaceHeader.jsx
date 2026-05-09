@@ -1,72 +1,73 @@
 import React from "react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { UserPlus } from "lucide-react"
+import { Sparkles, UserPlus } from "lucide-react"
 
 function WorkspaceHeader({ workspace, members, onCreateProject, onInviteMember }) {
   const firstLetter = workspace?.name?.charAt(0).toUpperCase()
-  console.log("members : ",members)
+  const memberList = Array.isArray(members) ? members : []
 
   return (
-    <div className="flex items-center justify-between bg-white">
-      
-      {/* LEFT SIDE */}
-      <div className="flex items-start gap-4">
-        
-        {/* Workspace Icon */}
-        <div
-          className="h-12 w-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg"
-          style={{ backgroundColor: workspace?.color }}
-        >
-          {firstLetter}
+    <section className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-slate-50 via-white to-violet-50/60 px-5 py-6 shadow-sm sm:px-8 sm:py-8">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-200/25 via-transparent to-transparent" />
+      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex items-start gap-4 min-w-0">
+          <div
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-lg font-bold text-white shadow-lg"
+            style={{
+              backgroundColor: workspace?.color || "#6366f1",
+              boxShadow: `0 12px 40px -12px ${workspace?.color || "#6366f1"}66`,
+            }}
+          >
+            {firstLetter}
+          </div>
+          <div className="min-w-0 flex-1 space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-violet-700 shadow-sm ring-1 ring-violet-100">
+              <Sparkles className="size-3.5" />
+              Workspace home
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+              {workspace?.name}
+            </h2>
+            <p className="text-sm text-slate-600">
+              {workspace?.description || "Add a description in workspace settings."}
+            </p>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-xs font-medium text-slate-500">Members</span>
+              <div className="flex -space-x-2">
+                {memberList.map((member, index) => (
+                  <Avatar
+                    key={member?.user?._id || index}
+                    className="h-9 w-9 border-2 border-white shadow-sm"
+                  >
+                    <AvatarFallback className="bg-violet-100 text-xs font-semibold text-violet-800">
+                      {member?.user?.name?.charAt(0).toUpperCase() || "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Workspace Info */}
-        <div>
-          <h2 className="text-lg font-semibold">{workspace?.name}</h2>
-          <p className="text-sm text-gray-500">{workspace?.description}</p>
-         <div className="flex items-center gap-2 mt-2">
-  <p className="text-sm text-gray-500">Members</p>
-
-  <div className="flex items-center -space-x-2">
-    {members.map((member, index) => (
-      <Avatar
-        key={index}
-        className="h-8 w-8 border-2 border-white"
-      >
-        <AvatarFallback className="text-xs font-medium">
-          {member?.user?.name?.charAt(0).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-    ))}
-  </div>
-</div>
-
+        <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
+          <Button
+            variant="outline"
+            onClick={onInviteMember}
+            className="rounded-xl border-slate-200"
+          >
+            <UserPlus size={16} className="mr-2" />
+            Invite
+          </Button>
+          <Button
+            onClick={onCreateProject}
+            className="rounded-xl bg-violet-600 px-4 text-white shadow-md shadow-violet-600/25 hover:bg-violet-700"
+          >
+            Create project
+          </Button>
         </div>
       </div>
-
-      {/* RIGHT SIDE */}
-      <div className="flex items-center gap-3">
-        
-        {/* Invite Button */}
-        <Button
-          variant="outline"
-          onClick={onInviteMember}
-          className="flex items-center gap-2"
-        >
-          <UserPlus size={16} />
-          Invite
-        </Button>
-
-        {/* Create Project Button */}
-        <Button
-          onClick={onCreateProject}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          + Create Project
-        </Button>
-      </div>
-    </div>
+    </section>
   )
 }
 

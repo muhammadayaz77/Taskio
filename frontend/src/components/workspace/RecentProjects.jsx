@@ -24,8 +24,8 @@ function RecentProjects({ data }) {
   };
 
   return (
-    <div className="col-span-12 lg:col-span-6 mt-6">
-      <Card className="h-full">
+    <div className="col-span-12 lg:col-span-6">
+      <Card className="h-full border-slate-200/90 shadow-sm transition-colors hover:border-violet-200/60">
         <CardHeader>
           <CardTitle>Recent Projects</CardTitle>
         </CardHeader>
@@ -44,7 +44,7 @@ function RecentProjects({ data }) {
               </thead>
 
               <tbody>
-                {data.map((project) => (
+                {(data ?? []).map((project) => (
                   <tr
                     key={project._id}
                     className="border-b hover:bg-gray-50 transition cursor-pointer"

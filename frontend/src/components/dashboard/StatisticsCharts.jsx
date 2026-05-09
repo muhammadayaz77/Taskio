@@ -28,10 +28,10 @@ function StatisticsCharts({
   workspaceProductivityData,
 }) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       
       {/* Task Trends */}
-      <Card>
+      <Card className="border-slate-200/90 shadow-sm transition-colors hover:border-violet-200/60">
         <CardHeader>
           <CardTitle>Weekly Task Trends</CardTitle>
         </CardHeader>
@@ -73,7 +73,7 @@ function StatisticsCharts({
       </Card>
 
       {/* Project Status */}
-      <Card>
+      <Card className="border-slate-200/90 shadow-sm transition-colors hover:border-violet-200/60">
         <CardHeader>
           <CardTitle>Project Status</CardTitle>
         </CardHeader>
@@ -102,7 +102,7 @@ function StatisticsCharts({
       </Card>
 
       {/* Task Priority */}
-      <Card>
+      <Card className="border-slate-200/90 shadow-sm transition-colors hover:border-violet-200/60">
         <CardHeader>
           <CardTitle>Task Priority</CardTitle>
         </CardHeader>
@@ -132,7 +132,7 @@ function StatisticsCharts({
 
 
       {/* Workspace Productivity */}
-      <Card>
+      <Card className="border-slate-200/90 shadow-sm transition-colors hover:border-violet-200/60">
         <CardHeader>
           <CardTitle>Workspace Productivity</CardTitle>
         </CardHeader>

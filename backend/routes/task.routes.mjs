@@ -31,7 +31,6 @@ import {
   taskPrioritySchema,
   taskStatusSchema,
   taskTittleNameSchema,
-  workspaceParamsSchema,
 } from "../libs/validate-schema.mjs";
 import { validateSchema } from "../libs/validateSchema.mjs";
 const router = express.Router();
@@ -46,7 +45,7 @@ router.post(
   authMiddleware,
   validateSchema({
     body: createTaskSchema,
-    params: workspaceParamsSchema,
+    params: projectParamsSchema,
   }),
   createTask,
 );

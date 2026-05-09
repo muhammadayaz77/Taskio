@@ -158,9 +158,7 @@ export const createTaskSchema = z.object({
     .min(3, "Title must be at least 3 characters")
     .max(100, "Title is too long"),
 
-  description: z
-    .string()
-    .optional(),
+  description: z.string().optional(),
 
   status: z.enum(["To Do", "In Progress", "Done"], {
     errorMap: () => ({ message: "Status is required" }),
@@ -170,15 +168,13 @@ export const createTaskSchema = z.object({
     errorMap: () => ({ message: "Priority is required" }),
   }),
 
-  dueDate: z
-    .string()
-    .min(1, "Due date is required"),
+  dueDate: z.string().optional(),
 
   assignees: z
     .array(
       z.object({
-        user: z.string(),
+        user: z.coerce.string(),
       })
     )
-    .min(1, "At least one assignee is required"),
+    .default([]),
 });

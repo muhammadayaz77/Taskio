@@ -26,8 +26,8 @@ function UpcomingTasks({ data }) {
   };
 
   return (
-    <div className="col-span-12 lg:col-span-6 mt-6">
-      <Card className="h-full">
+    <div className="col-span-12 lg:col-span-6">
+      <Card className="h-full border-slate-200/90 shadow-sm transition-colors hover:border-violet-200/60">
         
         <CardHeader>
           <CardTitle>Upcoming Tasks</CardTitle>
@@ -37,7 +37,7 @@ function UpcomingTasks({ data }) {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {data.map((task) => (
+          {(data ?? []).map((task) => (
             <div
               key={task._id}
               className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition"

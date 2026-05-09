@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   Archive as ArchiveIcon,
@@ -36,8 +37,9 @@ function formatDate(iso) {
   });
 }
 
-function ArchivedTaskCard({ task, workspaceId }) {
+function ArchivedTaskCard({ task, workspaceId, accentColor }) {
   const project = task.project;
+  const accent = accentColor || "#6366f1";
   const projectId = project?._id;
   const ws =
     project?.workspace?.toString?.() ??
@@ -49,8 +51,20 @@ function ArchivedTaskCard({ task, workspaceId }) {
       : null;
 
   const inner = (
-    <article className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-300 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-500/10">
-      <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br from-violet-100/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+    <article
+      className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg"
+      style={
+        {
+          "--archive-accent": accent,
+        }
+      }
+    >
+      <div
+        className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `linear-gradient(to bottom right, ${accent}33, transparent)`,
+        }}
+      />
 
       <div className="relative flex flex-col gap-4">
         <div className="flex items-start justify-between gap-3">
@@ -61,7 +75,10 @@ function ArchivedTaskCard({ task, workspaceId }) {
                 Archived
               </span>
             </div>
-            <h2 className="text-base font-semibold leading-snug text-slate-900 transition-colors group-hover:text-violet-700">
+            <h2
+              className="text-base font-semibold leading-snug text-slate-900 transition-colors"
+              style={{ "--tw-group-hover': accent }}
+            >
               {task.title}
             </h2>
             <div className="flex flex-wrap items-center gap-2 text-xs">

@@ -41,16 +41,19 @@ export const createTask = async (req, res) => {
       });
     }
 
-    // 🔥 FIX 1 — Convert assignees to ObjectId array
-    const formattedAssignees = assignees?.map((a) => a.user);
+    const formattedAssignees = Array.isArray(assignees)
+      ? assignees.map((a) => a.user).filter(Boolean)
+      : [];
+
+    const due = dueDate && String(dueDate).trim() !== "" ? dueDate : undefined;
 
     const newTask = await Task.create({
       title,
       description,
       status,
       priority,
-      dueDate,
-      assignees: formattedAssignees, // ✅ correct format
+      dueDate: due,
+      assignees: formattedAssignees,
       project: projectId, // ✅ required field added
       createdBy: req.user._id,
     });

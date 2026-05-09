@@ -1,47 +1,84 @@
 import React, { useState } from "react";
-import { Plus, Users, Calendar, ArrowRight } from "lucide-react";
+import {
+  Plus,
+  Users,
+  Calendar,
+  ArrowRight,
+  FolderKanban,
+  Sparkles,
+} from "lucide-react";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import CreateWorkspace from "../../components/workspace/CreateWorkspace";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/ui/button";
 
 const Workspaces = () => {
   const navigate = useNavigate();
   const { workspaces } = useSelector((store) => store.workspace);
-  console.log("workspaces : s ",workspaces)
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
 
   const formatDate = (date) => {
     try {
       return format(new Date(date), "MMM dd, yyyy 'at' h:mm a");
-    } catch (error) {
+    } catch {
       return "N/A";
     }
   };
 
   const handleViewWorkspace = (workspaceId) => {
-    // Navigate to workspace details
-    navigate(`/workspaces/${workspaceId}`)
-    console.log("View workspace:", workspaceId);
+    navigate(`/workspaces/${workspaceId}`);
   };
 
-  return (
-    <div className="w-full min-h-screen p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Workspaces</h1>
-        <button
-          onClick={() => setIsCreatingWorkspace(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-        >
-          <Plus size={20} />
-          <span className="font-medium">Create Workspace</span>
-        </button>
-      </div>
+  const count = workspaces?.length ?? 0;
 
-      {/* Workspace Cards Grid */}
+  return (
+    <div className="mx-auto max-w-6xl px-2 pb-16 sm:px-4">
+      <section className="relative mb-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-slate-50 via-white to-violet-50/60 px-5 py-8 shadow-sm sm:px-8 sm:py-10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-200/25 via-transparent to-transparent" />
+        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-violet-700 shadow-sm ring-1 ring-violet-100">
+              <Sparkles className="size-3.5" />
+              Your workspaces
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg shadow-violet-600/25">
+                <FolderKanban className="size-7" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                  Workspaces
+                </h1>
+                <p className="mt-1 max-w-xl text-sm text-slate-600">
+                  Organize projects and teams in one place. Open a workspace to
+                  see projects and tasks.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-3">
+            <div className="rounded-2xl border border-white/60 bg-white/80 px-5 py-3 shadow-sm ring-1 ring-slate-100 backdrop-blur-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                Total
+              </p>
+              <p className="text-2xl font-bold tabular-nums text-slate-900">
+                {count}
+              </p>
+            </div>
+            <Button
+              onClick={() => setIsCreatingWorkspace(true)}
+              className="rounded-xl bg-violet-600 px-5 py-2.5 font-medium text-white shadow-md shadow-violet-600/25 hover:bg-violet-700"
+            >
+              <Plus className="mr-2 size-4" />
+              Create workspace
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {workspaces && workspaces.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {workspaces.map((workspace) => (
             <WorkspaceCard
               key={workspace._id}
@@ -52,26 +89,27 @@ const Workspaces = () => {
           ))}
         </div>
       ) : (
-        /* Empty State */
-        <div className="flex flex-col items-center justify-center py-20 text-gray-500">
-          <div className="text-7xl mb-4">📁</div>
-          <p className="text-xl font-semibold mb-2 text-gray-700">
+        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 px-8 py-20 text-center">
+          <div className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+            <FolderKanban className="size-8 text-slate-300" />
+          </div>
+          <p className="text-lg font-semibold text-slate-800">
             No workspaces yet
           </p>
-          <p className="text-sm text-gray-500 mb-6">
-            Create your first workspace to get started
+          <p className="mt-2 max-w-md text-sm text-slate-500">
+            Create your first workspace to invite teammates and spin up
+            projects.
           </p>
-          <button
+          <Button
             onClick={() => setIsCreatingWorkspace(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="mt-6 rounded-xl bg-violet-600 px-6 text-white shadow-md shadow-violet-600/25 hover:bg-violet-700"
           >
-            <Plus size={18} />
-            <span>Create Workspace</span>
-          </button>
+            <Plus className="mr-2 size-4" />
+            Create workspace
+          </Button>
         </div>
       )}
 
-      {/* Create Workspace Dialog */}
       <CreateWorkspace
         isCreatingWorkspace={isCreatingWorkspace}
         setIsCreatingWorkspace={setIsCreatingWorkspace}
@@ -81,50 +119,49 @@ const Workspaces = () => {
 };
 
 const WorkspaceCard = ({ workspace, formatDate, onViewWorkspace }) => {
+  const color = workspace.color || "#6366f1";
+
   return (
-    <div
+    <button
+      type="button"
       onClick={() => onViewWorkspace(workspace._id)}
-      className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-xl hover:border-gray-300 transition-all duration-200 cursor-pointer group"
+      className="group w-full rounded-2xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-500/10 focus-visible:outline focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
     >
-      {/* Workspace Header with Logo and Name */}
-      <div className="flex items-start gap-3 mb-4">
+      <div className="mb-4 flex items-start gap-4">
         <div
-          className="flex items-center justify-center w-12 h-12 rounded-lg text-white text-lg font-bold flex-shrink-0"
-          style={{ backgroundColor: workspace.color || "#6366f1" }}
+          className="flex size-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white shadow-inner"
+          style={{ backgroundColor: color }}
         >
           {workspace.name?.charAt(0).toUpperCase()}
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-lg font-semibold text-slate-900 transition group-hover:text-violet-700">
             {workspace.name}
           </h3>
-          <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-1">
-            <Calendar size={13} />
+          <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
+            <Calendar className="size-3.5 shrink-0" />
             <span>Created {formatDate(workspace.createdAt)}</span>
           </div>
         </div>
       </div>
 
-      {/* Members Count */}
-      <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
-        <Users size={16} className="text-gray-400" />
+      <div className="mb-4 flex items-center gap-2 text-sm text-slate-600">
+        <Users className="size-4 text-violet-500" />
         <span className="font-medium">
           {workspace.members?.length || 0} member
           {workspace.members?.length !== 1 ? "s" : ""}
         </span>
       </div>
 
-      {/* Description */}
-      <p className="text-sm text-gray-600 mb-4 line-clamp-2 min-h-[40px]">
-        {workspace.description || "No description provided"}
+      <p className="mb-5 line-clamp-2 min-h-[40px] text-sm leading-relaxed text-slate-600">
+        {workspace.description || "No description yet"}
       </p>
 
-      {/* View Details Link */}
-      <div className="flex items-center gap-1.5 text-sm text-blue-600 font-medium group-hover:gap-2.5 transition-all">
-        <span>View workspace details and projects</span>
-        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+      <div className="flex items-center gap-1.5 text-sm font-semibold text-violet-700 transition group-hover:gap-2">
+        <span>Open workspace</span>
+        <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
       </div>
-    </div>
+    </button>
   );
 };
 

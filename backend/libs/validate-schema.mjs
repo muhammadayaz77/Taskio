@@ -161,7 +161,7 @@
     workspaceId: z.string().min(1, "Workspace ID is required"),
   });
     export const projectParamsSchema = z.object({
-    projectId: z.string().min(1, "Task ID is required"),
+    projectId: z.string().min(1, "Project ID is required"),
   });
     export const taskParamsSchema = z.object({
     taskId : z.string().min(1, "Task ID is required"),
@@ -174,9 +174,7 @@
       .min(3, "Title must be at least 3 characters")
       .max(100, "Title is too long"),
 
-    description: z
-      .string()
-      .optional(),
+    description: z.string().optional(),
 
     status: z.enum(["To Do", "In Progress", "Done"], {
       errorMap: () => ({ message: "Status is required" }),
@@ -186,17 +184,15 @@
       errorMap: () => ({ message: "Priority is required" }),
     }),
 
-    dueDate: z
-      .string()
-      .min(1, "Due date is required"),
+    dueDate: z.string().optional(),
 
     assignees: z
       .array(
         z.object({
-          user: z.string(),
+          user: z.coerce.string().min(1),
         })
       )
-      .min(1, "At least one assignee is required"),
+      .default([]),
   });
 
   export const taskTittleNameSchema = z.object({
