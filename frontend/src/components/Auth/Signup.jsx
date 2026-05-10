@@ -13,10 +13,11 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 
 import { signupSchema } from "../../lib/schema";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useRegister from "../../hooks/auth/useRegister";
 
 const SignupForm = () => {
+  const location = useLocation();
   const { mutate, isPending } = useRegister();
 
   const form = useForm({
@@ -144,6 +145,7 @@ const SignupForm = () => {
           Already have an account?{" "}
           <Link
             to="/sign-in"
+            state={location.state}
             className="text-blue-700 underline-offset-4 hover:text-blue-900"
           >
             Login

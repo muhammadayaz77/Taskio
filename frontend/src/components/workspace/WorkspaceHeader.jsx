@@ -3,7 +3,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Sparkles, UserPlus } from "lucide-react"
 
-function WorkspaceHeader({ workspace, members, onCreateProject, onInviteMember }) {
+function WorkspaceHeader({
+  workspace,
+  members,
+  onCreateProject,
+  onInviteMember,
+  canInvite = true,
+}) {
   const firstLetter = workspace?.name?.charAt(0).toUpperCase()
   const memberList = Array.isArray(members) ? members : []
 
@@ -54,7 +60,13 @@ function WorkspaceHeader({ workspace, members, onCreateProject, onInviteMember }
           <Button
             variant="outline"
             onClick={onInviteMember}
-            className="rounded-xl border-slate-200"
+            disabled={!canInvite}
+            title={
+              !canInvite
+                ? "Only workspace owners and admins can invite people."
+                : undefined
+            }
+            className="rounded-xl border-slate-200 disabled:opacity-60"
           >
             <UserPlus size={16} className="mr-2" />
             Invite

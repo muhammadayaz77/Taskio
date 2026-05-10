@@ -2,11 +2,12 @@
 import { ZodError } from "zod";
 
 export const validateSchema =
-  ({ body, params }) =>
+  ({ body, params, query }) =>
   (req, res, next) => {
     try {
       if (body) body.parse(req.body);
       if (params) params.parse(req.params);
+      if (query) query.parse(req.query);
 
       next();
     } catch (err) {

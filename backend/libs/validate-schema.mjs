@@ -29,9 +29,15 @@
       .string()
       .email("Invalid email address")
       .regex(noEmojiRegex, "Emojis are not allowed in email"),
-         role: z
-        .enum(["manager", "contributor","viewer"])
-        .optional(), // role is optional
+    role: z.enum(["admin", "member", "viewer"]).optional(),
+  });
+
+  export const acceptWorkspaceInviteSchema = z.object({
+    token: z.string().min(1, "Invitation token is required"),
+  });
+
+  export const workspaceInvitePreviewQuerySchema = z.object({
+    token: z.string().min(1, "Invitation token is required"),
   });
 
   export const registerSchema = z

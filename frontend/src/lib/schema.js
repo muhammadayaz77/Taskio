@@ -81,6 +81,14 @@ export const signupSchema = z
   })
 
 
+  export const inviteWorkspaceMemberSchema = z.object({
+    email: z
+      .string()
+      .email("Invalid email address")
+      .regex(noEmojiRegex, "Emojis are not allowed in email"),
+    role: z.enum(["admin", "member", "viewer"]).default("member"),
+  });
+
 
   export const workspaceSchema = z.object({
     

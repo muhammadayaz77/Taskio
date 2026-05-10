@@ -15,10 +15,11 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 
 import { loginSchema } from "../../lib/schema";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useLogin } from "../../hooks/auth/useLogin";
 
 const LoginForm = () => {
+  const location = useLocation();
   const {mutate,isPending} = useLogin()
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -94,7 +95,7 @@ const LoginForm = () => {
             }
           </Button>
         </form>
-          <p className="text-gray-500 text-sm text-center mt-6">Don't have an account? <Link to='/sign-up' className="text-blue-700 hover:text-blue-900 border-blue-900">Signup</Link></p>
+          <p className="text-gray-500 text-sm text-center mt-6">Don't have an account? <Link to='/sign-up' state={location.state} className="text-blue-700 hover:text-blue-900 border-blue-900">Signup</Link></p>
       </Form>
     </div>
   );

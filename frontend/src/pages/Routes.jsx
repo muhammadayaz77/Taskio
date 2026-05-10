@@ -16,6 +16,7 @@ import TaskDetails from './Task/TaskDetails'
 import MyTasks from './Task/MyTasks'
 import Archive from './Task/Archive'
 import Members from './Members'
+import WorkspaceInviteAccept from './WorkspaceInviteAccept'
 
  function Index() {
   return (
@@ -24,6 +25,8 @@ import Members from './Members'
     
     <AuthProvider>
     <Routes>
+
+    <Route path="/workspace-invite" element={<WorkspaceInviteAccept />} />
 
     <Route element={<AppLayout />}>
       <Route path="/workspaces" element={<Workspaces />} />

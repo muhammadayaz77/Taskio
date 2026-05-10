@@ -17,7 +17,10 @@ const AuthProvider = ({ children }) => {
 
 
   const isPublicRoute =
-    publicRoutes.includes(pathname) || pathname.startsWith("/verify-email/");
+    publicRoutes.includes(pathname) ||
+    pathname.startsWith("/verify-email/") ||
+    pathname.startsWith("/workspace-invite") ||
+    pathname.startsWith("/reset-password/");
 
   // ✅ Restore auth from localStorage on mount
   useEffect(() => {
