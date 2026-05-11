@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
 import App from "./App.jsx";
 import AuthProvider from "./providers/AuthProviders.jsx";
+import { SocketProvider } from "./providers/SocketProvider.jsx";
 import { store } from "../store/index.js"; // 👈 redux store
 
 export const queryClient = new QueryClient();
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          <SocketProvider>
             <App />
+          </SocketProvider>
           <ReactQueryDevtools initialIsOpen={false} position="top" />
         </BrowserRouter>
       </QueryClientProvider>

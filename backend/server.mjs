@@ -1,4 +1,5 @@
 import express from "express";
+import http from 'http';
 import morgan from 'morgan'
 const app = express();
 import dotenv from "dotenv";
@@ -6,12 +7,13 @@ import { DbConnection } from "./config/db.js";
 import cookieParser from 'cookie-parser';
 dotenv.config();
 import cors from 'cors';
+import { initSocket } from './libs/socket.mjs';
 const PORT = process.env.PORT || 3000
 
 
 app.use(cors({
   origin: 'http://localhost:5173', 
-  methods : ['GET','POST','DELETE','PUT'],  
+  methods : ['GET','POST','DELETE','PUT','PATCH'],  
   allowedHeaders : ['Content-Type','Authorization'],
   credentials: true 
 }))
@@ -47,11 +49,13 @@ app.use((req,res,) => {
   })
 })
 
-// database connection 
+const httpServer = http.createServer(app);
+initSocket(httpServer);
+
 DbConnection()
   .then(() => {
-    app.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
       console.log(`server is running on http://localhost:${PORT}`);
     });
   })
-  .catch((error) => console.log(error));    
+  .catch((error) => console.log(error));

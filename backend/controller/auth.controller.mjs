@@ -348,3 +348,89 @@ export const verifyEmail = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    const out = user.toObject();
+    delete out.password;
+    return res.status(200).json({ success: true, user: out });
+  } catch (err) {
+    console.log("getMe error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, profilePicture } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    if (name !== undefined) user.name = name;
+    if (profilePicture !== undefined) {
+      user.profilePicture =
+        profilePicture === "" ? undefined : profilePicture;
+    }
+    await user.save();
+    const out = user.toObject();
+    delete out.password;
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated",
+      user: out,
+    });
+  } catch (err) {
+    console.log("updateProfile error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user._id).select("+password");
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    const ok = await bcrypt.compare(currentPassword, user.password);
+    if (!ok) {
+      return res.status(400).json({
+        message: "Current password is incorrect",
+        success: false,
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    });
+  } catch (err) {
+    console.log("changePassword error : ", err);
+    res.status(500).json({
+      message: "Internal Server error",
+      error: err.message,
+    });
+  }
+};

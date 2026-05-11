@@ -259,14 +259,24 @@ useEffect(() => {
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem className='cursor-pointer'>
-                <User className="mr-2 h-4 w-4" />
-                Profile
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/settings"
+                  className="flex cursor-pointer items-center"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem className='cursor-pointer'>
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/settings"
+                  className="flex cursor-pointer items-center"
+                >
+                  <Settings className="mr-2 h-4 w-4" />
+                  Account settings
+                </Link>
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />

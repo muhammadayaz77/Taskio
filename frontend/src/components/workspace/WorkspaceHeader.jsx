@@ -1,7 +1,8 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Sparkles, UserPlus } from "lucide-react"
+import { MessageSquare, Sparkles, UserPlus } from "lucide-react"
 
 function WorkspaceHeader({
   workspace,
@@ -57,6 +58,16 @@ function WorkspaceHeader({
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
+          <Button
+            asChild
+            variant="outline"
+            className="rounded-xl border-slate-200"
+          >
+            <Link to={`/workspaces/${workspace?._id}/chat`}>
+              <MessageSquare size={16} className="mr-2" />
+              Team chat
+            </Link>
+          </Button>
           <Button
             variant="outline"
             onClick={onInviteMember}

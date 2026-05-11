@@ -52,10 +52,15 @@ const updateData = async (path, data) => {
   return response.data;
 };
 
+const patchData = async (path, data) => {
+  const response = await api.patch(path, data);
+  return response.data;
+};
+
 const deleteData = async (path) => {
   const response = await api.delete(path);
   return response.data;
 };
 
-export { fetchData, postData, deleteData, updateData };
+export { fetchData, postData, deleteData, updateData, patchData };
 export default api;

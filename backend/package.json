@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",
     "morgan": "^1.10.1",
+    "socket.io": "^4.8.3",
     "zod": "^3.22.4",
     "zod-express-middleware": "^1.4.0"
   }

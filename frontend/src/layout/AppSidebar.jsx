@@ -8,7 +8,7 @@ import {
 
 import { Grid as GridIcon, ChevronDown as ChevronDownIcon, MoreHorizontal as HorizontaLDots } from "lucide-react";
 import { LayoutDashboard } from "lucide-react";
-import { Users, Settings, Archive, Folder, Clipboard } from "lucide-react";
+import { Users, Archive, Folder, Clipboard, UserRound, Building2, MessageSquare } from "lucide-react";
 
 const navItems = [
    {
@@ -37,8 +37,8 @@ const navItems = [
     path: "/archive",
   },
   {
-    icon: <Settings />,
-    name: "Settings",
+    icon: <UserRound />,
+    name: "Profile",
     path: "/settings",
   },
 ];
@@ -112,7 +112,7 @@ const AppSidebar = () => {
 
   return (
     <aside
-      className={`fixed mt-16 lg:mt-0 top-0 px-5 left-0 bg-white text-gray-900 h-screen border-r border-gray-200 transition-all duration-300 z-50 
+      className={`fixed mt-16 lg:mt-0 top-0 px-5 left-0 bg-white text-gray-900 h-screen border-r border-gray-200 transition-all duration-300 z-50 flex flex-col
     ${
       isExpanded || isMobileOpen
         ? "w-[290px]"
@@ -146,8 +146,9 @@ const AppSidebar = () => {
       </div>
 
       {/* Navigation */}
-      <div className="flex flex-col overflow-y-auto overflow-x-hidden duration-300 ease-linear no-scrollbar">
-        <nav className="mb-6">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="no-scrollbar flex-1 overflow-y-auto overflow-x-hidden duration-300 ease-linear">
+        <nav className="mb-6 pb-4">
           <div className="flex flex-col gap-4">
             <div>
               {/* Section Title */}
@@ -267,6 +268,55 @@ const AppSidebar = () => {
             </div>
           </div>
         </nav>
+        </div>
+
+        {activeWorkspaceId ? (
+          <div className="shrink-0 space-y-1 border-t border-gray-200 bg-white py-4">
+            <p
+              className={`mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 ${
+                !isExpanded && !isHovered ? "lg:text-center" : ""
+              }`}
+            >
+              {isExpanded || isHovered || isMobileOpen ? "Workspace" : "—"}
+            </p>
+            <Link
+              to={`/workspaces/${activeWorkspaceId}/chat`}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors duration-200 ${
+                location.pathname ===
+                `/workspaces/${activeWorkspaceId}/chat`
+                  ? "bg-violet-50 text-violet-900 ring-1 ring-violet-100"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              <span className="flex size-5 items-center justify-center">
+                <MessageSquare className="size-5" />
+              </span>
+              {(isExpanded || isHovered || isMobileOpen) && (
+                <span className="text-sm font-medium whitespace-nowrap">
+                  Team chat
+                </span>
+              )}
+            </Link>
+            <Link
+              to={`/workspaces/${activeWorkspaceId}/settings`}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors duration-200 ${
+                location.pathname ===
+                `/workspaces/${activeWorkspaceId}/settings`
+                  ? "bg-indigo-50 text-indigo-900 ring-1 ring-indigo-100"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              <span className="flex size-5 items-center justify-center">
+                <Building2 className="size-5" />
+              </span>
+              {(isExpanded || isHovered || isMobileOpen) && (
+                <span className="text-sm font-medium whitespace-nowrap">
+                  Workspace settings
+                </span>
+              )}
+            </Link>
+          </div>
+        ) : null}
       </div>
     </aside>
   )

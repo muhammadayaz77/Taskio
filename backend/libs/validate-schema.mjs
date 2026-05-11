@@ -40,6 +40,86 @@
     token: z.string().min(1, "Invitation token is required"),
   });
 
+  export const updateProfileSchema = z
+    .object({
+      name: z
+        .string()
+        .min(3, "Name must be at least 3 characters")
+        .max(80, "Name is too long")
+        .regex(noEmojiRegex, "Emojis are not allowed in name")
+        .regex(
+          fullNameRegex,
+          "Full name can contain letters and only one space"
+        )
+        .optional(),
+      profilePicture: z
+        .union([
+          z.string().url("Must be a valid image URL"),
+          z.literal(""),
+        ])
+        .optional(),
+    })
+    .refine(
+      (data) =>
+        data.name !== undefined || data.profilePicture !== undefined,
+      { message: "Nothing to update", path: ["name"] }
+    );
+
+  export const changePasswordSchema = z
+    .object({
+      currentPassword: z
+        .string()
+        .min(1, "Current password is required")
+        .regex(noEmojiRegex, "Emojis are not allowed"),
+      newPassword: z
+        .string()
+        .min(6, "Password must be at least 6 characters")
+        .regex(noSpaceRegex, "Spaces are not allowed in password")
+        .regex(noEmojiRegex, "Emojis are not allowed in password"),
+      confirmPassword: z
+        .string()
+        .min(6, "Confirm password is required")
+        .regex(noSpaceRegex, "Spaces are not allowed in password")
+        .regex(noEmojiRegex, "Emojis are not allowed in password"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+
+  export const updateWorkspacePatchSchema = z
+    .object({
+      name: z
+        .string()
+        .min(3, "Name must be at least 3 characters")
+        .regex(noEmojiRegex, "Emojis are not allowed in name")
+        .optional(),
+      description: z.string().optional(),
+      color: z
+        .string()
+        .min(3, "Color must be at least 3 characters")
+        .regex(noEmojiRegex, "Emojis are not allowed in color")
+        .optional(),
+    })
+    .refine(
+      (data) =>
+        data.name !== undefined ||
+        data.description !== undefined ||
+        data.color !== undefined,
+      { message: "Provide at least one field", path: ["name"] }
+    );
+
+  export const workspaceMemberRouteParamsSchema = z.object({
+    workspaceId: z.string().min(1, "Workspace ID is required"),
+    memberUserId: z.string().min(1, "Member ID is required"),
+  });
+
+  export const workspaceMemberRolePatchSchema = z.object({
+    role: z.enum(["admin", "member", "viewer"], {
+      errorMap: () => ({ message: "Invalid role" }),
+    }),
+  });
+
   export const registerSchema = z
     .object({
       fullName: z

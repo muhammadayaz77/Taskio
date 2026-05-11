@@ -4,6 +4,8 @@ import Task from "../models/task.model.mjs";
 import User from "../models/user.model.mjs";
 import jwt from "jsonwebtoken";
 import WorkspaceInvite from "../models/workspace.invite.model.mjs";
+import Conversation from "../models/conversation.model.mjs";
+import Message from "../models/message.model.mjs";
 import { sendEmail } from '../libs/send-email.js'
 
 
@@ -714,6 +716,244 @@ export const inviteUserToWorkspace = async (req, res) => {
     });
   } catch (err) {
     console.log('inviteUserToWorkspace error : ', err);
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: err.message,
+    });
+  }
+};
+
+function findMembership(workspace, userId) {
+  const id = userId.toString();
+  return workspace.members.find((m) => m.user.toString() === id);
+}
+
+function isAdminOrOwnerRole(role) {
+  return role === 'owner' || role === 'admin';
+}
+
+export const updateWorkspaceMeta = async (req, res) => {
+  try {
+    const { workspaceId } = req.params;
+    const { name, description, color } = req.body;
+
+    const workspace = await Workspace.findOne({
+      _id: workspaceId,
+      'members.user': req.user._id,
+    });
+
+    if (!workspace) {
+      return res.status(404).json({
+        success: false,
+        message: 'Workspace not found',
+      });
+    }
+
+    const me = findMembership(workspace, req.user._id);
+    if (!me || !isAdminOrOwnerRole(me.role)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Only owners and admins can edit workspace settings',
+      });
+    }
+
+    if (name !== undefined) workspace.name = name;
+    if (description !== undefined) workspace.description = description;
+    if (color !== undefined) workspace.color = color;
+
+    await workspace.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Workspace updated',
+      workspace,
+    });
+  } catch (err) {
+    console.log('updateWorkspaceMeta error : ', err);
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: err.message,
+    });
+  }
+};
+
+export const deleteWorkspaceById = async (req, res) => {
+  try {
+    const { workspaceId } = req.params;
+
+    const workspace = await Workspace.findOne({
+      _id: workspaceId,
+      'members.user': req.user._id,
+    });
+
+    if (!workspace) {
+      return res.status(404).json({
+        success: false,
+        message: 'Workspace not found',
+      });
+    }
+
+    if (workspace.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Only the workspace owner can delete this workspace',
+      });
+    }
+
+    const projects = await Project.find({ workspace: workspaceId }).select(
+      '_id'
+    );
+    const projectIds = projects.map((p) => p._id);
+
+    await Task.deleteMany({ project: { $in: projectIds } });
+    await Project.deleteMany({ workspace: workspaceId });
+    await WorkspaceInvite.deleteMany({ workspaceId });
+    await Message.deleteMany({ workspace: workspaceId });
+    await Conversation.deleteMany({ workspace: workspaceId });
+    await Workspace.findByIdAndDelete(workspaceId);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Workspace and its projects were deleted',
+    });
+  } catch (err) {
+    console.log('deleteWorkspaceById error : ', err);
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: err.message,
+    });
+  }
+};
+
+export const removeWorkspaceMember = async (req, res) => {
+  try {
+    const { workspaceId, memberUserId } = req.params;
+
+    const workspace = await Workspace.findOne({
+      _id: workspaceId,
+      'members.user': req.user._id,
+    });
+
+    if (!workspace) {
+      return res.status(404).json({
+        success: false,
+        message: 'Workspace not found',
+      });
+    }
+
+    const requester = findMembership(workspace, req.user._id);
+    const target = findMembership(workspace, memberUserId);
+
+    if (!target) {
+      return res.status(404).json({
+        success: false,
+        message: 'Member not found in this workspace',
+      });
+    }
+
+    if (target.role === 'owner') {
+      return res.status(400).json({
+        success: false,
+        message: 'The workspace owner cannot be removed',
+      });
+    }
+
+    const isSelf = req.user._id.toString() === memberUserId;
+
+    if (isSelf) {
+      workspace.members = workspace.members.filter(
+        (m) => m.user.toString() !== memberUserId
+      );
+      await workspace.save();
+      return res.status(200).json({
+        success: true,
+        message: 'You left the workspace',
+      });
+    }
+
+    if (!requester || !isAdminOrOwnerRole(requester.role)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Only owners and admins can remove other members',
+      });
+    }
+
+    workspace.members = workspace.members.filter(
+      (m) => m.user.toString() !== memberUserId
+    );
+    await workspace.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Member removed',
+      workspace,
+    });
+  } catch (err) {
+    console.log('removeWorkspaceMember error : ', err);
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: err.message,
+    });
+  }
+};
+
+export const updateWorkspaceMemberRole = async (req, res) => {
+  try {
+    const { workspaceId, memberUserId } = req.params;
+    const { role } = req.body;
+
+    const workspace = await Workspace.findOne({
+      _id: workspaceId,
+      'members.user': req.user._id,
+    });
+
+    if (!workspace) {
+      return res.status(404).json({
+        success: false,
+        message: 'Workspace not found',
+      });
+    }
+
+    const requester = findMembership(workspace, req.user._id);
+    if (!requester || !isAdminOrOwnerRole(requester.role)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Only owners and admins can change member roles',
+      });
+    }
+
+    const idx = workspace.members.findIndex(
+      (m) => m.user.toString() === memberUserId
+    );
+    if (idx === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Member not found in this workspace',
+      });
+    }
+
+    if (workspace.members[idx].role === 'owner') {
+      return res.status(400).json({
+        success: false,
+        message: 'The owner role cannot be changed here',
+      });
+    }
+
+    workspace.members[idx].role = role;
+    await workspace.save();
+
+    const populated = await Workspace.findById(workspaceId).populate(
+      'members.user',
+      'name email profilePicture'
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Member role updated',
+      workspace: populated,
+    });
+  } catch (err) {
+    console.log('updateWorkspaceMemberRole error : ', err);
     res.status(500).json({
       message: 'Internal Server Error',
       error: err.message,

@@ -6,11 +6,15 @@ import {
   workspaceSchema,
   acceptWorkspaceInviteSchema,
   workspaceInvitePreviewQuerySchema,
+  updateWorkspacePatchSchema,
+  workspaceMemberRouteParamsSchema,
+  workspaceMemberRolePatchSchema,
 } from '../libs/validate-schema.mjs';
 import authMiddleware from '../middleware/auth.middleware.mjs';
 import {
   acceptWorkspaceInvitation,
   createWorkspace,
+  deleteWorkspaceById,
   getWorkspace,
   getWorkspaceArchivedTasks,
   getWorkspaceDetails,
@@ -18,6 +22,9 @@ import {
   getWorkspaceProjects,
   getWorkspaceStats,
   inviteUserToWorkspace,
+  removeWorkspaceMember,
+  updateWorkspaceMeta,
+  updateWorkspaceMemberRole,
 } from '../controller/workspace.controller.mjs';
 
 const router = express.Router();
@@ -50,6 +57,44 @@ router.post(
     params: workspaceParamsSchema,
   }),
   inviteUserToWorkspace
+);
+
+router.patch(
+  '/:workspaceId/members/:memberUserId',
+  authMiddleware,
+  validateSchema({
+    params: workspaceMemberRouteParamsSchema,
+    body: workspaceMemberRolePatchSchema,
+  }),
+  updateWorkspaceMemberRole
+);
+
+router.delete(
+  '/:workspaceId/members/:memberUserId',
+  authMiddleware,
+  validateSchema({
+    params: workspaceMemberRouteParamsSchema,
+  }),
+  removeWorkspaceMember
+);
+
+router.patch(
+  '/:workspaceId',
+  authMiddleware,
+  validateSchema({
+    params: workspaceParamsSchema,
+    body: updateWorkspacePatchSchema,
+  }),
+  updateWorkspaceMeta
+);
+
+router.delete(
+  '/:workspaceId',
+  authMiddleware,
+  validateSchema({
+    params: workspaceParamsSchema,
+  }),
+  deleteWorkspaceById
 );
 
 router.get('/', authMiddleware, getWorkspace);

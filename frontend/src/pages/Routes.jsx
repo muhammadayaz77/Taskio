@@ -17,6 +17,9 @@ import MyTasks from './Task/MyTasks'
 import Archive from './Task/Archive'
 import Members from './Members'
 import WorkspaceInviteAccept from './WorkspaceInviteAccept'
+import ProfileSettings from './ProfileSettings'
+import WorkspaceSettings from './WorkSpace/WorkspaceSettings'
+import WorkspaceChat from './WorkSpace/WorkspaceChat'
 
  function Index() {
   return (
@@ -30,6 +33,9 @@ import WorkspaceInviteAccept from './WorkspaceInviteAccept'
 
     <Route element={<AppLayout />}>
       <Route path="/workspaces" element={<Workspaces />} />
+      <Route path="/settings" element={<ProfileSettings />} />
+      <Route path="/workspaces/:workspaceId/settings" element={<WorkspaceSettings />} />
+      <Route path="/workspaces/:workspaceId/chat" element={<WorkspaceChat />} />
       <Route path="/workspaces/:workspaceId" element={<WorkspaceDetails />} />
       <Route path="/workspaces/:workspaceId/projects/:projectId" element={<ProjectDetails />} />
       <Route path="/workspaces/:workspaceId/projects/:projectId/tasks/:taskId" element={<TaskDetails />} />

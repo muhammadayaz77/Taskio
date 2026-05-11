@@ -90,6 +90,56 @@ export const signupSchema = z
   });
 
 
+  export const profileUpdateSchema = z.object({
+    name: z
+      .string()
+      .min(3, "Name must be at least 3 characters")
+      .max(80, "Name is too long")
+      .regex(noEmojiRegex, "Emojis are not allowed in name")
+      .regex(
+        fullNameRegex,
+        "Letters and at most one space (e.g. Muhammad Ayaz)"
+      ),
+    profilePicture: z
+      .union([
+        z.string().url("Paste a valid https image URL"),
+        z.literal(""),
+      ])
+      .optional(),
+  });
+
+  export const changePasswordFormSchema = z
+    .object({
+      currentPassword: z.string().min(1, "Current password is required"),
+      newPassword: z
+        .string()
+        .min(6, "At least 6 characters")
+        .regex(noSpaceRegex, "Spaces are not allowed in password")
+        .regex(noEmojiRegex, "Emojis are not allowed in password"),
+      confirmPassword: z
+        .string()
+        .min(6, "Confirm your new password")
+        .regex(noSpaceRegex, "Spaces are not allowed in password")
+        .regex(noEmojiRegex, "Emojis are not allowed in password"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+
+  export const workspaceSettingsFormSchema = z.object({
+    name: z
+      .string()
+      .min(3, "Name must be at least 3 characters")
+      .regex(noEmojiRegex, "Emojis are not allowed in name"),
+    description: z.string().optional(),
+    color: z
+      .string()
+      .min(3, "Pick a color hex or name")
+      .regex(noEmojiRegex, "Emojis are not allowed"),
+  });
+
+
   export const workspaceSchema = z.object({
     
     name: z
