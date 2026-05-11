@@ -19,7 +19,19 @@ const messageSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    body: { type: String, trim: true, required: true, maxlength: 4000 },
+    body: {
+      type: String,
+      trim: true,
+      maxlength: 4000,
+      default: '',
+      validate: {
+        validator: function (v) {
+          // body must be non-empty unless the message is soft-deleted
+          return this.isDeleted ? true : !!(v && v.trim().length > 0);
+        },
+        message: 'Message body is required',
+      },
+    },
     editedAt: { type: Date, default: null },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },

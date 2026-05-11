@@ -52,13 +52,16 @@ export function useChatSocket({
       queryClient.setQueryData(key, (data) => {
         if (!data) return data;
         const pages = [...data.pages];
-        const lastIdx = pages.length - 1;
-        if (lastIdx < 0) return data;
-        const last = pages[lastIdx];
-        if (last.messages?.some((m) => m._id === message._id)) return data;
-        pages[lastIdx] = {
-          ...last,
-          messages: [...last.messages, message],
+        if (pages.length === 0) return data;
+        // pages[0] holds the newest batch — append new live messages there.
+        const head = pages[0];
+        const exists = pages.some((p) =>
+          p.messages?.some((m) => m._id === message._id)
+        );
+        if (exists) return data;
+        pages[0] = {
+          ...head,
+          messages: [...(head.messages || []), message],
         };
         return { ...data, pages };
       });

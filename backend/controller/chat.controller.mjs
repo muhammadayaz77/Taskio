@@ -418,10 +418,19 @@ export const deleteMessage = async (req, res) => {
       });
     }
 
-    message.isDeleted = true;
-    message.deletedAt = new Date();
-    message.body = '';
-    await message.save();
+    // Update directly (bypasses validators) so re-deleting a soft-deleted
+    // row remains idempotent and we never hit the "body required" rule.
+    await Message.updateOne(
+      { _id: message._id },
+      {
+        $set: {
+          isDeleted: true,
+          deletedAt: new Date(),
+          body: '',
+          editedAt: null,
+        },
+      }
+    );
 
     const populated = await Message.findById(message._id).populate(
       'sender',

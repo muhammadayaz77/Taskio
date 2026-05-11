@@ -134,7 +134,12 @@ export default function WorkspaceChat() {
 
   const flatMessages = useMemo(() => {
     if (!messagesData) return [];
-    return messagesData.pages.flatMap((p) => p.messages || []);
+    // Pages are newest-first across the array; within each page messages are
+    // already oldest -> newest. Reverse pages so the final list is fully
+    // chronological (oldest at top, newest at bottom).
+    return [...messagesData.pages]
+      .reverse()
+      .flatMap((p) => p.messages || []);
   }, [messagesData]);
 
   const { mutateAsync: sendMessage } = useSendMessage(workspaceId);
