@@ -23,8 +23,8 @@ export const register = async (req, res) => {
     // }
 
     let existUser = await User.findOne({ email });
-    console.log("User",existUser);
-    // console.log(existUser);
+    console.log("User", existUser);
+
     if (existUser && existUser.isEmailVerified) {
       return res.status(400).json({
         message: "Email address already in use",
@@ -32,16 +32,22 @@ export const register = async (req, res) => {
       });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password,salt);
-    
+    // If the user exists but hasn't verified their email yet,
+    // delete the old unverified user and any pending verification tokens
+    // so we can re-create them cleanly and resend the verification email.
+    if (existUser && !existUser.isEmailVerified) {
+      await Verification.deleteMany({ userId: existUser._id });
+      await User.findByIdAndDelete(existUser._id);
+    }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     // const managerId = req.user._id;
     let newUser = await User.create({
       name: fullName,
       email,
-      password : hashedPassword,
+      password: hashedPassword,
     });
 
     const user = {
@@ -64,6 +70,8 @@ console.log("Process Env : ",process.env.SEND_GRID_API)
     console.log("isemail sent : ", isEmailSent);
 
     if (!isEmailSent) {
+      // Clean up the newly created user so registration can be retried
+      await User.findByIdAndDelete(newUser._id);
       return res.status(500).json({
         message: "Failed to send verification email",
         success: false,

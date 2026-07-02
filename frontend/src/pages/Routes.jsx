@@ -50,6 +50,7 @@ import WorkspaceChat from './WorkSpace/WorkspaceChat'
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/*" element={<>Not Found</>} />
 
     {/* <Route element={<ProtectedRoute />}> */}
     {/* <Route element={<ProtectedRoute />}> */}
