@@ -20,6 +20,7 @@ import WorkspaceInviteAccept from './WorkspaceInviteAccept'
 import ProfileSettings from './ProfileSettings'
 import WorkspaceSettings from './WorkSpace/WorkspaceSettings'
 import WorkspaceChat from './WorkSpace/WorkspaceChat'
+import Home from './Home'
 
  function Index() {
   return (
@@ -43,8 +44,8 @@ import WorkspaceChat from './WorkSpace/WorkspaceChat'
       <Route path="/archive" element={<Archive />} />
       <Route path="/members" element={<Members />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/" element={<>Home</>} />
     </Route>
+    <Route path="/" element={<Home />} />
       <Route path="/sign-in" element={<Login />} />
       <Route path="/sign-up" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

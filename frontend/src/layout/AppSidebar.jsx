@@ -127,17 +127,17 @@ const AppSidebar = () => {
     >
       {/* Logo */}
       <div
-        className={`py-8 flex ${
+        className={`pb-8 flex ${
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
-            <div className="flex items-center gap-2">
-              <img src="/Logo.png" alt="Logo" width={50} height={40} />
-              <span className="text-gray-900 text-2xl font-semibold">
+            <div className="flex items-center justify-center">
+              <img src="/Logo22.png" alt="Logo" width={150} height={80} />
+              {/* <span className="text-gray-900 text-2xl font-semibold">
                 Taskio
-              </span>
+              </span> */}
             </div>
           ) : (
             <img src="/Logo.png" alt="Logo" width={32} height={32} />
