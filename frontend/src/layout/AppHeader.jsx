@@ -204,8 +204,8 @@ useEffect(() => {
           </div>
 
           {/* Logo Mobile */}
-          <Link to="/" className="lg:hidden">
-            <img src="/Logo.png" width={30} height={30} alt="Logo" />
+          <Link to="/" className="lg:hidden flex items-center">
+            <img src="/Logo.png" alt="Logo" style={{ width: 72, height: 72, objectFit: "contain", marginLeft: -20, marginRight: -16 }} />
           </Link>
 
           {/* Mobile Menu */}

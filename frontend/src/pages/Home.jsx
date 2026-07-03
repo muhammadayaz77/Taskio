@@ -233,9 +233,9 @@ export default function Home() {
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
           {/* Logo */}
-          <Link to="/" style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none" }}>
-            <img src="/Logo.png" alt="Taskio" style={{ width: 34, height: 34 }} />
-            <span style={{ fontSize: 19, fontWeight: 800, color: "#111827", letterSpacing: "-0.3px" }}>Taskio</span>
+          <Link to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+            <img src="/Logo.png" alt="Taskio" style={{ width: 100, height: 100, objectFit: "contain", marginLeft: -30, marginRight: -26 }} />
+            <span style={{ fontSize: 19, fontWeight: 800, color: "#111827" }}>Taskio</span>
           </Link>
 
           {/* Desktop nav */}
@@ -454,7 +454,7 @@ export default function Home() {
 
                 {/* micro sidebar */}
                 <div style={{ width: 52, background: "#1e1b4b", display: "flex", flexDirection: "column", alignItems: "center", padding: "14px 0", gap: 18 }}>
-                  <img src="/Logo.png" alt="" style={{ width: 28, height: 28, borderRadius: 8 }} />
+                  <img src="/Logo.png" alt="" style={{ width: 64, height: 64, objectFit: "contain", marginTop: -18, marginBottom: -18 }} />
                   {[LayoutDashboard, Folder, Clipboard, MessageSquare, Users].map((Icon, i) => (
                     <div key={i} style={{
                       width: 34, height: 34, borderRadius: 9,
@@ -915,8 +915,8 @@ export default function Home() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 36, marginBottom: 40 }}>
             <div style={{ gridColumn: "span 2" }}>
-              <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", marginBottom: 14 }}>
-                <img src="/Logo.png" alt="Taskio" style={{ width: 30, height: 30 }} />
+              <Link to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none", marginBottom: 14 }}>
+                <img src="/Logo.png" alt="Taskio" style={{ width: 72, height: 72, objectFit: "contain", marginLeft: -20, marginRight: -16 }} />
                 <span style={{ fontSize: 17, fontWeight: 800, color: "#111827" }}>Taskio</span>
               </Link>
               <p style={{ fontSize: 13.5, color: "#6b7280", lineHeight: 1.65, maxWidth: 240 }}>
