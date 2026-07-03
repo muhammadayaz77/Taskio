@@ -322,20 +322,20 @@ export default function Home() {
             {/* badge */}
             <div style={{ marginBottom: 24 }}>
               <span style={{
-                display: "inline-flex", alignItems: "center", gap: 7,
-                background: "linear-gradient(#fff, #fff) padding-box, linear-gradient(90deg, #7c3aed, #0ea5e9, #ec4899, #7c3aed) border-box",
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "linear-gradient(#faf9ff, #faf9ff) padding-box, linear-gradient(90deg, #7c3aed, #3b82f6, #06b6d4, #8b5cf6, #7c3aed) border-box",
                 border: "1.5px solid transparent",
-                backgroundSize: "100% 100%, 200% auto",
-                animation: "fadeDown 0.55s ease both, borderMove 4s linear infinite",
-                borderRadius: 99, padding: "5px 14px 5px 10px",
-                fontSize: 12.5, fontWeight: 600, color: "#374151",
-                boxShadow: "0 4px 15px rgba(124, 58, 237, 0.08)",
+                backgroundSize: "100% 100%, 300% auto",
+                animation: "fadeDown 0.55s ease both, borderMove 6s linear infinite",
+                borderRadius: 99, padding: "5px 16px 5px 6px",
+                fontSize: 13, fontWeight: 600, color: "#374151",
+                boxShadow: "0 0 0 3px rgba(124,58,237,0.06), 0 4px 18px rgba(124,58,237,0.1)",
               }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "linear-gradient(135deg,#7c3aed,#6366f1)", borderRadius: 99, padding: "2px 9px", color: "#fff", fontSize: 11, fontWeight: 700 }}>
-                  <Sparkles size={11} /> New
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "linear-gradient(135deg,#7c3aed,#4f46e5)", borderRadius: 99, padding: "3px 10px", color: "#fff", fontSize: 11, fontWeight: 800, letterSpacing: "0.02em" }}>
+                  <Sparkles size={10} /> New · v2.0
                 </span>
-                Taskio 2.0 is live — Task management built for high-performance teams
-                <ChevronRight size={14} style={{ color: "#7c3aed" }} />
+                <span>Taskio is live — built for <strong style={{ color: "#7c3aed" }}>modern teams</strong></span>
+                <ChevronRight size={13} style={{ color: "#9ca3af", flexShrink: 0 }} />
               </span>
             </div>
 
@@ -966,9 +966,9 @@ export default function Home() {
           to   { transform: translateX(-33.33%); }
         }
         @keyframes borderMove {
-          0% { background-position: 0 0, 0% 50%; }
-          50% { background-position: 0 0, 100% 50%; }
-          100% { background-position: 0 0, 0% 50%; }
+          0%   { background-position: 0 0, 0%   50%; }
+          50%  { background-position: 0 0, 100% 50%; }
+          100% { background-position: 0 0, 0%   50%; }
         }
 
         .hide-mobile { display: flex !important; }
