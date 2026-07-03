@@ -617,22 +617,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* marquee strip */}
+      {/* marquee strip — seamless loop */}
       <div style={{ background: "#111827", padding: "14px 0", overflow: "hidden", position: "relative" }}>
-        <div style={{ display: "flex", gap: 56, animation: "marquee 18s linear infinite", whiteSpace: "nowrap" }}>
-          {[...Array(3)].flatMap(() => [
-            "GET 400% MORE DONE",
-            "•",
-            "WORKSPACES & PROJECTS",
-            "•",
-            "REAL-TIME TEAM CHAT",
-            "•",
-            "ANALYTICS DASHBOARD",
-            "•",
-            "SMART TASK MANAGEMENT",
-            "•",
-          ]).map((t, i) => (
-            <span key={i} style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", color: t === "•" ? "#7c3aed" : "#e5e7eb" }}>{t}</span>
+        {/*
+          Two identical tracks placed side-by-side inside one flex row.
+          We translate the whole row by exactly -50% (= one track width).
+          When CSS resets to 0 the content looks identical → zero jump.
+        */}
+        <div style={{
+          display: "flex",
+          width: "max-content",
+          animation: "marqueeSeamless 22s linear infinite",
+          willChange: "transform",
+        }}>
+          {[0, 1].map(copy => (
+            <div key={copy} style={{ display: "flex", gap: 52, paddingRight: 52 }}>
+              {[
+                "GET 400% MORE DONE", "•",
+                "WORKSPACES & PROJECTS", "•",
+                "REAL-TIME TEAM CHAT", "•",
+                "ANALYTICS DASHBOARD", "•",
+                "SMART TASK MANAGEMENT", "•",
+              ].map((t, i) => (
+                <span key={i} style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", whiteSpace: "nowrap", color: t === "•" ? "#7c3aed" : "#e5e7eb" }}>{t}</span>
+              ))}
+            </div>
           ))}
         </div>
       </div>
@@ -964,6 +973,11 @@ export default function Home() {
         @keyframes marquee {
           from { transform: translateX(0); }
           to   { transform: translateX(-33.33%); }
+        }
+        /* Seamless version — translates exactly half the total row width */
+        @keyframes marqueeSeamless {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
         @keyframes borderMove {
           0%   { background-position: 0 0, 0%   50%; }
