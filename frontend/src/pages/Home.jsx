@@ -300,25 +300,26 @@ export default function Home() {
         alignItems: "center",
         paddingTop: 80,
         paddingBottom: 60,
-        background: "linear-gradient(160deg, #faf9ff 0%, #f0ebff 40%, #e8f4ff 100%)",
+        background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 35%, #f1f5f9 65%, #eff6ff 100%)",
         position: "relative",
         overflow: "hidden",
       }}>
         {/* subtle grid */}
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
-          backgroundImage: "radial-gradient(circle, #c4b5fd33 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-          opacity: 0.6,
+          backgroundImage: "radial-gradient(circle, #cbd5e1 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          opacity: 0.5,
         }} />
         {/* blobs */}
-        <div style={{ position: "absolute", top: "10%", right: "5%", width: 420, height: 420, background: "radial-gradient(circle, #a78bfa22 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: "5%", left: "0%", width: 300, height: 300, background: "radial-gradient(circle, #93c5fd22 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "5%", right: "5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "5%", left: "-5%", width: 450, height: 450, background: "radial-gradient(circle, rgba(14,165,233,0.14) 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "40%", right: "20%", width: 350, height: 350, background: "radial-gradient(circle, rgba(99,102,241,0.09) 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none" }} />
 
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px", width: "100%", display: "flex", alignItems: "center", gap: 56, position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px", width: "100%", display: "flex", alignItems: "center", gap: 56, position: "relative", zIndex: 1 }} className="hero-container">
 
           {/* ── LEFT: text ── */}
-          <div style={{ flex: "0 0 auto", maxWidth: 480 }}>
+          <div style={{ flex: "0 0 auto", maxWidth: 480 }} className="hero-left-side">
             {/* badge */}
             <div style={{ marginBottom: 24 }}>
               <span style={{
@@ -417,8 +418,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── RIGHT: App mockup ── */}
-          <div style={{ flex: 1, minWidth: 0, animation: "fadeRight 0.75s ease 0.3s both", position: "relative" }}>
+          {/* ── RIGHT: App mockup (hidden on screen sizes less than large / <1024px) ── */}
+          <div style={{ flex: 1, minWidth: 0, animation: "fadeRight 0.75s ease 0.3s both", position: "relative" }} className="hero-right-side">
             {/* outer card shadow */}
             <div style={{
               background: "#fff",
@@ -987,6 +988,20 @@ export default function Home() {
 
         .hide-mobile { display: flex !important; }
         .show-mobile { display: none !important; }
+
+        @media (max-width: 1023.98px) {
+          .hero-right-side {
+            display: none !important;
+          }
+          .hero-container {
+            justify-content: center !important;
+          }
+          .hero-left-side {
+            max-width: 580px !important;
+            width: 100% !important;
+            flex: 1 1 100% !important;
+          }
+        }
 
         @media (max-width: 767px) {
           .hide-mobile { display: none !important; }
