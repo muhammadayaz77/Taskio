@@ -126,7 +126,7 @@ const AppSidebar = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Logo */}
-      <div className="pt-4 pb-6 flex justify-center items-center w-full">
+      <div className="-mx-5 pt-4 pb-6 flex justify-center items-center">
         <Link to="/" className="flex items-center justify-center">
           {isExpanded || isHovered || isMobileOpen ? (
             <img 
@@ -138,7 +138,7 @@ const AppSidebar = () => {
             <img 
               src="/Logo.png" 
               alt="Logo" 
-              className="h-30 w-36 -my-5 -mx-5 object-contain transition-all duration-300"
+              className="h-16 w-16 object-contain transition-all duration-300"
             />
           )}
         </Link>
