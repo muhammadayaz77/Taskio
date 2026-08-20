@@ -33,7 +33,7 @@ function WorkspaceHeader({
               <Sparkles className="size-3.5" />
               Workspace home
             </div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 truncate max-w-full" title={workspace?.name}>
               {workspace?.name}
             </h2>
             <p className="text-sm text-slate-600">

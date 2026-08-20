@@ -76,7 +76,7 @@ function Dashboard() {
               <Sparkles className="size-3.5" />
               Overview
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl truncate max-w-full" title={workspaceName}>
               {workspaceName}
             </h1>
             <p className="max-w-2xl text-sm text-slate-600">

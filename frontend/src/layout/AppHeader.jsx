@@ -152,18 +152,17 @@ useEffect(() => {
             <DropdownMenu open={workspaceOpen} onOpenChange={setWorkspaceOpen}>
                   <DropdownMenuTrigger asChild>
                   <button 
-  className={`flex items-center gap-2 px-3 h-10 border rounded-lg hover:opacity-90 transition cursor-pointer ${selectedWorkspace?.color ? "text-white" : 'text-black'} "`}
+  className={`flex items-center gap-2 px-3 h-10 border rounded-lg hover:opacity-90 transition cursor-pointer max-w-[180px] sm:max-w-[240px] ${selectedWorkspace?.color ? "text-white" : 'text-black'}`}
   style={{ 
     backgroundColor: selectedWorkspace?.color || "#fff",
-    // color: "white" // or use a function to determine if text should be white or black
   }}>
-    <Layers size={16} />
-    <span className="text-sm font-medium ">
+    <Layers size={16} className="shrink-0" />
+    <span className="text-sm font-medium truncate max-w-[110px] sm:max-w-[160px]">
       {selectedWorkspace?.name || "Workspace"}
     </span>
     <ChevronDown
       size={16}
-      className={`transition-transform duration-200 ${
+      className={`shrink-0 transition-transform duration-200 ${
         workspaceOpen ? "rotate-180" : ""
       }`}
     />
@@ -182,13 +181,13 @@ useEffect(() => {
     }`}
   >
     <div
-      className="flex items-center justify-center w-7 h-7 rounded-full text-white text-xs font-semibold"
+      className="flex items-center justify-center w-7 h-7 rounded-full text-white text-xs font-semibold shrink-0"
       style={{ backgroundColor: ws.color || "#6366f1" }}
     >
       {ws.name?.charAt(0).toUpperCase()}
     </div>
 
-    <span>{ws.name}</span>
+    <span className="truncate max-w-[160px]">{ws.name}</span>
   </DropdownMenuItem>
 ))}
 
@@ -239,22 +238,22 @@ useEffect(() => {
           {/* USER DROPDOWN */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 px-2 h-10 border rounded-lg hover:bg-gray-100">
-                <Avatar className="h-7 w-7">
+              <button className="flex items-center gap-2 px-2 h-10 border rounded-lg hover:bg-gray-100 max-w-[160px] sm:max-w-[200px]">
+                <Avatar className="h-7 w-7 shrink-0">
                   <AvatarFallback>
                     {user?.name?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="hidden sm:block text-sm font-medium">
+                <span className="hidden sm:block text-sm font-medium truncate max-w-[100px] sm:max-w-[140px]">
                   {user?.name}
                 </span>
               </button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-56">
-              <div className="px-3 py-2 text-sm">
-                <p className="font-medium">{user?.name}</p>
-                <p className="text-xs text-gray-500">{user?.email}</p>
+              <div className="px-3 py-2 text-sm max-w-[220px]">
+                <p className="font-medium truncate">{user?.name}</p>
+                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
               </div>
 
               <DropdownMenuSeparator />
